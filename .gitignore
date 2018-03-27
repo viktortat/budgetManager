@@ -1,0 +1,11 @@
+### Vue
+*/node_modules
+*/dist
+
+### Django
+venv
+__pycache__
+*.py[co]
+
+### General
+.vscode
