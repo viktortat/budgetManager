@@ -1,0 +1,54 @@
+@import "variables.styl"
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
+
+// ==================================
+//              Reset
+// ==================================
+
+@import "reset.styl"
+
+// ==================================
+//          General styles
+// ==================================
+
+body
+    // @rules
+    @media only screen and (min-width: 1000px)
+        font-size: $base-font-size
+    
+    // Layout and box-model properties (margin, padding, box-sizing, overflow, position, display, width/height, etc.)
+    // Typographic properties (font-, line-height, letter-spacing, text-, etc.)
+    font-family: 'Montserrat', sans-serif
+    font-size: $mobile-font-size
+    font-weight: 400
+    line-height: 1
+
+    // Stylistic properties (color, background-*, animation, border, etc.)
+    color: $font-color-primary
+
+    // UI properties (appearance, cursor, user-select, pointer-events, etc.)
+    // Pseudo-elements (::after, ::before, ::selection, etc.)
+    // Pseudo-selectors (:hover, :focus, :active, etc.)
+    // Nested elements
+
+h1, h2, h3, h4 
+    font-weight: inherit
+
+h1, .is-size-1
+    font-size: 1em * ($ratio ** 4)
+
+h2, .is-size-2
+    font-size: 1em * ($ratio ** 3)
+
+h3, .is-size-3
+    font-size: 1em * ($ratio ** 2)
+
+h4, .is-size-4
+    font-size: 1em * ($ratio ** 1)
+
+small, .is-size-small
+    font-size: 1em * ($ratio ** -1)
+
+// ==================================
+//      Generic styles for tags
+// ==================================
