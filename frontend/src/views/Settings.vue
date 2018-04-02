@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Transakce</h1>
+        <h1>Nastavení</h1>
     </div>
 </template>
 

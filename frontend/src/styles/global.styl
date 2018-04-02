@@ -1,5 +1,5 @@
 @import "variables.styl"
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
 
 // ==================================
 //              Reset
@@ -12,10 +12,7 @@
 // ==================================
 
 body
-    // @rules
-    @media only screen and (min-width: 1000px)
-        font-size: $base-font-size
-    
+    // @rules   
     // Layout and box-model properties (margin, padding, box-sizing, overflow, position, display, width/height, etc.)
     // Typographic properties (font-, line-height, letter-spacing, text-, etc.)
     font-family: 'Montserrat', sans-serif
@@ -24,7 +21,7 @@ body
     line-height: 1
 
     // Stylistic properties (color, background-*, animation, border, etc.)
-    color: $font-color-primary
+    color: $font-color-dark
 
     // UI properties (appearance, cursor, user-select, pointer-events, etc.)
     // Pseudo-elements (::after, ::before, ::selection, etc.)
@@ -35,20 +32,61 @@ h1, h2, h3, h4
     font-weight: inherit
 
 h1, .is-size-1
-    font-size: 1em * ($ratio ** 4)
+    font-size: 1em * ($ratio ** 5)
 
 h2, .is-size-2
-    font-size: 1em * ($ratio ** 3)
+    font-size: 1em * ($ratio ** 4)
 
 h3, .is-size-3
-    font-size: 1em * ($ratio ** 2)
+    font-size: 1em * ($ratio ** 3)
 
 h4, .is-size-4
+    font-size: 1em * ($ratio ** 2)
+
+h5, .is-size-5
     font-size: 1em * ($ratio ** 1)
 
 small, .is-size-small
     font-size: 1em * ($ratio ** -1)
+    display: block
+
+.is-bold
+    font-weight: 600
+
+.is-right
+    text-align: right
+
+.level
+    display: flex
+    justify-content: space-between
+
+.is-link-light
+    color: $font-color-light
+
+.is-success
+    color: #08D26F
+
+.is-danger
+    color: #FF5C87
 
 // ==================================
-//      Generic styles for tags
+//          Component styles
 // ==================================
+
+.button
+    height: 40px
+    width: 150px
+
+    font-size: inherit
+    font-weight: 600
+
+    color: $font-color-light
+    background-color: #7B76F4
+    background: linear-gradient(to bottom right, #7B76F4, #7784FB)
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+    border-radius: 10px
+
+    cursor: pointer
+
+    &:hover
+        transform: translateY(1px) translateX(1px)

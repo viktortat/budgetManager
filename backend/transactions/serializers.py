@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Transaction, Category
+from .models import Transaction, Category, Wallet
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -13,5 +13,12 @@ class TransactionSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ("id", "name", "user", "transactions")
-        read_only_fields = ["user"]
+        fields = ("id", "name", "transactions", "color", "balance")
+        read_only_fields = ["balance"]
+
+
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = ("id", "name", "categories", "balance", "owner", "users")
+        read_only_fields = ["balance", "owner", "users"]
