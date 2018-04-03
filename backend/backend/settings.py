@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # DRF
     'rest_framework',
     'django_filters',
+    'dry_rest_permissions',
 ]
 
 MIDDLEWARE = [

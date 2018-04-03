@@ -1,81 +1,71 @@
-from django.db.models import Q
-from django_filters import rest_framework as filters
-from rest_framework import generics
+from django_filters import rest_framework as django_filters
+from dry_rest_permissions.generics import DRYPermissions
+from rest_framework import generics, response
 
-from .filters import TransactionFilter
+from .filters import TransactionFilter, CategoryFilter
 from .models import Category, Transaction, Wallet
+from .permissions import WalletFilterBackend, WalletFilterBackendFK, check_wallet_ownership
 from .serializers import CategorySerializer, TransactionSerializer, WalletSerializer
 
 
 class WalletListView(generics.ListCreateAPIView):
+    queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackend]
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return Wallet.objects.all()
-        else:
-            return Wallet.objects.filter(Q(owner=user) | Q(users=user))
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class WalletDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return Wallet.objects.all()
-        else:
-            return Wallet.objects.filter(Q(owner=user) | Q(users=user))
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackend]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = CategorySerializer
-
-    def get_queryset(self):
-        wallet_id = self.kwargs.get("pk", None)
-        category_id = self.kwargs.get("id", None)
-        return Category.objects.filter(Q(id=category_id) & Q(wallet__id=wallet_id))
-
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
-        obj = generics.get_object_or_404(queryset)
-        self.check_object_permissions(self.request, obj)
-        return obj
+        serializer.save(owner=self.request.user)
 
 
 class CategoryListView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
+    filter_class = CategoryFilter
 
-    def get_queryset(self):
-        wallet_id = self.kwargs.get("pk", None)
-        return Category.objects.filter(wallet__id=wallet_id)
+    def post(self, request, *args, **kwargs):
+        wallet_id = request.data.get("wallet", None)
+        if wallet_id is not None:
+            if not check_wallet_ownership(wallet_id, request.user):
+                return response.Response(status=403, data="Sorry, seems like this is not your wallet...")
+        return self.create(request, *args, **kwargs)
 
 
-# Todo
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK]
+
+
 class TransactionListView(generics.ListCreateAPIView):
+    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    filter_backends = [filters.DjangoFilterBackend]
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
     filter_class = TransactionFilter
-
-    def get_queryset(self):
-        wallet_id = self.kwargs.get("pk", None)
-        return Transaction.objects.filter(wallet__id=wallet_id)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
-# Todo
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return Transaction.objects.filter(user=user)
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

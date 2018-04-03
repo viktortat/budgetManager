@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from .models import Transaction
+from .models import Transaction, Category
 
 
 class TransactionFilter(filters.FilterSet):
@@ -13,3 +13,9 @@ class TransactionFilter(filters.FilterSet):
         model = Transaction
         fields = '__all__'
         exclude = ["notes"]
+
+
+class CategoryFilter(filters.FilterSet):
+    class Meta:
+        model = Category
+        fields = '__all__'

@@ -25,21 +25,3 @@ class TransactionsTests(test.APITestCase):
         }
         response = self.client.post(self.login_url, data, format='json')
         self.token_for_user = response.data["token"]
-
-    def test_user_rights_for_creating_transaction(self):
-        pass
-        # data = {
-        #     "transaction_type": "income",
-        #
-        # }
-        # self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
-        # response = self.client.post(self.transactions_url, data, format="json")
-        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        #
-        # self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user)
-        # response = self.client.post(self.transactions_url, data, format="json")
-        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        #
-        # self.client.credentials(HTTP_AUTHORIZATION='')
-        # response = self.client.post(self.transactions_url, data, format="json")
-        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

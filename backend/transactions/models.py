@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
+from dry_rest_permissions.generics import authenticated_users, allow_staff_or_superuser
 
 TRANSACTION_TYPES = [
     ('expense', _('Expense')),
@@ -30,11 +31,33 @@ class Wallet(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_read_permission(request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_write_permission(request):
+        return True
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_read_permission(self, request):
+        return request.user == self.owner or request.user in self.users.all()
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_write_permission(self, request):
+        return request.user == self.owner or request.user in self.users.all()
+
 
 class Category(models.Model):
     name = models.CharField(_("Name"), max_length=128)
     color = models.CharField(_("Color"), max_length=16)
-    wallet = models.ForeignKey(Wallet, verbose_name=_("Wallet"), related_name="categories", on_delete=models.CASCADE, blank=True, null=True)
+    wallet = models.ForeignKey(Wallet, verbose_name=_("Wallet"), related_name="categories", on_delete=models.CASCADE)
     balance = models.DecimalField(_('Balance'), max_digits=11, decimal_places=2, default=0.0)
 
     def update_total(self):
@@ -50,14 +73,72 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_read_permission(request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_write_permission(request):
+        return True
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_read_permission(self, request):
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_write_permission(self, request):
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
+
 
 class Transaction(models.Model):
     transaction_type = models.CharField(_('Transaction type'), max_length=32, choices=TRANSACTION_TYPES, default='expense')
     notes = models.CharField(_('Notes'), max_length=255, blank=True, null=True)
-    category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='transactions', on_delete=models.CASCADE)
     amount = models.DecimalField(_('Amount'), max_digits=11, decimal_places=2)
     date = models.DateField(_('Date'), default=datetime.date.today)
     user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE, blank=True, null=True)
+    category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='transactions', on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, verbose_name=_('Wallet'), related_name='transactions', on_delete=models.CASCADE, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.wallet = self.category.wallet
+        super(Transaction, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.wallet.name + " - " + self.category.name + " - " + str(self.amount)
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_read_permission(request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_write_permission(request):
+        return True
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_read_permission(self, request):
+        if request.user == self.wallet.owner or request.user in self.wallet.users.all():
+            return True
+        else:
+            return False
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_write_permission(self, request):
+        if request.user == self.wallet.owner or request.user in self.wallet.users.all():
+            return True
+        else:
+            return False
 
 
 def post_save_balance(sender, instance, created, *args, **kwargs):
