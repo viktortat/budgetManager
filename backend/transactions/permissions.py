@@ -9,7 +9,7 @@ class WalletFilterBackend(DRYPermissionFiltersBase):
         if request.user.is_staff:
             return queryset
         else:
-            return queryset.filter(Q(owner=request.user) | Q(users=request.user))
+            return queryset.filter(Q(owner=request.user) | Q(users=request.user)).distinct()
 
 
 class WalletFilterBackendFK(DRYPermissionFiltersBase):
@@ -17,7 +17,7 @@ class WalletFilterBackendFK(DRYPermissionFiltersBase):
         if request.user.is_staff:
             return queryset
         else:
-            return queryset.filter(Q(wallet__owner=request.user) | Q(wallet__users=request.user))
+            return queryset.filter(Q(wallet__owner=request.user) | Q(wallet__users=request.user)).distinct()
 
 
 def check_wallet_ownership(wallet_id, user):

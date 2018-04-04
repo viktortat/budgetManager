@@ -14,11 +14,11 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ("id", "name", "transactions", "color", "balance", "wallet")
-        read_only_fields = ["balance"]
+        read_only_fields = ["balance", "transactions"]
 
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = ("id", "name", "categories", "balance", "owner", "users")
-        read_only_fields = ["balance", "owner"]
+        read_only_fields = ["balance", "owner", "categories"]

@@ -71,7 +71,7 @@ class Category(models.Model):
         self.save()
 
     def __str__(self):
-        return self.name
+        return self.name + " " + self.wallet.name
 
     @staticmethod
     @authenticated_users
@@ -141,7 +141,7 @@ class Transaction(models.Model):
             return False
 
 
-def post_save_balance(sender, instance, created, *args, **kwargs):
+def post_save_balance_update(sender, instance, created, *args, **kwargs):
     category_id = instance.category.id
     category = Category.objects.get(id=category_id)
     if category is not None:
@@ -150,4 +150,4 @@ def post_save_balance(sender, instance, created, *args, **kwargs):
             category.wallet.update_total()
 
 
-post_save.connect(post_save_balance, sender=Transaction)
+post_save.connect(post_save_balance_update, sender=Transaction)
