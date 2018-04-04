@@ -1,6 +1,6 @@
 from django_filters import rest_framework as django_filters
 from dry_rest_permissions.generics import DRYPermissions
-from rest_framework import generics, response
+from rest_framework import generics, response, status
 
 from .filters import TransactionFilter, CategoryFilter
 from .models import Category, Transaction, Wallet
@@ -40,9 +40,9 @@ class CategoryListView(generics.ListCreateAPIView):
         if wallet_id is not None:
             try:
                 if not check_wallet_ownership(wallet_id, request.user):
-                    return response.Response(status=403, data="Sorry, it seems like this is not your wallet...")
+                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your wallet...")
             except Wallet.DoesNotExist:
-                return response.Response(status=404, data="Sorry, it seems like your wallet does not exists...")
+                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your wallet does not exists...")
         return self.create(request, *args, **kwargs)
 
 
@@ -70,5 +70,5 @@ class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [DRYPermissions]
     filter_backends = [WalletFilterBackendFK]
 
-    def perform_create(self, serializer):
+    def perform_update(self, serializer):
         serializer.save(user=self.request.user)

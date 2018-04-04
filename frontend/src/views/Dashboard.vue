@@ -80,6 +80,7 @@ export default {
         grid-gap: 16px
         padding-left: 0
         padding-top: 16px
+        margin: 64px 0
 
     display: grid
     grid-template-columns: repeat(3, 480px)
@@ -87,6 +88,7 @@ export default {
     justify-content: center
     padding-left: 96px
     padding-top: 96px
+    margin: 96px
 
 .card
     @media screen and (max-width: 767px)
