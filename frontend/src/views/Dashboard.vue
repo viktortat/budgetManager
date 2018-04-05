@@ -47,8 +47,10 @@
 </template>
 
 <script>
-import Transaction from '@/components/Transaction.vue';
-import BarGraph from '@/components/LineChart.vue';
+import axios from 'axios'
+
+import Transaction from '@/components/Transaction.vue'
+import BarGraph from '@/components/LineChart.vue'
 
 export default {
     data() {
@@ -59,6 +61,9 @@ export default {
     components: {
         Transaction,
         BarGraph
+    },
+    created() {
+        
     }
 }
 </script>
