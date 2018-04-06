@@ -6,20 +6,14 @@
     </div>
 </template>
 
-<script>
-
-
-export default {
-    
-}
-</script>
-
 <style lang="stylus">
 @import "./styles/global.styl"
+
+html 
+    background-color: #F4F7FA
 
 .app
     min-height: 100.06vh
 
-    background-color: #FCFDFF
-
+    //background-color: #FCFDFF
 </style>

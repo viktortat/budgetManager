@@ -1,22 +1,22 @@
 <template>
-    <div id="dashboard" class="dashboard">
+    <div id="dashboard" class="dashboard section">
         <div class="card card-bilance">
             <div class="card-heading">
                 <h2>Bilance</h2>
             </div>
             <h3>Zůstatek</h3>
-            <p class="is-size-2 is-bold is-right">26 000,- Kč</p>
+            <p class="is-size-2 is-bold is-right">{{ wallet.balance }} Kč</p>
             <h3>Změna</h3>
-            <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> 6 000,- Kč</p>
+            <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{ calculatedDifference }} Kč</p>
             <small class="is-right">Oproti minulému měsíci</small>
             <h3>Počet Transakcí</h3>
             <div class="level">
                 <div>
-                    <p class="is-size-2 is-bold">6 <i class="fas fa-angle-up is-success"></i></p>
+                    <p class="is-size-2 is-bold">{{ calculateTransactionsFromLastWeek }} <i class="fas fa-angle-up is-success"></i></p>
                     <small>Za minulý týden</small>
                 </div>
                 <div>
-                    <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> 32</p>
+                    <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{calculateTransactionsFromLastMonth}}</p>
                     <small class="is-right">Za minulý měsíc</small>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <i class="fas fa-angle-double-right is-size-3"></i>
                 </router-link>
             </div>
-            <transaction v-for="(transaction, index) in transactions" :key="index" />
+            <transaction v-for="(transaction, index) in lastTransactions" :key="index" :transaction="transaction" :categories="categories" />
         </div>
         <div class="card">
             <div class="card-heading">
@@ -48,14 +48,71 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 import Transaction from '@/components/Transaction.vue'
 import BarGraph from '@/components/LineChart.vue'
 
+import { tokenMixin } from '@/mixins.js'
+
+import { mapState, mapActions } from 'vuex'
+
 export default {
+    mixins: [tokenMixin],
     data() {
         return {
-            transactions: [{}, {}, {}, {}],
+            difference: 0
+        }
+    },
+    methods: {
+        ...mapActions([
+            'loadData'
+        ]),
+        calculateBalance(balance, transactions) {
+            for(let transaction of transactions) {
+                if(transaction.transaction_type == "income") {
+                    balance =+ transaction.amount;
+                } else {
+                    balance =- transaction.amount;
+                }
+            }
+            return balance;
+        }
+    },
+    computed: {
+        ...mapState([
+            'wallet',
+            'transactions',
+            'categories'
+        ]),
+        lastTransactions() {
+            return this.transactions.slice(0, 4);
+        },
+        calculatedDifference() {
+            const lastMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD');
+            const lastMonthLastDay = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
+            const thisMonthFirstDay = moment().startOf('month').format('YYYY-MM-DD');
+            const thisMonthLastDay = moment().endOf('month').format('YYYY-MM-DD');
+
+            const lastMonthTransactions = this.transactions.filter(trns => trns.date > lastMonthFirstDay && trns.date < lastMonthLastDay);
+            const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
+            
+            let balanceLastMonth = this.calculateBalance(0, lastMonthTransactions);
+            let balanceThisMonth = this.calculateBalance(0, thisMonthTransactions);
+
+            return balanceThisMonth - balanceLastMonth;
+        },
+        calculateTransactionsFromLastMonth() {
+            const thisMonthFirstDay = moment().startOf('month').format('YYYY-MM-DD');
+            const thisMonthLastDay = moment().endOf('month').format('YYYY-MM-DD');
+            const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
+            return thisMonthTransactions.length;
+        },
+        calculateTransactionsFromLastWeek() {
+            const thisMonthFirstDay = moment().startOf('week').format('YYYY-MM-DD');
+            const thisMonthLastDay = moment().endOf('week').format('YYYY-MM-DD');
+            const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
+            return thisMonthTransactions.length;
         }
     },
     components: {
@@ -63,7 +120,7 @@ export default {
         BarGraph
     },
     created() {
-        
+        this.loadData();
     }
 }
 </script>
@@ -82,22 +139,21 @@ export default {
 
     @media screen and (max-width: 767px)
         grid-template-columns: 1fr
-        grid-gap: 16px
+        grid-gap: 0
         padding-left: 0
         padding-top: 16px
         margin: 64px 0
 
     display: grid
     grid-template-columns: repeat(3, 480px)
-    grid-gap: 96px
+    grid-gap: 48px
     justify-content: center
-    padding-left: 96px
-    padding-top: 96px
-    margin: 96px
+    padding-left: 48px
+    padding-top: 48px
 
 .card
     @media screen and (max-width: 767px)
-        width: 100%
+        width: 100vw
         box-shadow: unset
         border-radius: 0
         padding: 16px
@@ -122,7 +178,7 @@ export default {
         width: 480px
     
     @media screen and (max-width: 767px)
-        width: 100%
+        width: 100vw
 
     width: 1056px
 

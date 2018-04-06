@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name: 'TransactionDetail', params: {id: transaction.id}}" class="transaction">
+    <router-link :to="{name: 'Transactions'}" class="transaction">
         <aside></aside>
         <div class="transaction-info">
             <small>{{ transaction.date }}</small>

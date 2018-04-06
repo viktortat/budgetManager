@@ -1,6 +1,6 @@
 from django_filters import rest_framework as django_filters
 from dry_rest_permissions.generics import DRYPermissions
-from rest_framework import generics, response, status
+from rest_framework import generics, response, status, pagination
 
 from .filters import TransactionFilter, CategoryFilter
 from .models import Category, Transaction, Wallet
@@ -54,11 +54,14 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TransactionListView(generics.ListCreateAPIView):
-    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     permission_classes = [DRYPermissions]
     filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
     filter_class = TransactionFilter
+    pagination_class = pagination.LimitOffsetPagination
+
+    def get_queryset(self):
+        return Transaction.objects.all().order_by("-date", "-id")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
