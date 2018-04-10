@@ -90,7 +90,7 @@ small, .is-size-small
     background-color: #7B76F4
     background: linear-gradient(to bottom right, #7B76F4, #7784FB)
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
-    //border-radius: 10px
+    border-radius: $border-radius
 
     cursor: pointer
 
@@ -98,13 +98,13 @@ small, .is-size-small
         transform: translateY(1px) translateX(1px)
 
 .section 
-    margin: 96px
+    padding: 96px
 
     @media screen and (max-width: 767px)
-        margin: 64px 0
+        padding: 64px 0
 
 .input
-    width: 300px
+    width: 200px
     height: 40px
     padding-left: 10px
     margin-bottom: 30px
@@ -112,4 +112,11 @@ small, .is-size-small
     font-size: inherit
     font-family: inherit 
 
-    border-bottom: 2px solid #7B76F4
+    background-color: #F2F2F2
+
+.label
+    & > *
+        margin-bottom: 5px
+        margin-left: 5px
+        
+        font-weight: 600

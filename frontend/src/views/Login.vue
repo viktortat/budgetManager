@@ -3,14 +3,14 @@
         <h1>Přihlásit se</h1>
         <form class="form">
             <p>
-                <label for="username-login">
-                    <small>Email</small>                     
+                <label for="username-login" class="label">
+                    <p>Email</p>                     
                 </label>
                 <input type="text" id="username-login" class="input" v-model="email">
             </p>
             <p>
-                <label for="password-login">
-                    <small>Heslo</small>                     
+                <label for="password-login" class="label">
+                    <p>Heslo</p>                     
                 </label>
                 <input type="password" id="password-login" class="input" v-model="password">
             </p>

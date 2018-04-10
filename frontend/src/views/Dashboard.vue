@@ -5,9 +5,9 @@
                 <h2>Bilance</h2>
             </div>
             <h3>Zůstatek</h3>
-            <p class="is-size-2 is-bold is-right">{{ wallet.balance }} Kč</p>
+            <p class="is-size-2 is-bold is-right">{{ wallet.balance | formatCurrency }}</p>
             <h3>Změna</h3>
-            <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{ calculatedDifference }} Kč</p>
+            <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{ calculateDifference | formatCurrency }}</p>
             <small class="is-right">Oproti minulému měsíci</small>
             <h3>Počet Transakcí</h3>
             <div class="level">
@@ -54,7 +54,6 @@ import Transaction from '@/components/Transaction.vue'
 import BarGraph from '@/components/LineChart.vue'
 
 import { tokenMixin } from '@/mixins.js'
-
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -70,7 +69,7 @@ export default {
         ]),
         calculateBalance(balance, transactions) {
             for(let transaction of transactions) {
-                if(transaction.transaction_type == "income") {
+                if(transaction.transaction_type === "income") {
                     balance =+ transaction.amount;
                 } else {
                     balance =- transaction.amount;
@@ -86,9 +85,9 @@ export default {
             'categories'
         ]),
         lastTransactions() {
-            return this.transactions.slice(0, 4);
+            return this.transactions.slice(0, 5);
         },
-        calculatedDifference() {
+        calculateDifference() {
             const lastMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD');
             const lastMonthLastDay = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
             const thisMonthFirstDay = moment().startOf('month').format('YYYY-MM-DD');
@@ -149,7 +148,7 @@ export default {
     grid-gap: 48px
     justify-content: center
     padding-left: 48px
-    padding-top: 48px
+    padding-top: 122px
 
 .card
     @media screen and (max-width: 767px)
@@ -166,7 +165,7 @@ export default {
     padding-top: 96px
     
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
-    border-radius: 10px
+    border-radius: $border-radius
     background-color: #FFFFFF
 
     & > h3
@@ -180,7 +179,7 @@ export default {
     @media screen and (max-width: 767px)
         width: 100vw
 
-    width: 1056px
+    width: 1008px
 
 .card-heading
     @media screen and (max-width: 767px)
@@ -202,7 +201,7 @@ export default {
     color: $font-color-light
     background-color: #7B76F4
     background: linear-gradient(to bottom right, #7B76F4, #7784FB)
-    border-radius: 10px 10px 0 0 
+    border-radius: $border-radius $border-radius 0 0 
 
 .card-graph
     padding-top: 32px

@@ -15,6 +15,14 @@ export default {
             'transactions',
             'categories'
         ]),
+    },
+    methods: {
+        ...mapActions([
+            'loadData'
+        ])
+    },
+    created() {
+        this.loadData();
     }
 }
 </script>

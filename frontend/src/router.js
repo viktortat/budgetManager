@@ -27,12 +27,12 @@ export default new Router({
         navbar: Navbar
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
-        } else if(store.state.wallet == null) {
-          next( { name: 'Wallets', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
         }
       }
     },
@@ -44,10 +44,10 @@ export default new Router({
         header: Header
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
         }
       }
     },
@@ -59,12 +59,29 @@ export default new Router({
         navbar: Navbar
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
-        } else if(store.state.wallet == null) {
-          next( { name: 'Wallets', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
+        }
+      }
+    },
+    { path: '/transakce/new',
+      name: 'TransactionNew',
+      components: {
+        default: TransactionDetail,
+        header: Header,
+        navbar: Navbar
+      },
+      beforeEnter: (to, from, next) => {
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
+        } else {
+          next()
         }
       }
     },
@@ -76,12 +93,12 @@ export default new Router({
         navbar: Navbar
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
-        } else if(store.state.wallet == null) {
-          next( { name: 'Wallets', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
         }
       }
     },
@@ -100,12 +117,12 @@ export default new Router({
         navbar: Navbar
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
-        } else if(store.state.wallet == null) {
-          next( { name: 'Wallets', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
         }
       }
     },
@@ -118,12 +135,12 @@ export default new Router({
         navbar: Navbar
       },
       beforeEnter: (to, from, next) => {
-        if(!store.state.isUserLoggedIn) {
-          next( { name: 'Login', query: {redirect: to.fullPath} });
-        } else if(store.state.wallet == null) {
-          next( { name: 'Wallets', query: {redirect: to.fullPath} });
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
         } else {
-          next();
+          next()
         }
       }
     },

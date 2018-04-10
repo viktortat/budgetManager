@@ -1,10 +1,11 @@
 <template>
     <header class="header">
-        <button class="button">
+        <router-link :to="{name: 'TransactionNew'}" tag="button" class="button" v-if="wallet !== null">
             Přidat transakci
-        </button>
+        </router-link>
+        <div v-else></div>
         <div class="account is-size-5" v-if="isUserLoggedIn">
-            <p class="account-email">panzelva@gmail.com</p>
+            <p class="account-email">{{ user.email }}</p>
         </div>
         <div class="account is-size-5" v-else>
             <router-link :to="{name: 'Login'}" class="is-link-dark">
@@ -21,7 +22,8 @@ export default {
     computed: {
         ...mapState([
             'isUserLoggedIn',
-            'wallet'
+            'wallet',
+            'user'
         ])
     }
 }
@@ -45,12 +47,13 @@ export default {
     top: 0
     left: 0
     width: 100vw
-    height: 96px
+    height: 76px
     padding-left: 128px
     padding-right: 32px
     z-index: 25
 
-    background-color: rgba(255, 255, 255, 0.6)
+    background-color: rgba(255, 255, 255, 1)
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
 
 .account
     display: flex

@@ -15,6 +15,6 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-Vue.filter("money", str => {
-  str.substring(0, 4);
+Vue.filter('formatCurrency', value => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',') + ' Kč'
 })

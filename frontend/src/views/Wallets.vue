@@ -6,10 +6,10 @@
             <div class="wallet" v-for="wallet in wallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
                 <h2>{{ wallet.name }}</h2>
                 <br>
-                <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}">{{ wallet.balance }} Kč</h4>
+                <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}"><span v-if="wallet.balance < 0">-</span>{{ wallet.balance | formatCurrency }}</h4>
                 <br>
                 <p>Majitel: {{ wallet.owner }}</p>
-                <p><span v-for="user in wallet.users" :key="user.id">{{ user }}</span></p>
+                <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
             </div>
         </div>
     </div>
@@ -36,6 +36,14 @@ export default {
         setWalletAndRedirect(wallet) {
             this.pickWallet(wallet);
             this.$router.push(this.$route.query.redirect || { name: 'Dashboard' })
+        }
+    },
+    computed: {
+        ownedWallets() {
+            
+        },
+        sharedWallets() {
+
         }
     },
     created() {
@@ -68,7 +76,7 @@ export default {
     padding: 10px
 
     background-color: white
-    border-radius: 10px
+    border-radius: $border-radius
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
