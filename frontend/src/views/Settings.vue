@@ -1,6 +1,6 @@
 <template>
-    <div class="section">
-        <h1>Nastavení</h1>
+    <div class="section-md">
+        <h1 class="is-bold">Nastavení</h1>
     </div>
 </template>
 

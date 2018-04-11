@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <router-link :to="{name: 'TransactionNew'}" tag="button" class="button" v-if="wallet !== null">
+        <router-link :to="{name: 'TransactionNew'}" tag="button" class="button is-success" v-if="wallet !== null">
             Přidat transakci
         </router-link>
         <div v-else></div>
@@ -48,7 +48,7 @@ export default {
     left: 0
     width: 100vw
     height: 76px
-    padding-left: 128px
+    padding-left: 118px
     padding-right: 32px
     z-index: 25
 

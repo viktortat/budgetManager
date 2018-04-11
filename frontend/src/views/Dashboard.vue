@@ -1,5 +1,5 @@
 <template>
-    <div id="dashboard" class="dashboard section">
+    <div id="dashboard" class="dashboard section-md">
         <div class="card card-bilance">
             <div class="card-heading">
                 <h2>Bilance</h2>
@@ -39,6 +39,9 @@
             <div class="card-heading">
                 <h2>Karta</h2>
             </div>
+            <h3>Text <i class="fas fa-user"></i></h3>
+            <h4>Text <i class="fas fa-user"></i></h4>
+            <h5>Text <i class="fas fa-user"></i></h5>
         </div>
         <div class="card card-wide card-graph">
             <bar-graph/>
@@ -50,7 +53,7 @@
 import axios from 'axios'
 import moment from 'moment'
 
-import Transaction from '@/components/Transaction.vue'
+import Transaction from '@/components/TransactionSimple.vue'
 import BarGraph from '@/components/LineChart.vue'
 
 import { tokenMixin } from '@/mixins.js'
@@ -139,16 +142,11 @@ export default {
     @media screen and (max-width: 767px)
         grid-template-columns: 1fr
         grid-gap: 0
-        padding-left: 0
-        padding-top: 16px
-        margin: 64px 0
 
     display: grid
     grid-template-columns: repeat(3, 480px)
     grid-gap: 48px
     justify-content: center
-    padding-left: 48px
-    padding-top: 122px
 
 .card
     @media screen and (max-width: 767px)

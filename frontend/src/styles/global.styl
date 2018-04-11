@@ -28,7 +28,7 @@ body
     // Pseudo-selectors (:hover, :focus, :active, etc.)
     // Nested elements
 
-h1, h2, h3, h4 
+h1, h2, h3, h4, h5
     font-weight: inherit
 
 h1, .is-size-1
@@ -97,11 +97,31 @@ small, .is-size-small
     &:hover
         transform: translateY(1px) translateX(1px)
 
-.section 
-    padding: 96px
+    &.is-success
+        background: unset
+        background-color: #08D26F
 
+    &.is-danger
+        background: unset
+        background-color: #FF5C87
+
+.section 
     @media screen and (max-width: 767px)
         padding: 64px 0
+
+    padding: 96px
+
+.section-md
+    @media screen and (max-width: 767px)
+        padding-left: 0
+        padding-top: 80px
+        padding-right: 0
+        padding-bottom: 80px
+
+    padding-left: 96px
+    padding-top: 122px
+    padding-right: 96px
+    padding-bottom: 96px
 
 .input
     width: 200px
@@ -113,6 +133,17 @@ small, .is-size-small
     font-family: inherit 
 
     background-color: #F2F2F2
+
+    &.input-medium 
+        width: 280px
+
+    &.input-large 
+        width: 300px
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button
+    -webkit-appearance: none
+    margin: 0
 
 .label
     & > *

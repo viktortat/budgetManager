@@ -600,7 +600,17 @@ class TransactionsTests(test.APITestCase):
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_transactions_creating_by_admin_user(self):
-        pass
+        """
+        """
+
+        data = {
+            "category": "1",
+            "amount": "50000.60",
+            "transaction_type": "expense"
+        }
+        self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
+        response = self.client.post(self.transactions_url, data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_transactions_creating_by_basic_user(self):
         pass

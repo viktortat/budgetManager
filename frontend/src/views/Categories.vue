@@ -1,6 +1,6 @@
 <template>
-    <div class="section">
-        <h1>Kategorie</h1>
+    <div class="section-md">
+        <h1 class="is-bold">Kategorie</h1>
         <p v-for="category in categories" :key="category.id">{{ category.name }}</p>
     </div>
 </template>

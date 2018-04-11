@@ -1,6 +1,6 @@
 <template>
-    <div class="wallets-wrapper">
-        <h1>Peněženky</h1>
+    <div class="section-md">
+        <h1 class="is-bold">Peněženky</h1>
         <p v-if="wallets.length == 0">There are no wallets!</p>
         <div class="wallets">
             <div class="wallet" v-for="wallet in wallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
@@ -60,9 +60,6 @@ export default {
 
 
 <style lang="stylus" scoped>
-.wallets-wrapper 
-    padding-top: 96px
-
 .wallets
     display: flex
     flex-flow: row
@@ -84,4 +81,7 @@ export default {
 
     &:hover
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+    &:first-child
+        margin-left: 0
 </style>

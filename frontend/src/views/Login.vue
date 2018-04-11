@@ -1,18 +1,18 @@
 <template>
     <div class="login">
-        <h1>Přihlásit se</h1>
+        <h1 class="is-bold">Přihlásit se</h1>
         <form class="form">
             <p>
                 <label for="username-login" class="label">
                     <p>Email</p>                     
                 </label>
-                <input type="text" id="username-login" class="input" v-model="email">
+                <input type="text" id="username-login" class="input input-medium" v-model="email">
             </p>
             <p>
                 <label for="password-login" class="label">
                     <p>Heslo</p>                     
                 </label>
-                <input type="password" id="password-login" class="input" v-model="password">
+                <input type="password" id="password-login" class="input input-medium" v-model="password">
             </p>
             <button class="button" @click.prevent="login">Přihlásit se</button>
         </form>
