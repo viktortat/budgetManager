@@ -5,8 +5,8 @@
             <p>{{ this.categories.find(x => x.id === transaction.category).name }}</p>
             <p class="transaction-date is-size-small">{{ transaction.date }}</p>
         </div>
-        <div @click="goToDetail()" class="transaction-owner">{{ this.wallet.users.find(x => x.id === transaction.user).email }}</div>
-        <div @click="goToDetail()" class="transaction-notes">{{ transaction.notes }} --</div>
+        <div @click="goToDetail()" class="transaction-owner">{{ getUserEmail }}</div>
+        <div @click="goToDetail()" class="transaction-notes">{{ transaction.notes }}<span v-if="!transaction.notes">--</span></div>
         <div @click="goToDetail()" class="transaction-amount" :class="{'is-success': transaction.transaction_type === 'income', 'is-danger': transaction.transaction_type === 'expense'}">
             <span v-if="transaction.transaction_type === 'expense'">-</span> {{ transaction.amount | formatCurrency }}
         </div>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+
+
 export default {
     props: ['transaction', 'categories', 'wallet'],
     data() {
@@ -25,6 +27,13 @@ export default {
         goToDetail() {
             this.$router.push({ name: 'TransactionDetail', params: { id: this.transaction.id }})
         }
+    },
+    computed: {
+        getUserEmail() {
+            const user = this.wallet.users.find(x => x.id === transaction.user)
+            if(user) return user.email
+            else return this.$store.state.user.email
+        }
     }
 }
 </script>
@@ -33,18 +42,12 @@ export default {
 @import "../styles/variables.styl"
 
 .transaction
-    @media screen and (min-width: 1020px)
-        width: 900px
-
-    @media screen and (min-width: 620px) and (max-width: 1019px)
-        width: 600px
-
+    position: relative
     display: flex
-    width: 300px
     height: 60px
     margin-bottom: 10px
     margin-left: 10px
-    position: relative
+    margin-right: 10px
 
     background-color: #FFFFFF
     color: $font-color-dark

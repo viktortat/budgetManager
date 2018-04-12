@@ -11,6 +11,9 @@
 //          General styles
 // ==================================
 
+html 
+    height: 100%
+
 body
     // @rules   
     // Layout and box-model properties (margin, padding, box-sizing, overflow, position, display, width/height, etc.)
@@ -70,18 +73,19 @@ small, .is-size-small
     color: $font-color-dark
 
 .is-success
-    color: #08D26F
+    color: $success-color
 
 .is-danger
-    color: #FF5C87
+    color: $danger-color
 
 // ==================================
 //          Component styles
 // ==================================
 
 .button
-    height: 40px
-    width: 150px
+    height: 35px
+    padding-left: 20px
+    padding-right: 20px
 
     font-size: inherit
     font-weight: 600
@@ -89,56 +93,55 @@ small, .is-size-small
     color: $font-color-light
     background-color: #7B76F4
     background: linear-gradient(to bottom right, #7B76F4, #7784FB)
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
     border-radius: $border-radius
 
     cursor: pointer
 
-    &:hover
-        transform: translateY(1px) translateX(1px)
+    // &:hover
+    //     transform: translateY(1px) translateX(1px)
 
     &.is-success
         background: unset
-        background-color: #08D26F
+        background-color: $success-color
 
     &.is-danger
         background: unset
-        background-color: #FF5C87
+        background-color: $danger-color
 
-.section 
-    @media screen and (max-width: 767px)
-        padding: 64px 0
-
-    padding: 96px
-
-.section-md
+.section
     @media screen and (max-width: 767px)
         padding-left: 0
-        padding-top: 80px
+        padding-top: 56px
         padding-right: 0
-        padding-bottom: 80px
+        padding-bottom: 0
 
-    padding-left: 96px
-    padding-top: 122px
-    padding-right: 96px
-    padding-bottom: 96px
+    padding-left: 208px
+    padding-top: 56px
+    padding-right: 0
+    padding-bottom: 0
+
+    &.top
+        padding-left: 0
 
 .input
     width: 200px
     height: 40px
     padding-left: 10px
-    margin-bottom: 30px
 
     font-size: inherit
     font-family: inherit 
 
     background-color: #F2F2F2
+    border-radius: $border-radius
 
     &.input-medium 
         width: 280px
 
     &.input-large 
         width: 300px
+
+    &.input-100 
+        width: 100%
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button

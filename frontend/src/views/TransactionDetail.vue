@@ -1,19 +1,18 @@
 <template>
-    <div class="section-md">
-        <h1>Trn det</h1>
-        <div class="transaction-edit">
-            <form class="form">
+    <div class="section transaction-detail-wrapper">
+        <div class="transaction">
+            <form>
                 <p>
                     <label for="transaction-amount" class="label">
                         <p>Částka</p>                     
                     </label>
-                    <input id="transaction-amount" type="number" class="input input-medium" v-model="transaction.amount">
+                    <input id="transaction-amount" type="number" class="input input-100" v-model="transaction.amount">
                 </p>
                 <p>
                     <label for="transaction-category" class="label">
                         <p>Kategorie</p>                     
                     </label>
-                    <select id="transaction-category" class="input input-medium" v-model="transaction.category">
+                    <select id="transaction-category" class="input input-100" v-model="transaction.category">
                         <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                     </select>
                 </p>
@@ -21,19 +20,19 @@
                     <label for="transaction-date" class="label">
                         <p>Datum</p>                     
                     </label>
-                    <flat-pickr id="transaction-date" v-model="transaction.date" class="input input-medium"></flat-pickr>
+                    <flat-pickr id="transaction-date" v-model="transaction.date" class="input input-100"></flat-pickr>
                 </p>
                 <p>
                     <label for="transaction-notes" class="label">
                         <p>Poznámka</p>                     
                     </label>
-                    <input id="transaction-notes" type="text" class="input input-medium" v-model="transaction.notes">
+                    <input id="transaction-notes" type="text" class="input input-100" v-model="transaction.notes">
                 </p>
                 <p>
                     <label for="transaction-type" class="label">
                         <p>Typ transakce</p>                     
                     </label>
-                    <select id="transaction-type" class="input input-medium" v-model="transaction.transaction_type">
+                    <select id="transaction-type" class="input input-100" v-model="transaction.transaction_type">
                         <option value="income">Příjem</option>
                         <option value="expense">Výdej</option>
                     </select>
@@ -76,7 +75,7 @@ export default {
                 'notes': this.transaction.notes,
                 'date': this.transaction.date
             };
-            console.log(data)
+
         }
     },
     computed: {
@@ -96,9 +95,7 @@ export default {
                 const url = "/api/transactions/" + transactionID + "/";
                 axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                     this.transaction = res.data;
-                }).catch(err => {
-                    console.log(err);
-                });
+                }).catch(err => {});
             } else {
                 const transaction = this.$store.state.transactions.find(x => x.id === transactionID);
                 this.transaction = Object.assign({}, transaction);
@@ -110,6 +107,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import "../styles/variables.styl"
+
+.transaction-detail-wrapper
+    min-height: 100.06vh
+
+    background-color: $background-color-primary
 
 .transaction-edit
     width: 320px

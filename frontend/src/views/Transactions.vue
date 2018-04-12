@@ -1,59 +1,62 @@
 <template>
-    <div class="section-md">
-        <div class="filter-wrapper">
-            <div>
+    <div class="section transactions-wrapper">
+        <div class="filters">
+            <div class="filter">
                 <label for="filter-date-from" class="label">
                     <p>Datum od:</p>
                 </label>
-                <flat-pickr v-model="dateFrom" class="input"></flat-pickr>
+                <flat-pickr v-model="dateFrom" class="input input-100"></flat-pickr>
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-date-to" class="label">
                     <p>Datum do:</p>
                 </label>
-                <flat-pickr v-model="dateTo" class="input"></flat-pickr>
+                <flat-pickr v-model="dateTo" class="input input-100"></flat-pickr>
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-amount-from" class="label">
                     <p>Částka od:</p>
                 </label>
-                <input type="number" class="input" id="filter-amount-from" v-model="amountFrom"> 
+                <input type="number" class="input input-100" id="filter-amount-from" v-model="amountFrom"> 
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-amount-to" class="label">
                     <p>Částka do:</p>
                 </label>
-                <input type="number" class="input" id="filter-amount-to" v-model="amountTo">
+                <input type="number" class="input input-100" id="filter-amount-to" v-model="amountTo">
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-transaction-type" class="label">
                     <p>Typ transakce</p>                     
                 </label>
-                <select id="filter-transaction-type" class="input" v-model="type">
+                <select id="filter-transaction-type" class="input input-100" v-model="type">
                     <option value="" selected>Příjem a Výdej</option>
                     <option value="income">Příjem</option>
                     <option value="expense">Výdej</option>
                 </select>
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-category" class="label">
                     <p>Kategorie</p>                     
                 </label>
-                <select id="filter-category" class="input" v-model="category">
+                <select id="filter-category" class="input input-100" v-model="category">
                     <option value="" selected>Vše ({{ categories.length }})</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                 </select>
             </div>
-            <div>
+            <div class="filter">
                 <label for="filter-category" class="label">
                     <p>Autor</p>                     
                 </label>
-                <select id="filter-category" class="input" v-model="author">
+                <select id="filter-category" class="input input-100" v-model="author">
                     <option value="" selected>Vše ({{ wallet.users.length }})</option>
                     <option v-for="user in wallet.users" :key="user.id" :value="user.id">{{ user.email }}</option>
                 </select>
             </div>
-            <button class="button" @click="clearFilter()">Clear</button>
+            <footer class="filters-footer">
+                <div></div>
+                <button class="button is-danger" @click="clearFilter()">Reset filtru</button>
+            </footer>
         </div>
         <transition-group name="fade">
             <transaction v-for="(transaction, index) in filteredTransactions" :key="index" :transaction="transaction" :categories="categories" :wallet="wallet" />
@@ -123,40 +126,43 @@ export default {
 
 <style lang="stylus" scoped>
 @import "../styles/variables.styl"
+
 .transactions-wrapper
-    @media screen and (max-width: 767px)
-        padding-top: 16px
+    min-height: 100.06vh
 
-    display: flex
-    flex-flow: column
-    align-items: center
-    padding-top: 122px
+    background-color: $background-color-primary
 
-.filter-wrapper
-    @media screen and (min-width: 1020px)
-        width: 900px
-
-    @media screen and (min-width: 620px) and (max-width: 1019px)
-        width: 600px
-
-    display: flex
-    flex-wrap: wrap
-    justify-content: space-between
-    padding: 20px
-    width: 300px
-    min-height: 200px
+.filters
+    position: relative
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+    grid-gap: 10px
+    padding-left: 20px
+    padding-right: 20px
+    padding-top: 20px
+    padding-bottom: 75px
     margin-left: 10px
     margin-top: 10px
     margin-bottom: 10px
     margin-right: 10px
 
-    background-color: #ffffff
+    background-color: #FFFFFF
     border-radius: $border-radius
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to {
-    opacity: 0;
-}
+.filters-footer
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    padding: 20px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.fade-enter-active, .fade-leave-active
+    transition: opacity 0.5s
+
+.fade-enter, .fade-leave-to
+    opacity: 0
+
 </style>

@@ -1,18 +1,38 @@
 <template>
-    <div class="section-md">
-        <h1 class="is-bold">Peněženky</h1>
-        <p v-if="wallets.length == 0">There are no wallets!</p>
+    <section class="section top wallets-wrapper">
+        <h2>Vaše peněženky</h2>
         <div class="wallets">
-            <div class="wallet" v-for="wallet in wallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
+            <div class="wallet wallet-create">
+                <form>
+                    <p>
+                        <label for="wallet-name" class="label">
+                            <p>Jméno peněženky</p>
+                        </label>
+                        <input type="text" id="wallet-name" class="input input-100" v-model="walletName">
+                    </p>
+                    <button class="button is-success" @click.prevent="createWallet()">Vytvořit peněženku</button>
+                </form>
+            </div>
+            <div class="wallet" v-for="wallet in ownedWallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
                 <h2>{{ wallet.name }}</h2>
                 <br>
-                <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}"><span v-if="wallet.balance < 0">-</span>{{ wallet.balance | formatCurrency }}</h4>
+                <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}">{{ wallet.balance | formatCurrency }}</h4>
+                <br>
+                <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
+            </div>
+        </div>
+        <h2>Sdílené peněženky</h2>
+        <div class="wallets">
+            <div class="wallet" v-for="wallet in sharedWallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
+                <h2>{{ wallet.name }}</h2>
+                <br>
+                <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}">{{ wallet.balance | formatCurrency }}</h4>
                 <br>
                 <p>Majitel: {{ wallet.owner }}</p>
                 <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <style lang="stylus" scoped>
@@ -21,12 +41,13 @@
 
 <script>
 import axios from 'axios'
-import { mapActions } from "vuex"
+import { mapState ,mapActions } from "vuex"
 
 export default {
     data() {
         return {
-            wallets: []
+            wallets: [],
+            walletName: ""
         }
     },
     methods: {
@@ -36,52 +57,98 @@ export default {
         setWalletAndRedirect(wallet) {
             this.pickWallet(wallet);
             this.$router.push(this.$route.query.redirect || { name: 'Dashboard' })
+        },
+        createWallet() {
+            if(this.walletName) {
+                const data = {
+                    'name': this.walletName
+                }
+                const url = "/api/wallets/"
+                axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                    this.wallets.push(res.data)
+                }).catch(err => {
+
+                })
+                this.walletName = ""
+            }
+        },
+        getWallets() {
+            axios.get("/api/wallets/", { 
+                headers: { Authorization: 'JWT ' + this.$store.state.token }
+            }).then(res => {
+                this.wallets = res.data;
+            }).catch(err => {
+
+            });
         }
     },
     computed: {
+        ...mapState([
+            'user'
+        ]),
         ownedWallets() {
-            
+            let wallets = this.wallets.filter(wall => wall.owner === this.user.id)
+            return wallets
         },
         sharedWallets() {
-
+            let wallets = this.wallets.filter(wall => wall.owner !== this.user.id)
+            return wallets
         }
     },
     created() {
-        axios.get("/api/wallets/", { 
-            headers: { Authorization: 'JWT ' + this.$store.state.token }
-        }).then(res => {
-            this.wallets = res.data;
-        }).catch(err => {
-            console.log(err);
-        });
+        this.getWallets()
     }
 }
 </script>
 
 
 <style lang="stylus" scoped>
+@import "../styles/variables.styl"
+
+.wallets-wrapper
+    min-height: 100.06vh
+
+    background-color: $background-color-primary
+
+    & > h2
+        padding-top: 1rem
+        padding-bottom: 1rem
+        padding-left: 1rem
+
 .wallets
-    display: flex
-    flex-flow: row
-    flex-wrap: wrap
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-gap: 10px;
+    margin: 10px;
 
 .wallet
-    width: 272px
-    height: 200px
-    margin-top: 24px
-    margin-left: 24px
-    padding: 10px
+    height: 250px;
+    padding: 20px;
 
-    background-color: white
+    background-color: #FFFFFF
     border-radius: $border-radius
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
     cursor: pointer
 
     &:hover
-        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        background-color: #F2F2F2
 
-    &:first-child
-        margin-left: 0
+.wallet-create
+    display: flex
+    align-items: center
+    justify-content: center
+
+    border: none
+
+    cursor: unset
+
+    &:hover
+        background-color: #FFFFFF
+    
+    & input
+        margin-bottom: 20px
+    
+    & .button
+        width: 100%
+
 </style>

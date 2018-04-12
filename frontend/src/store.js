@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+
+import router from './router'
 import axios from 'axios'
 
 import { getApiCategories, getApiTransactions, getCurrentUser } from './utils.js'
@@ -13,7 +15,8 @@ export default new Vuex.Store({
     isUserLoggedIn: false,
     wallet: null,
     categories: [],
-    transactions: []
+    transactions: [],
+    isMenuActive: false
   },
   mutations: {
     setToken: (state, payload) => {
@@ -33,9 +36,16 @@ export default new Vuex.Store({
     },
     setUser: (state, payload) => {
       state.user = payload
+    },
+    setIsMenuActive: (state, payload) => {
+      if (payload) state.isMenuActive = payload
+      else state.isMenuActive = !state.isMenuActive
     }
   },
   actions: {
+    toggleMenu: (context, payload) => {
+      context.commit('setIsMenuActive', payload)
+    },
     logUserIn: (context, payload) => {
       context.commit('setToken', payload)
       context.commit('setIsUserLoggedIn', true)
@@ -49,6 +59,7 @@ export default new Vuex.Store({
       commit('setToken', '')
       commit('setIsUserLoggedIn', false)
       commit('setUser', {})
+      router.push({ name: 'Login' })
     },
     pickWallet: ({ commit }, payload) => {
       commit('setWallet', payload)

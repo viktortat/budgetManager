@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Dashboard from '@/views/Dashboard.vue'
 import Transactions from '@/views/Transactions.vue'
 import TransactionDetail from '@/views/TransactionDetail.vue'
@@ -26,6 +27,9 @@ export default new Router({
         header: Header,
         navbar: Navbar
       },
+      meta: {
+        'name': 'Přehled'
+      },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
           next({ name: 'Login', query: {redirect: to.fullPath} })
@@ -43,6 +47,9 @@ export default new Router({
         default: Wallets,
         header: Header
       },
+      meta: {
+        'name': ''
+      },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
           next({ name: 'Login', query: {redirect: to.fullPath} })
@@ -57,6 +64,9 @@ export default new Router({
         default: Transactions,
         header: Header,
         navbar: Navbar
+      },
+      meta: {
+        'name': 'Transakce'
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
@@ -75,6 +85,9 @@ export default new Router({
         header: Header,
         navbar: Navbar
       },
+      meta: {
+        'name': 'Transakce'
+      },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
           next({ name: 'Login', query: {redirect: to.fullPath} })
@@ -91,6 +104,9 @@ export default new Router({
         default: TransactionDetail,
         header: Header,
         navbar: Navbar
+      },
+      meta: {
+        'name': 'Transakce'
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
@@ -116,6 +132,9 @@ export default new Router({
         header: Header,
         navbar: Navbar
       },
+      meta: {
+        'name': 'Nastavení'
+      },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {
           next({ name: 'Login', query: {redirect: to.fullPath} })
@@ -133,6 +152,9 @@ export default new Router({
         default: Categories,
         header: Header,
         navbar: Navbar
+      },
+      meta: {
+        'name': 'Kategorie'
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {

@@ -1,50 +1,20 @@
 <template>
-    <div id="dashboard" class="dashboard section-md">
-        <div class="card card-bilance">
-            <div class="card-heading">
-                <h2>Bilance</h2>
-            </div>
-            <h3>Zůstatek</h3>
-            <p class="is-size-2 is-bold is-right">{{ wallet.balance | formatCurrency }}</p>
-            <h3>Změna</h3>
-            <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{ calculateDifference | formatCurrency }}</p>
-            <small class="is-right">Oproti minulému měsíci</small>
-            <h3>Počet Transakcí</h3>
-            <div class="level">
-                <div>
-                    <p class="is-size-2 is-bold">{{ calculateTransactionsFromLastWeek }} <i class="fas fa-angle-up is-success"></i></p>
-                    <small>Za minulý týden</small>
-                </div>
-                <div>
-                    <p class="is-size-2 is-bold is-right"><i class="fas fa-angle-up is-success"></i> {{calculateTransactionsFromLastMonth}}</p>
-                    <small class="is-right">Za minulý měsíc</small>
-                </div>
-            </div>
+    <div id="dashboard" class="dashboard-wrapper section">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column"></div>
         </div>
-        <div class="card">
-            <div class="card-heading">
-                <h2>Transakce</h2>
-                <router-link :to="{name: 'Transactions'}" class="is-link-light">
-                    <i class="fas fa-angle-double-right is-size-3"></i>
-                </router-link>
-            </div>
-            <transaction v-for="(transaction, index) in lastTransactions" :key="index" :transaction="transaction" :categories="categories" />
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column"></div>
         </div>
-        <div class="card">
-            <div class="card-heading">
-                <h2>Karta</h2>
-            </div>
+        <div class="columns">
+            <div class="column"></div>
         </div>
-        <div class="card">
-            <div class="card-heading">
-                <h2>Karta</h2>
-            </div>
-            <h3>Text <i class="fas fa-user"></i></h3>
-            <h4>Text <i class="fas fa-user"></i></h4>
-            <h5>Text <i class="fas fa-user"></i></h5>
-        </div>
-        <div class="card card-wide card-graph">
-            <bar-graph/>
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column"></div>
         </div>
     </div>
 </template>
@@ -132,81 +102,31 @@ export default {
 <style lang="stylus" scoped>
 @import "../styles/variables.styl"
 
-.dashboard
-    @media screen and (min-width: 1344px) and (max-width: 1919px)
-        grid-template-columns: repeat(2, 480px)
+.dashboard-wrapper
+    min-height: 100.06vh
 
-    @media screen and (min-width: 768px) and (max-width: 1343px)
-        grid-template-columns: 480px
+    background-color: $background-color-primary
 
-    @media screen and (max-width: 767px)
-        grid-template-columns: 1fr
-        grid-gap: 0
-
-    display: grid
-    grid-template-columns: repeat(3, 480px)
-    grid-gap: 48px
-    justify-content: center
-
-.card
-    @media screen and (max-width: 767px)
-        width: 100vw
-        box-shadow: unset
-        border-radius: 0
-        padding: 16px
-        padding-top: 96px
-        
-    position: relative
-    width: 480px
-    height: 480px
-    padding: 32px
-    padding-top: 96px
-    
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
-    border-radius: $border-radius
-    background-color: #FFFFFF
-
-    & > h3
-        padding-top: 32px
-        padding-bottom: 16px
-
-.card-wide
-    @media screen and (min-width: 768px) and (max-width: 1343px)
-        width: 480px
-    
-    @media screen and (max-width: 767px)
-        width: 100vw
-
-    width: 1008px
-
-.card-heading
-    @media screen and (max-width: 767px)
-        border-radius: 0
-
+.columns 
     display: flex
-    align-items: center
-    justify-content: space-between
-    position: absolute
-    left: 0
-    top: 0
-    height: 96px
-    width: 100%
-    padding-left: 32px
-    padding-right: 32px
+    flex-wrap: wrap
 
-    font-weight: 600
-    
-    color: $font-color-light
-    background-color: #7B76F4
-    background: linear-gradient(to bottom right, #7B76F4, #7784FB)
-    border-radius: $border-radius $border-radius 0 0 
+.column
+    flex: 1 1 auto
+    min-height: 300px
+    width: 300px
+    padding: 20px
 
-.card-graph
-    padding-top: 32px
+.column:nth-child(1n), .auto-grid-item:nth-child(1n)
+    background-color: aqua
 
-.card-bilance
-    & small 
-        padding-top: 8px
+.column:nth-child(2n), .auto-grid-item:nth-child(2n)
+    background-color: beige
 
+.column:nth-child(3n), .auto-grid-item:nth-child(3n) 
+    background-color: cadetblue
+
+.column:nth-child(4n), .auto-grid-item:nth-child(4n)
+    background-color: darksalmon
 
 </style>

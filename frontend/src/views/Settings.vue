@@ -1,6 +1,6 @@
 <template>
-    <div class="section-md">
-        <h1 class="is-bold">Nastavení</h1>
+    <div class="section settings-wrapper">
+        
     </div>
 </template>
 
@@ -22,5 +22,9 @@ export default {
 <style lang="stylus" scoped>
 @import "../styles/variables.styl"
 
+.settings-wrapper
+    min-height: 100.06vh
+
+    background-color: $background-color-primary
 
 </style>

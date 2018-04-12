@@ -72,6 +72,9 @@ export default {
     & small
         font-weight: 600
 
+    & input
+        margin-bottom: 30px
+
 </style>
 
 
