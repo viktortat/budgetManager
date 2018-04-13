@@ -3,7 +3,8 @@ import Router from 'vue-router'
 
 import Dashboard from '@/views/Dashboard.vue'
 import Transactions from '@/views/Transactions.vue'
-import TransactionDetail from '@/views/TransactionDetail.vue'
+import TransactionCreate from '@/views/TransactionCreate.vue'
+import TransactionEdit from '@/views/TransactionEdit.vue'
 import Settings from '@/views/Settings.vue'
 import Categories from '@/views/Categories.vue'
 import Login from '@/views/Login.vue'
@@ -13,7 +14,7 @@ import Wallets from '@/views/Wallets.vue'
 import Header from '@/components/Header.vue'
 import Navbar from '@/components/Navbar.vue'
 
-import store from '@/store.js'
+import store from '@/store/store.js'
 
 Vue.use(Router)
 
@@ -81,7 +82,7 @@ export default new Router({
     { path: '/transakce/new',
       name: 'TransactionNew',
       components: {
-        default: TransactionDetail,
+        default: TransactionCreate,
         header: Header,
         navbar: Navbar
       },
@@ -101,7 +102,7 @@ export default new Router({
     { path: '/transakce/:id',
       name: 'TransactionDetail',
       components: {
-        default: TransactionDetail,
+        default: TransactionEdit,
         header: Header,
         navbar: Navbar
       },

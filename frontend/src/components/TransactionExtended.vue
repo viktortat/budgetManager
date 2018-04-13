@@ -30,9 +30,9 @@ export default {
     },
     computed: {
         getUserEmail() {
-            const user = this.wallet.users.find(x => x.id === transaction.user)
+            const user = this.wallet.users.find(x => x.id === this.transaction.user)
             if(user) return user.email
-            else return this.$store.state.user.email
+            else return ""
         }
     }
 }

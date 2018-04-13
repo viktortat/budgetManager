@@ -1,5 +1,5 @@
 <template>
-    <div class="section categories-wrapper">
+    <section class="section categories-wrapper">
         <div class="categories">
             <div class="category category-create">
                 <p>
@@ -16,25 +16,21 @@
                 </p>
                 <button class="button is-success" @click.prevent="createCategory()">Přidat kategorii</button>
             </div>
-            <div class="category" v-for="category in categories" :key="category.id">
-                <h3 class="is-bold">{{ category.name }}</h3>
-                <p>Transakcí: {{ category.transactions.length }}</p>
-                <p class="is-bold" :class="{'is-success': Number(category.balance) > 0, 'is-danger': Number(category.balance) < 0 }">{{ category.balance | formatCurrency }}</p>
-            </div>
+            <category v-for="category in categories" :key="category.id" :category='category'></category>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
 import axios from 'axios'
-
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex'
+import Category from '@/components/Category.vue'
 
 export default {
     data() {
         return {
-            categoryName: "",
-            categoryColor: ""
+            categoryName: '',
+            categoryColor: ''
         }
     },
     computed: {
@@ -58,13 +54,23 @@ export default {
                 }
                 axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                     this.categories.push(res.data)
+                    this.$notify({
+                        text: 'Kategorie byla vytvořena.',
+                        type: 'success'
+                    });
                 }).catch(err => {
-
+                    this.$notify({
+                        text: 'Vyskytl se problém, zkuste to prosím později.',
+                        type: 'error'
+                    });
                 })
                 this.categoryName = ""
                 this.categoryColor = ""
             }
         }
+    },
+    components: {
+        Category
     },
     created() {
         this.loadData();
@@ -92,6 +98,7 @@ export default {
     margin-right: 10px
 
 .category
+    position: relative
     height: 260px
     padding-left: 20px
     padding-right: 20px
@@ -103,22 +110,13 @@ export default {
 
     border-radius: $border-radius
     background-color: #FFFFFF
+    overflow: hidden
 
     cursor: pointer
 
-    &:hover
-        background-color: #F2F2F2
-
 .category-create
     cursor: unset
-    justify-content: center
     align-items: center
-
-    &:hover
-        background-color: #FFFFFF
-
-    & input
-        margin-bottom: 20px
     
     & .button
         width: 100%

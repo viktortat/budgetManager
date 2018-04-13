@@ -1,6 +1,29 @@
 <template>
-    <div>
+    <section>
         <h1>Home</h1>
         <router-link :to="{name: 'Login'}" tag="button" class="button">Login</router-link>
-    </div>
+        <button class="button" @click="notify()">notification</button>
+        <button class="button" @click="showAlert()">alert</button>
+    </section>
 </template>
+
+<script>
+export default {
+    methods: {
+        notify() {
+            this.$notify({
+                text: 'Hello user! This is a notification!',
+                type: 'success'
+            });
+        },
+        showAlert() {
+            this.$swal('Hello Vue world!!!')
+        }
+    }
+}
+</script>   
+
+<style lang="stylus" scoped>
+
+</style>
+

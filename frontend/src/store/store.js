@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import router from './router'
+import router from '@/router/router'
 import axios from 'axios'
 
-import { getApiCategories, getApiTransactions, getCurrentUser } from './utils.js'
+import { getApiCategories, getApiTransactions, getCurrentUser } from '@/utils.js'
 
 Vue.use(Vuex)
 
@@ -75,6 +75,16 @@ export default new Vuex.Store({
           })
         )
       }
+    },
+    refreshData: (context, payload) => {
+      const walletID = context.state.wallet.id
+      const token = context.state.token
+      axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token)]).then(
+        axios.spread((cat, tran) => {
+          context.commit('setTransactions', tran.data)
+          context.commit('setCategories', cat.data)
+        })
+      )
     }
   },
   getters: {

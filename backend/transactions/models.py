@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.utils.translation import ugettext_lazy as _
 from dry_rest_permissions.generics import authenticated_users, allow_staff_or_superuser
 
@@ -17,8 +17,8 @@ User = get_user_model()
 
 class Wallet(models.Model):
     name = models.CharField(_("Name"), max_length=128)
-    owner = models.ForeignKey(User, related_name="owner", on_delete=models.CASCADE, blank=True, null=True)
-    users = models.ManyToManyField(User, related_name="users", verbose_name=_('Users'), blank=True)
+    owner = models.ForeignKey(User, related_name="owned_wallets", on_delete=models.CASCADE, blank=True, null=True)
+    users = models.ManyToManyField(User, related_name="shared_wallets", verbose_name=_('Users'), blank=True)
     balance = models.DecimalField(_('Balance'), max_digits=11, decimal_places=2, default=0.0)
 
     def update_total(self):
@@ -26,6 +26,12 @@ class Wallet(models.Model):
         for category in self.categories.all():
             balance += category.balance
         self.balance = format(balance, ".2f")
+        self.save()
+
+    def copy_owner(self):
+        owner = User.objects.get(id=self.owner.id)
+        users = self.users
+        users.add(owner)
         self.save()
 
     def __str__(self):
@@ -52,6 +58,14 @@ class Wallet(models.Model):
     @allow_staff_or_superuser
     def has_object_write_permission(self, request):
         return request.user == self.owner or request.user in self.users.all()
+
+
+def post_save_users_update(sender, instance, created, *args, **kwargs):
+    if instance.owner not in instance.users.all():
+        instance.copy_owner()
+
+
+post_save.connect(post_save_users_update, sender=Wallet)
 
 
 class Category(models.Model):
@@ -151,3 +165,15 @@ def post_save_balance_update(sender, instance, created, *args, **kwargs):
 
 
 post_save.connect(post_save_balance_update, sender=Transaction)
+
+
+def post_delete_balance_update(sender, instance, using, *args, **kwargs):
+    category_id = instance.category.id
+    category = Category.objects.get(id=category_id)
+    if category is not None:
+        category.update_total()
+        if category.wallet is not None:
+            category.wallet.update_total()
+
+
+post_delete.connect(post_delete_balance_update, sender=Transaction)

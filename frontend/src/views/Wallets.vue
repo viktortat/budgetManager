@@ -66,8 +66,15 @@ export default {
                 const url = "/api/wallets/"
                 axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                     this.wallets.push(res.data)
+                    this.$notify({
+                        text: 'Peneženka byla vytvořena.',
+                        type: 'success'
+                    });
                 }).catch(err => {
-
+                    this.$notify({
+                        text: 'Vyskytl se problém, zkuste to prosím později.',
+                        type: 'error'
+                    });
                 })
                 this.walletName = ""
             }
@@ -77,9 +84,7 @@ export default {
                 headers: { Authorization: 'JWT ' + this.$store.state.token }
             }).then(res => {
                 this.wallets = res.data;
-            }).catch(err => {
-
-            });
+            })
         }
     },
     computed: {

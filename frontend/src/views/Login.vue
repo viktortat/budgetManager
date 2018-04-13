@@ -1,5 +1,5 @@
 <template>
-    <div class="login">
+    <section class="login">
         <h1 class="is-bold">Přihlásit se</h1>
         <form class="form">
             <p>
@@ -16,7 +16,7 @@
             </p>
             <button class="button" @click.prevent="login">Přihlásit se</button>
         </form>
-    </div>
+    </section>
 </template>
 
 <script>

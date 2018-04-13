@@ -1,13 +1,14 @@
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './registerServiceWorker'
+import App from '@/App.vue'
+import router from '@/router/router'
+import store from '@/store/store'
+import axios from 'axios'
+import '@/registerServiceWorker'
+import Notifications from 'vue-notification'
+import VueSweetalert2 from 'vue-sweetalert2';
 
-import Chart from 'chart.js'
-
-Chart.defaults.global.defaultFontColor = '#4D4D4D'
-Chart.defaults.global.defaultFontFamily = "'Montserrat', sans-serif"
+Vue.use(Notifications)
+Vue.use(VueSweetalert2)
 
 new Vue({
   router,

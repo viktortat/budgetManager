@@ -3,6 +3,7 @@
         <router-view name="header"/>
         <router-view name="navbar"/>
         <router-view/>
+        <notifications/>
     </div>
 </template>
 

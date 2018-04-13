@@ -1,5 +1,5 @@
 <template>
-    <div class="section transactions-wrapper">
+    <section class="section transactions-wrapper">
         <div class="filters">
             <div class="filter">
                 <label for="filter-date-from" class="label">
@@ -61,7 +61,7 @@
         <transition-group name="fade">
             <transaction v-for="(transaction, index) in filteredTransactions" :key="index" :transaction="transaction" :categories="categories" :wallet="wallet" />
         </transition-group>
-    </div>
+    </section>
 </template>
 
 <script>
