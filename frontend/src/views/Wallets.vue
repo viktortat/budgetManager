@@ -52,7 +52,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            "pickWallet"
+            "pickWallet",
+            "logUserOut"
         ]),
         setWalletAndRedirect(wallet) {
             this.pickWallet(wallet);
@@ -84,6 +85,10 @@ export default {
                 headers: { Authorization: 'JWT ' + this.$store.state.token }
             }).then(res => {
                 this.wallets = res.data;
+            }).catch(error => {
+                if(error.response.status === 401) {
+                    this.logUserOut()
+                }
             })
         }
     },

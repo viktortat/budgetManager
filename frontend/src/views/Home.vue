@@ -3,7 +3,6 @@
         <h1>Home</h1>
         <router-link :to="{name: 'Login'}" tag="button" class="button">Login</router-link>
         <button class="button" @click="notify()">notification</button>
-        <button class="button" @click="showAlert()">alert</button>
     </section>
 </template>
 

@@ -42,7 +42,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            'loadData'
+            'loadData',
+            'refreshData'
         ]),
         createCategory() {
             if(this.categoryName && this.categoryColor) {  
@@ -53,11 +54,11 @@ export default {
                     "wallet": this.wallet.id
                 }
                 axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
-                    this.categories.push(res.data)
                     this.$notify({
                         text: 'Kategorie byla vytvořena.',
                         type: 'success'
                     });
+                    this.refreshData()
                 }).catch(err => {
                     this.$notify({
                         text: 'Vyskytl se problém, zkuste to prosím později.',

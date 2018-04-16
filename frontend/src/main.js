@@ -19,3 +19,13 @@ new Vue({
 Vue.filter('formatCurrency', value => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',') + ' Kč'
 })
+
+axios.interceptors.response.use(response => {
+  return response
+}, error => {
+  console.log(error)
+  if(error.response.status === 401) {
+    store.dispatch("logUserOut")
+  }
+  return Promise.reject(error)
+});

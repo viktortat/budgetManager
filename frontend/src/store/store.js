@@ -6,9 +6,14 @@ import axios from 'axios'
 
 import { getApiCategories, getApiTransactions, getCurrentUser } from '@/utils.js'
 
+import createPersistedState from 'vuex-persistedstate'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState({
+    paths: ['token', 'isUserLoggedIn'],
+  })],
   state: {
     user: {},
     token: '',
@@ -73,7 +78,11 @@ export default new Vuex.Store({
             context.commit('setTransactions', tran.data)
             context.commit('setCategories', cat.data)
           })
-        )
+        ).catch(error => {
+          if(error.response.status === 401) {
+            context.dispatch('logUserOut')
+          }
+        })
       }
     },
     refreshData: (context, payload) => {
@@ -86,8 +95,5 @@ export default new Vuex.Store({
         })
       )
     }
-  },
-  getters: {
-
   }
 })
