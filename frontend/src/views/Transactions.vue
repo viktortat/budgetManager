@@ -106,12 +106,13 @@ export default {
             'loadData'
         ]),
         clearFilter() {
-            this.dateFrom = "";
-            this.dateTo = "";
-            this.amountFrom = "";
-            this.amountTo = "";
-            this.type = '',
+            this.dateFrom = ""
+            this.dateTo = ""
+            this.amountFrom = ""
+            this.amountTo = ""
+            this.type = ''
             this.category = ''
+            this.author = ''
         }
     },
     components: {

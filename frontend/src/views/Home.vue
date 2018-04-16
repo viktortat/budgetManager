@@ -14,9 +14,6 @@ export default {
                 text: 'Hello user! This is a notification!',
                 type: 'success'
             });
-        },
-        showAlert() {
-            this.$swal('Hello Vue world!!!')
         }
     }
 }

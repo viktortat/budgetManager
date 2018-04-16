@@ -12,7 +12,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   plugins: [createPersistedState({
-    paths: ['token', 'isUserLoggedIn'],
+    paths: ['token', 'isUserLoggedIn', 'user'],
   })],
   state: {
     user: {},

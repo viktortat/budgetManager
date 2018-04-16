@@ -5,10 +5,8 @@ import store from '@/store/store'
 import axios from 'axios'
 import '@/registerServiceWorker'
 import Notifications from 'vue-notification'
-import VueSweetalert2 from 'vue-sweetalert2';
 
 Vue.use(Notifications)
-Vue.use(VueSweetalert2)
 
 new Vue({
   router,
