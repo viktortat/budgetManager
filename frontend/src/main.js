@@ -5,8 +5,11 @@ import store from '@/store/store'
 import axios from 'axios'
 import '@/registerServiceWorker'
 import Notifications from 'vue-notification'
+import moment from 'moment'
 
 Vue.use(Notifications)
+
+moment.locale('cs')
 
 new Vue({
   router,

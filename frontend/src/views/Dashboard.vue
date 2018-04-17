@@ -1,27 +1,22 @@
 <template>
     <section id="dashboard" class="dashboard-wrapper section">
         <div class="dashboard-filters">
+            <button class="button" @click="subtractMonth()">předchozí</button>
             <div class="dashboard-filter">
-                <label for="dashboard-date-from" class="label">
-                    <p>Datum od:</p>
-                </label>
-                <flat-pickr v-model="dateFrom" class="input input-100" id="dashboard-date-from"></flat-pickr>
+                <p>Zvolený měsíc: {{ month | parseMonth }}</p>
             </div>
-            <div class="filter">
-                <label for="dashboard-date-to" class="label">
-                    <p>Datum do:</p>
-                </label>
-                <flat-pickr v-model="dateTo" class="input input-100" id="dashboard-date-to"></flat-pickr>
-            </div>
+            <button class="button" @click="addMonth()">další</button>
         </div>
         <div class="columns">
             <div class="column"></div>
             <div class="column">
-                <doughnut-chart :data="categoriesDataset" :options="{responsive: true, maintainAspectRatio: false}"/>
+                <doughnut-chart :chartData="categoriesDataset" :options="{responsive: true, maintainAspectRatio: false}" />
             </div>
         </div>
         <div class="columns">
-            <div class="column"></div>
+            <div class="column">
+                <line-chart :chartData="getTransactions" :options="{responsive: true, maintainAspectRatio: false}" />
+            </div>
         </div>
     </section>
 </template>
@@ -31,8 +26,8 @@ import axios from 'axios'
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
 import Transaction from '@/components/TransactionSimple.vue'
-import PieChart from '@/components/PieChart.js'
 import DoughnutChart from '@/components/DoughnutChart.js'
+import LineChart from '@/components/LineChart.js'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -41,24 +36,29 @@ export default {
     data() {
         return {
             difference: 0,
-            dateFrom: "",
-            dateTo: ""
+            month: ''
         }
     },
     methods: {
         ...mapActions([
             'loadData'
         ]),
-        // calculateBalance(balance, transactions) {
-        //     for(let transaction of transactions) {
-        //         if(transaction.transaction_type === "income") {
-        //             balance =+ transaction.amount;
-        //         } else {
-        //             balance =- transaction.amount;
-        //         }
-        //     }
-        //     return balance;
-        // }
+        calculateBalance(balance, transactions) {
+            for(let transaction of transactions) {
+                if(transaction.transaction_type === "income") {
+                    balance += Number(transaction.amount);
+                } else {
+                    balance -= Number(transaction.amount);
+                }
+            }
+            return balance;
+        },
+        addMonth() {
+            this.month = moment(this.month).add(1, 'month')
+        },
+        subtractMonth() {
+            this.month = moment(this.month).subtract(1, 'month')
+        }
     },
     computed: {
         ...mapState([
@@ -80,10 +80,28 @@ export default {
                 data.labels.push(cat.name)
             }
             return data
-        }
+        },
         // lastTransactions() {
         //     return this.transactions.slice(0, 5);
         // },
+        getTransactions() {
+            let data = {
+                datasets: [{ data: [], backgroundColor: [], borderColor: [] }],
+                labels: []
+            }
+            let dateFrom = moment(this.month).startOf('month').format('YYYY-MM-DD')
+            let dateTo =  moment(this.month).endOf('month').format('YYYY-MM-DD')
+            for(var i = 0; i < 6; i++) {
+                dateFrom = moment(this.month).subtract(i, 'months').startOf('month').format('YYYY-MM-DD')
+                dateTo = moment(this.month).subtract(i, 'months').endOf('month').format('YYYY-MM-DD')
+                let transactions = this.transactions.filter(trns => trns.date >= dateFrom && trns.date <= dateTo);
+                data.datasets[0].data.unshift(Number(this.calculateBalance(0, transactions)))
+                data.labels.unshift(moment(dateFrom).format('MMMM'))
+            }
+            data.datasets[0].backgroundColor.push('#d3eafb')
+            data.datasets[0].borderColor.push('#2599ee')
+            return data
+        },
         // calculateDifference() {
         //     const lastMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD');
         //     const lastMonthLastDay = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
@@ -114,13 +132,17 @@ export default {
     components: {
         Transaction,
         flatPickr,
-        PieChart,
-        DoughnutChart
+        DoughnutChart,
+        LineChart
+    },
+    filters: {
+        parseMonth(value) {
+            return moment(value).format('MMMM YYYY')
+        }
     },
     created() {
         this.loadData()
-        this.dateFrom = moment().startOf('month').format('YYYY-MM-DD')
-        this.dateTo = moment().endOf('month').format('YYYY-MM-DD')
+        this.month = moment().startOf('month').format('YYYY-MM-DD')
     }
 }
 </script>
@@ -137,7 +159,7 @@ export default {
 
 .dashboard-filters
     display: flex
-    justify-content: center
+    justify-content: space-between
     align-items: center
     flex-wrap: wrap
     margin: 10px
