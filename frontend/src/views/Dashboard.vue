@@ -1,25 +1,30 @@
 <template>
     <section id="dashboard" class="dashboard-wrapper section">
         <div class="dashboard-filters">
-            <button class="button" @click="subtractMonth()"><i class="fas fa-angle-left"></i></button>
+            <button class="button" @click="subtractDate()"><i class="fas fa-angle-left"></i></button>
             <div class="dashboard-filter">
-                <p>Zvolený měsíc: {{ month | parseMonth }}</p>
+                <flat-pickr v-model="dateFrom" class="input"></flat-pickr>
+                <flat-pickr v-model="dateTo" class="input"></flat-pickr>
             </div>
-            <button class="button" @click="addMonth()"><i class="fas fa-angle-right"></i></button>
+            <button class="button" @click="addDate()"><i class="fas fa-angle-right"></i></button>
         </div>
         <div class="columns">
-            <div class="column"></div>
+            <div class="column">
+                <p>{{ calculateExpenses }}</p>
+                <p>{{ calculateIncome }}</p>
+            </div>
             <div class="column">
                 <doughnut-chart :chartData="categoriesDataset" :options="{responsive: true, maintainAspectRatio: false}" />
             </div>
         </div>
         <div class="columns">
             <div class="column">
-                <line-chart :chartData="getTransactions" :options="{responsive: true, maintainAspectRatio: false}" />
+                <line-chart :chartData="transactionsDataset" :options="{responsive: true, maintainAspectRatio: false}" />
             </div>
         </div>
     </section>
 </template>
+
 
 <script>
 import axios from 'axios'
@@ -36,7 +41,8 @@ export default {
     data() {
         return {
             difference: 0,
-            month: ''
+            dateTo: moment().endOf('month').format('YYYY-MM-DD'), 
+            dateFrom: moment().startOf('month').format('YYYY-MM-DD')
         }
     },
     methods: {
@@ -53,11 +59,30 @@ export default {
             }
             return balance;
         },
-        addMonth() {
-            this.month = moment(this.month).add(1, 'month')
+        subtractDate() {
+            if(this.walkByMonth()) {
+                this.dateTo = moment(this.dateTo).subtract(1, 'months').endOf('month').format('YYYY-MM-DD')
+                this.dateFrom = moment(this.dateFrom).subtract(1, 'months').startOf('month').format('YYYY-MM-DD')
+            } else {
+                let difference = moment.duration(moment(this.dateTo).diff(moment(this.dateFrom))).asDays()
+                this.dateTo = moment(this.dateTo).subtract(difference, 'days').format('YYYY-MM-DD')
+                this.dateFrom = moment(this.dateFrom).subtract(difference, 'days').format('YYYY-MM-DD')
+            }
         },
-        subtractMonth() {
-            this.month = moment(this.month).subtract(1, 'month')
+        addDate() {
+            if(this.walkByMonth()) {
+                this.dateTo = moment(this.dateTo).add(1, 'months').endOf('month').format('YYYY-MM-DD')
+                this.dateFrom = moment(this.dateFrom).add(1, 'months').startOf('month').format('YYYY-MM-DD')
+            } else {
+                let difference = moment.duration(moment(this.dateTo).diff(moment(this.dateFrom))).asDays()
+                this.dateTo = moment(this.dateTo).add(difference, 'days').format('YYYY-MM-DD')
+                this.dateFrom = moment(this.dateFrom).add(difference, 'days').format('YYYY-MM-DD')
+            }
+        },
+        walkByMonth() {
+            let dateTo = moment(this.dateTo).endOf('month').format('YYYY-MM-DD')
+            let dateFrom = moment(this.dateFrom).startOf('month').format('YYYY-MM-DD')
+            return moment(dateFrom).isSame(moment(this.dateFrom)) && moment(dateTo).isSame(moment(this.dateTo))
         }
     },
     computed: {
@@ -71,63 +96,64 @@ export default {
                 datasets: [{ data: [], backgroundColor: [] }],
                 labels: []
             }   
-            const categories = this.categories.slice().filter(cat => cat.balance < 0).sort((a, b) => {
-                return b.balance - a.balance
-            })
-            for(let cat of categories) {
-                data.datasets[0].data.push(cat.balance)
-                data.datasets[0].backgroundColor.push(cat.color)
-                data.labels.push(cat.name)
+            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let categories = this.categories.slice()
+            for (let cat of categories) {
+                let balance = 0
+                for (var i = 0; i < cat.transactions.length; i++) {
+                    let trn = transactions.find(x => x.id === cat.transactions[i])
+                    if(trn) {
+                        if (trn.transaction_type === "expense") {
+                            balance += Number(trn.amount)
+                        }
+                    }
+                }
+                if(balance) {
+                    data.datasets[0].data.push(balance)
+                    data.datasets[0].backgroundColor.push(cat.color)
+                    data.labels.push(cat.name)
+                }
             }
             return data
         },
-        // lastTransactions() {
-        //     return this.transactions.slice(0, 5);
-        // },
-        getTransactions() {
+        transactionsDataset() {
             let data = {
                 datasets: [{ data: [], backgroundColor: [], borderColor: [] }],
                 labels: []
             }
-            let dateFrom = moment(this.month).startOf('month').format('YYYY-MM-DD')
-            let dateTo =  moment(this.month).endOf('month').format('YYYY-MM-DD')
+            let dateFrom = this.dateFrom
+            let dateTo = this.dateTo
             for(var i = 0; i < 6; i++) {
-                dateFrom = moment(this.month).subtract(i, 'months').startOf('month').format('YYYY-MM-DD')
-                dateTo = moment(this.month).subtract(i, 'months').endOf('month').format('YYYY-MM-DD')
-                let transactions = this.transactions.filter(trns => trns.date >= dateFrom && trns.date <= dateTo);
+                let transactions = this.transactions.filter(trn => trn.date >= dateFrom && trn.date <= dateTo)
                 data.datasets[0].data.unshift(Number(this.calculateBalance(0, transactions)))
                 data.labels.unshift(moment(dateFrom).format('MMMM'))
+                dateFrom = moment(dateFrom).subtract(1, 'months').format('YYYY-MM-DD')
+                dateTo = moment(dateTo).subtract(1, 'months').format('YYYY-MM-DD')
             }
             data.datasets[0].backgroundColor.push('#d3eafb')
             data.datasets[0].borderColor.push('#2599ee')
             return data
         },
-        // calculateDifference() {
-        //     const lastMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD');
-        //     const lastMonthLastDay = moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD');
-        //     const thisMonthFirstDay = moment().startOf('month').format('YYYY-MM-DD');
-        //     const thisMonthLastDay = moment().endOf('month').format('YYYY-MM-DD');
-
-        //     const lastMonthTransactions = this.transactions.filter(trns => trns.date > lastMonthFirstDay && trns.date < lastMonthLastDay);
-        //     const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
-            
-        //     let balanceLastMonth = this.calculateBalance(0, lastMonthTransactions);
-        //     let balanceThisMonth = this.calculateBalance(0, thisMonthTransactions);
-
-        //     return balanceThisMonth - balanceLastMonth;
-        // },
-        // calculateTransactionsFromLastMonth() {
-        //     const thisMonthFirstDay = moment().startOf('month').format('YYYY-MM-DD');
-        //     const thisMonthLastDay = moment().endOf('month').format('YYYY-MM-DD');
-        //     const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
-        //     return thisMonthTransactions.length;
-        // },
-        // calculateTransactionsFromLastWeek() {
-        //     const thisMonthFirstDay = moment().startOf('week').format('YYYY-MM-DD');
-        //     const thisMonthLastDay = moment().endOf('week').format('YYYY-MM-DD');
-        //     const thisMonthTransactions = this.transactions.filter(trns => trns.date > thisMonthFirstDay && trns.date < thisMonthLastDay);
-        //     return thisMonthTransactions.length;
-        // }
+        calculateExpenses() {
+            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let balance = 0
+            for (let trn of transactions) {
+                if(trn.transaction_type === 'expense') {
+                    balance += Number(trn.amount)
+                }
+            }
+            return balance
+        },
+        calculateIncome() {
+            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let balance = 0
+            for (let trn of transactions) {
+                if(trn.transaction_type === 'income') {
+                    balance += Number(trn.amount)
+                }
+            }
+            return balance
+        }
     },
     components: {
         Transaction,
@@ -141,12 +167,10 @@ export default {
         }
     },
     created() {
-        this.loadData()
-        this.month = moment().startOf('month').format('YYYY-MM-DD')
+        this.loadData() 
     }
 }
 </script>
-
 
 
 <style lang="stylus" scoped>
