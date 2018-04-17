@@ -116,6 +116,9 @@ export default {
 @import "../styles/variables.styl"
 
 .wallets-wrapper
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+        
     min-height: 100.06vh
 
     background-color: $background-color-primary
@@ -132,6 +135,10 @@ export default {
     margin: 10px;
 
 .wallet
+    @media screen and (min-width: 768px)
+        &:hover
+            background-color: #F2F2F2
+
     height: 250px;
     padding: 20px;
 
@@ -140,8 +147,7 @@ export default {
 
     cursor: pointer
 
-    &:hover
-        background-color: #F2F2F2
+
 
 .wallet-create
     display: flex

@@ -42,6 +42,10 @@ export default {
 @import "../styles/variables.styl"
 
 .transaction
+    @media screen and (min-width: 768px)
+        &:hover
+            background-color: #F2F2F2
+    
     position: relative
     display: flex
     height: 60px
@@ -55,8 +59,6 @@ export default {
     border-radius: $border-radius
     transition: all 0.3s ease-in-out
 
-    &:hover
-        background-color: #F2F2F2
 
 .transaction-category, .transaction-owner, .transaction-notes, .transaction-amount
     height: 100%

@@ -1,11 +1,11 @@
 <template>
     <section id="dashboard" class="dashboard-wrapper section">
         <div class="dashboard-filters">
-            <button class="button" @click="subtractMonth()">předchozí</button>
+            <button class="button" @click="subtractMonth()"><i class="fas fa-angle-left"></i></button>
             <div class="dashboard-filter">
                 <p>Zvolený měsíc: {{ month | parseMonth }}</p>
             </div>
-            <button class="button" @click="addMonth()">další</button>
+            <button class="button" @click="addMonth()"><i class="fas fa-angle-right"></i></button>
         </div>
         <div class="columns">
             <div class="column"></div>
@@ -153,6 +153,9 @@ export default {
 @import "../styles/variables.styl"
 
 .dashboard-wrapper
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+        
     min-height: 100.06vh
 
     background-color: $background-color-primary

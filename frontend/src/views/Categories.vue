@@ -83,6 +83,9 @@ export default {
 @import "../styles/variables.styl"
 
 .categories-wrapper
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+        
     min-height: 100.06vh
 
     background-color: $background-color-primary

@@ -18,7 +18,7 @@
             </div>
             <footer class="settings-footer">
                 <div></div>
-                <button class="button is-success">Uložit</button>
+                <button class="button is-success" @click="editWalletName()">Uložit</button>
             </footer>
         </div>
     </section>
@@ -26,6 +26,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import axios from 'axios'
 
 export default {
     data() {
@@ -35,8 +36,27 @@ export default {
     },
     methods: {
         ...mapActions([
-            'loadData'
-        ])
+            'loadData',
+            'refreshData'
+        ]),
+        editWalletName() {
+            const data = {
+                'name': this.walletName
+            }
+            const url = '/api/wallets/' + this.wallet.id + '/'
+            axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.refreshData()
+                this.$notify({
+                    text: 'Peneženka byla prejmenována.',
+                    type: 'success'
+                })
+            }).catch(err => {
+                this.$notify({
+                    text: 'Vyskytl se problém, zkuste to prosím později.',
+                    type: 'error'
+                })
+            })
+        }
     },
     computed: {
         ...mapState([
@@ -56,6 +76,9 @@ export default {
 @import "../styles/variables.styl"
 
 .settings-wrapper
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+        
     min-height: 100.06vh
 
     background-color: $background-color-primary

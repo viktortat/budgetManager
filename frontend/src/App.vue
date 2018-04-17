@@ -11,6 +11,9 @@
 @import "./styles/global.styl"
 
 .app
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+
     min-height: 100.06vh
 
 </style>
