@@ -46,6 +46,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 import { mapState, mapActions } from 'vuex'
 
@@ -59,7 +60,7 @@ export default {
                 'amount': '',
                 'transaction_type': '',
                 'notes': '',
-                'date': '',
+                'date': moment().format('YYYY-MM-DD'),
                 'category': ''
             }
         }

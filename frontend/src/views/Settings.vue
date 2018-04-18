@@ -6,14 +6,12 @@
             </header>
             <div class="settings">
                 <div>
-                    <label for="settings-wallet-name" class="label">
-                        <p>Jméno</p>
-                    </label>
+                    <h5 class="is-bold">Jméno</h5>
                     <input type="text" id="settings-wallet-name" class="input input-100" v-model="walletName">
                 </div>
                 <div>
-                    <p class="is-bold">Uživatelé</p>
-                    <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
+                    <h5 class="is-bold">Uživatelé</h5>
+                    <wallet-user v-for="user in wallet.users" :key="user.id" :user="user" />
                 </div>
             </div>
             <footer class="settings-footer">
@@ -27,6 +25,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
+import WalletUser from '@/components/WalletUser.vue'
 
 export default {
     data() {
@@ -47,7 +46,7 @@ export default {
             axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.refreshData()
                 this.$notify({
-                    text: 'Peneženka byla prejmenována.',
+                    text: 'Peněženka byla uložena.',
                     type: 'success'
                 })
             }).catch(err => {
@@ -64,6 +63,9 @@ export default {
             'categories',
             'transactions'
         ])
+    },
+    components: {
+        WalletUser
     },
     created() {
         this.loadData();
@@ -117,4 +119,10 @@ export default {
 .settings
     & > div
         margin-bottom: 20px
+
+    & h5
+        margin-left: 5px
+        margin-bottom: 5px
+
+
 </style>

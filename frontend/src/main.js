@@ -9,27 +9,30 @@ import moment from 'moment'
 import { tokenMixin } from '@/mixins.js'
 
 Vue.use(Notifications)
+Vue.mixin(tokenMixin)
 
 moment.locale('cs')
+
+Vue.filter('formatCurrency', value => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',') + ' Kč'
+})
+
+axios.interceptors.response.use(response => {
+  return response
+}, error => {
+  if(error.response.status === 401) {
+    store.dispatch("logUserOut")
+  }
+  return Promise.reject(error)
+});
+
+router.beforeEach((to, from, next) => {
+  store.dispatch("toggleMenu", 'false')
+  next()
+})
 
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
-
-Vue.filter('formatCurrency', value => {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',') + ' Kč'
-})
-
-Vue.mixin(tokenMixin)
-
-axios.interceptors.response.use(response => {
-  return response
-}, error => {
-  console.log(error)
-  if(error.response.status === 401) {
-    store.dispatch("logUserOut")
-  }
-  return Promise.reject(error)
-});

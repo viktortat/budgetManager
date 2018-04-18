@@ -83,33 +83,68 @@ small, .is-size-small
 // ==================================
 
 .button
-    height: 35px
-    padding-left: 20px
-    padding-right: 20px
+    height: 45px
+    width: 156px
 
     font-size: inherit
     font-weight: 600
 
     color: $font-color-light
-    background-color: #7B76F4
-    background: linear-gradient(to bottom right, #7B76F4, #7784FB)
+    background-color: $primary-color
     border-radius: $border-radius
 
     cursor: pointer
 
-    // &:hover
-    //     transform: translateY(1px) translateX(1px)
+    &:hover
+        background-color: $primary-color-light
+
+    &:active
+        background-color: $primary-color-dark
+        box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.3)
+
+    &:focus
+        outline: 0
 
     &.is-success
-        background: unset
+        &:hover
+            background-color: $success-color-light
+
+        &:active
+            background-color: $success-color-dark
+            box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.3);
+
         background-color: $success-color
 
     &.is-danger
-        background: unset
+        &:hover
+            background-color: $danger-color-light
+
+        &:active
+            background-color: $danger-color-dark
+            box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.3);
+
         background-color: $danger-color
 
     &.is-100 
         width: 100%
+
+    &.is-square
+        width: 45px
+
+    &.is-link
+        height: unset
+        width: unset
+
+        color: $primary-color
+
+        background-color: unset
+
+        &:hover
+            color: $primary-color-light
+
+        &:active
+            color: $primary-color-dark
+            box-shadow: unset
 
 .section
     @media screen and (max-width: 767px)

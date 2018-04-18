@@ -43,7 +43,11 @@ export default new Vuex.Store({
       state.user = payload
     },
     setIsMenuActive: (state, payload) => {
-      if (payload) state.isMenuActive = payload
+      if (payload) {
+        if(payload == 'true') payload = true
+        else payload = false
+        state.isMenuActive = payload
+      }
       else state.isMenuActive = !state.isMenuActive
     }
   },

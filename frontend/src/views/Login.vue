@@ -43,7 +43,10 @@ export default {
                 this.logUserIn(res.data.token);
                 this.$router.push(this.$route.query.redirect || {name: 'Wallets'});
             }).catch(err => {
-                console.log(err);
+                this.$notify({
+                    text: 'Vyskytl se problém, zkuste to prosím později.',
+                    type: 'error'
+                });
             })
         }
     }

@@ -6,8 +6,8 @@
         <p class="is-bold" :class="{'is-success': Number(category.balance) > 0, 'is-danger': Number(category.balance) < 0 }">{{ category.balance | formatCurrency }}</p>
     </div>
     <div class="category" v-else-if="!menuMode">
-        <button class="button" @click="close(false, false, false)">Zavřít</button>
-        <button class="button is-success" @click="menuMode = !menuMode">Upravit</button>
+        <button class="button is-100" @click="close(false, false, false)">Zavřít</button>
+        <button class="button is-success is-100" @click="menuMode = !menuMode">Upravit</button>
         <div>
             <button class="button is-danger is-100" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
             <button class="button is-danger is-100" @click="deleteCategory()" v-else >Doopravdy?</button>

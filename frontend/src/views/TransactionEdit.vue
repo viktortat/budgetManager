@@ -37,8 +37,9 @@
                 </select>
             </p>
             <footer class="transaction-footer">
-                <button class="button is-danger" @click.prevent="deleteTransaction()">Smazat</button>
-                <button class="button is-success" @click.prevent="editTransaction()">Upravit</button>
+                <button class="button is-danger" @click.prevent="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
+                <button class="button is-danger" @click.prevent="deleteTransaction()" v-else>Doopravdy?</button>
+                <button class="button is-success" @click.prevent="editTransaction()">Uložit</button>
             </footer>
         </form>
     </div>
@@ -55,7 +56,8 @@ import 'flatpickr/dist/flatpickr.css'
 export default {
     data() {
         return {
-            transaction: {}
+            transaction: {},
+            deleteCheck: false
         }
     },
     methods: {
@@ -85,8 +87,9 @@ export default {
                         text: 'Vyskytl se problém, zkuste to prosím později.',
                         type: 'error'
                     });
-                });
+                }); 
             }
+            this.deleteCheck = false
         },
         deleteTransaction() {
             const url = "/api/transactions/" + this.transaction.id + "/"
