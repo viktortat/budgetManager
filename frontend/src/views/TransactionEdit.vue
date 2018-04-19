@@ -38,7 +38,7 @@
             </p>
             <footer class="transaction-footer">
                 <button class="button is-danger" @click.prevent="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
-                <button class="button is-danger" @click.prevent="deleteTransaction()" v-else>Doopravdy?</button>
+                <button class="button is-danger" @click.prevent="deleteTransaction()" v-else>Opravdu?</button>
                 <button class="button is-success" @click.prevent="editTransaction()">Uložit</button>
             </footer>
         </form>
@@ -49,6 +49,7 @@
 import axios from 'axios'
 
 import { mapState, mapActions } from 'vuex'
+import { tokenCheck } from '@/mixins.js'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -108,6 +109,7 @@ export default {
             });          
         }
     },
+    mixins: [tokenCheck],
     computed: {
         ...mapState([
             'wallet',

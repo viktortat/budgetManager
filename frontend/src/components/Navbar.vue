@@ -11,9 +11,7 @@
             <router-link :to="{name: 'Settings'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-cogs"></i></div>Nastavení</router-link>
         </div>
         <footer class="navbar-footer">
-            <div class="navbar-account">
-                <div class="navbar-account-photo"></div>
-            </div>
+            <div class="navbar-account"></div>
             <div></div>
             <div class="is-size-5 navbar-logout" @click="logUserOut"><i class="fas fa-sign-out-alt"></i></div>
         </footer>

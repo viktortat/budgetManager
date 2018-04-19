@@ -111,13 +111,16 @@ class Category(models.Model):
 
 
 class Transaction(models.Model):
-    transaction_type = models.CharField(_('Transaction type'), max_length=32, choices=TRANSACTION_TYPES, default='expense')
+    transaction_type = models.CharField(_('Transaction type'), max_length=32, choices=TRANSACTION_TYPES,
+                                        default='expense')
     notes = models.CharField(_('Notes'), max_length=255, blank=True, null=True)
     amount = models.DecimalField(_('Amount'), max_digits=11, decimal_places=2)
     date = models.DateField(_('Date'), default=datetime.date.today)
     user = models.ForeignKey(User, verbose_name=_('User'), on_delete=models.CASCADE, blank=True, null=True)
-    category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='transactions', on_delete=models.CASCADE)
-    wallet = models.ForeignKey(Wallet, verbose_name=_('Wallet'), related_name='transactions', on_delete=models.CASCADE, blank=True, null=True)
+    category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='transactions',
+                                 on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, verbose_name=_('Wallet'), related_name='transactions', on_delete=models.CASCADE,
+                               blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.wallet = self.category.wallet
@@ -141,18 +144,50 @@ class Transaction(models.Model):
     @authenticated_users
     @allow_staff_or_superuser
     def has_object_read_permission(self, request):
-        if request.user == self.wallet.owner or request.user in self.wallet.users.all():
-            return True
-        else:
-            return False
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
 
     @authenticated_users
     @allow_staff_or_superuser
     def has_object_write_permission(self, request):
-        if request.user == self.wallet.owner or request.user in self.wallet.users.all():
-            return True
-        else:
-            return False
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
+
+
+class Budget(models.Model):
+    name = models.CharField(_("Name"), max_length=128)
+    amount = models.DecimalField(_('Amount'), max_digits=11, decimal_places=2)
+    category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='budgets',
+                                 on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, verbose_name=_('Wallet'), related_name='budgets', on_delete=models.CASCADE,
+                               blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.wallet = self.category.wallet
+        super(Budget, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_read_permission(request):
+        return True
+
+    @staticmethod
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_write_permission(request):
+        return True
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_read_permission(self, request):
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
+
+    @authenticated_users
+    @allow_staff_or_superuser
+    def has_object_write_permission(self, request):
+        return request.user == self.wallet.owner or request.user in self.wallet.users.all()
 
 
 def post_save_balance_update(sender, instance, created, *args, **kwargs):

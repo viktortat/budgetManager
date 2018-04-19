@@ -2,10 +2,10 @@ from django_filters import rest_framework as django_filters
 from dry_rest_permissions.generics import DRYPermissions
 from rest_framework import generics, response, status, pagination
 
-from .filters import TransactionFilter, CategoryFilter
-from .models import Category, Transaction, Wallet
+from .filters import TransactionFilter, CategoryFilter, BudgetFilter
+from .models import Category, Transaction, Wallet, Budget
 from .permissions import WalletFilterBackend, WalletFilterBackendFK, check_wallet_ownership
-from .serializers import CategorySerializer, TransactionSerializer, WalletSerializer
+from .serializers import CategorySerializer, TransactionSerializer, WalletSerializer, BudgetSerializer
 
 
 class WalletListView(generics.ListCreateAPIView):
@@ -66,6 +66,17 @@ class TransactionListView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def post(self, request, *args, **kwargs):
+        category_id = request.data.get("category", None)
+        if category_id is not None:
+            try:
+                category = Category.objects.get(id=category_id)
+                if not check_wallet_ownership(category.wallet.id, request.user):
+                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your category...")
+            except Category.DoesNotExist:
+                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your category does not exists...")
+        return self.create(request, *args, **kwargs)
+
 
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Transaction.objects.all()
@@ -75,3 +86,29 @@ class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class BudgetListView(generics.ListCreateAPIView):
+    queryset = Budget.objects.all()
+    serializer_class = BudgetSerializer
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
+    filter_class = BudgetFilter
+
+    def post(self, request, *args, **kwargs):
+        category_id = request.data.get("category", None)
+        if category_id is not None:
+            try:
+                budget = Budget.objects.get(id=category_id)
+                if not check_wallet_ownership(budget.wallet.id, request.user):
+                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your category...")
+            except Budget.DoesNotExist:
+                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your category does not exists...")
+        return self.create(request, *args, **kwargs)
+
+
+class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Budget.objects.all()
+    serializer_class = BudgetSerializer
+    permission_classes = [DRYPermissions]
+    filter_backends = [WalletFilterBackendFK]

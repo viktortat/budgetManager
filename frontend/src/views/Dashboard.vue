@@ -37,9 +37,13 @@
             </div>
         </div>
         <div class="columns">
-            <div class="column"></div>
+            <div class="column">
+                <h4>Poslední transakce</h4>
+                <transaction-simple v-for="transaction in lastTransactions" :key="transaction.id" :transaction='transaction' :categories='categories' />
+            </div>
             <div class="column"></div>
             <div class="column">
+                <h4>Výdaje</h4>
                 <p v-if="categoriesDataset.datasets[0].data.length === 0">Žádná data k zobrazení...</p>
                 <doughnut-chart v-else :chartData="categoriesDataset" :options="categoriesOptions" />
             </div>
@@ -57,7 +61,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
-import Transaction from '@/components/TransactionSimple.vue'
+import TransactionSimple from '@/components/TransactionSimple.vue'
 import DoughnutChart from '@/components/DoughnutChart.js'
 import LineChart from '@/components/LineChart.js'
 
@@ -94,6 +98,7 @@ export default {
                 this.dateFrom = moment(this.dateFrom).subtract(1, 'years').startOf('year').format('YYYY-MM-DD')
             } else {
                 let difference = moment.duration(moment(this.dateTo).diff(moment(this.dateFrom))).asDays()
+                if (difference === 0) difference = 1
                 this.dateTo = moment(this.dateTo).subtract(difference, 'days').format('YYYY-MM-DD')
                 this.dateFrom = moment(this.dateFrom).subtract(difference, 'days').format('YYYY-MM-DD')
             }
@@ -107,6 +112,7 @@ export default {
                 this.dateFrom = moment(this.dateFrom).add(1, 'years').startOf('year').format('YYYY-MM-DD')
             } else {
                 let difference = moment.duration(moment(this.dateTo).diff(moment(this.dateFrom))).asDays()
+                if (difference === 0) difference = 1
                 this.dateTo = moment(this.dateTo).add(difference, 'days').format('YYYY-MM-DD')
                 this.dateFrom = moment(this.dateFrom).add(difference, 'days').format('YYYY-MM-DD')
             }
@@ -170,6 +176,9 @@ export default {
             'transactions',
             'categories'
         ]),
+        lastTransactions() {
+            return this.transactions.slice(0, 5)
+        },
         categoriesDataset() {
             let data = {
                 datasets: [{ data: [], backgroundColor: [] }],
@@ -224,7 +233,7 @@ export default {
             let dateFrom = this.dateFrom
             let dateTo = this.dateTo
             for(var i = 0; i < 6; i++) {
-                let transactions = this.transactions.filter(trn => trn.date >= dateFrom && trn.date < dateTo)
+                let transactions = this.transactions.filter(trn => trn.date >= dateFrom && trn.date <= dateTo)
                 data.datasets[0].data.unshift(Number(this.calculateBalance(0, transactions)))
                 if(this.isMonthSelected()) {
                     data.labels.unshift(moment(dateFrom).format('MMMM'))
@@ -235,14 +244,13 @@ export default {
                     dateFrom = moment(dateFrom).subtract(1, 'years').format('YYYY-MM-DD')
                     dateTo = moment(dateTo).subtract(1, 'years').format('YYYY-MM-DD')
                 } else {
-                    data.labels.unshift(moment(dateFrom).format('DD MMMM YYYY') + " – " + moment(dateTo).subtract(1, 'days').format('DD MMMM YYYY'))
+                    data.labels.unshift(moment(dateFrom).format('DD MMMM YYYY') + " – " + moment(dateTo).format('DD MMMM YYYY'))
                     let difference = moment.duration(moment(this.dateTo).diff(moment(this.dateFrom))).asDays()
-                    dateTo = moment(dateTo).subtract(difference, 'days').format('YYYY-MM-DD')
-                    
-                    dateFrom = moment(dateFrom).subtract(difference, 'days').format('YYYY-MM-DD')
+                    dateTo = moment(dateTo).subtract(difference + 1, 'days').format('YYYY-MM-DD')
+                    dateFrom = moment(dateFrom).subtract(difference + 1, 'days').format('YYYY-MM-DD')
                 }
             }
-            data.datasets[0].backgroundColor.push('#d3eafb')
+            data.datasets[0].backgroundColor.push('rgba(211, 234, 251, 0.5)')
             data.datasets[0].borderColor.push('#2599ee')
             return data
         },
@@ -257,7 +265,7 @@ export default {
         }
     },
     components: {
-        Transaction,
+        TransactionSimple,
         flatPickr,
         DoughnutChart,
         LineChart

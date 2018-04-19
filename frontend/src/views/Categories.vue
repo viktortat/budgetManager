@@ -25,6 +25,7 @@
 import axios from 'axios'
 import { mapState, mapActions } from 'vuex'
 import Category from '@/components/Category.vue'
+import { tokenCheck } from '@/mixins.js'
 
 export default {
     data() {
@@ -73,6 +74,7 @@ export default {
     components: {
         Category
     },
+    mixins: [tokenCheck],
     created() {
         this.loadData();
     }

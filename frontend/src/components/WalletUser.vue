@@ -3,7 +3,7 @@
         <div>{{ user.email }}</div>
         <div v-if="!isOwner">
             <button class="button is-danger" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
-            <button class="button is-danger" @click="removeUser()" v-else>Doopravdy?</button>
+            <button class="button is-danger" @click="removeUser()" v-else>Opravdu?</button>
         </div>
         <div v-else>
             Vlastník peněženky

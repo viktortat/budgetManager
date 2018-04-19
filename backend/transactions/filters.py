@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from .models import Transaction, Category
+from .models import Transaction, Category, Budget
 
 
 class TransactionFilter(filters.FilterSet):
@@ -18,4 +18,10 @@ class TransactionFilter(filters.FilterSet):
 class CategoryFilter(filters.FilterSet):
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class BudgetFilter(filters.FilterSet):
+    class Meta:
+        model = Budget
         fields = '__all__'

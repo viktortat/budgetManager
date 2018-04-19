@@ -6,10 +6,8 @@ import '@/registerServiceWorker'
 import Notifications from 'vue-notification'
 import axios from 'axios'
 import moment from 'moment'
-import { tokenMixin } from '@/mixins.js'
 
 Vue.use(Notifications)
-Vue.mixin(tokenMixin)
 
 moment.locale('cs')
 

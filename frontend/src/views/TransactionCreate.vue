@@ -53,6 +53,8 @@ import { mapState, mapActions } from 'vuex'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 
+import { tokenCheck } from '@/mixins.js'
+
 export default {
     data() {
         return {
@@ -111,6 +113,7 @@ export default {
     components: {
         flatPickr
     },
+    mixins: [tokenCheck],
     created() {
         this.loadData();
     }

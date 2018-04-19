@@ -10,7 +10,7 @@
         <button class="button is-success is-100" @click="menuMode = !menuMode">Upravit</button>
         <div>
             <button class="button is-danger is-100" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
-            <button class="button is-danger is-100" @click="deleteCategory()" v-else >Doopravdy?</button>
+            <button class="button is-danger is-100" @click="deleteCategory()" v-else >Opravdu?</button>
         </div>
     </div>
     <div class="category category-create" v-else>
@@ -110,11 +110,21 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import "../styles/variables.styl"
 
 .category-edit
     width: 100%
     display: flex
     justify-content: space-between
+
+    & > .button
+        border-radius: 0
+
+        &:first-child
+            border-radius: $border-radius 0 0 $border-radius
+        
+        &:last-child
+            border-radius: 0 $border-radius $border-radius 0
 
 .category-color
     position: absolute

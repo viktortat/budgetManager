@@ -601,28 +601,115 @@ class TransactionsTests(test.APITestCase):
 
     def test_transactions_creating_by_admin_user(self):
         """
+        Admin user must be able to create transactions in all wallets
         """
 
-        data = {
-            "category": "1",
-            "amount": "50000.60",
-            "transaction_type": "expense"
-        }
-        self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
-        response = self.client.post(self.transactions_url, data=data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        for category_id in range(1, 11):
+            data = {
+                "category": category_id,
+                "amount": "50000.60",
+                "transaction_type": "expense"
+            }
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
+            response = self.client.post(self.transactions_url, data=data, format="json")
+            if category_id in range(1, 10):
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_transactions_creating_by_basic_user(self):
-        pass
+        """
+        Basic user must be able to create transactions in his wallets
+        """
+
+        for category_id in range(1, 11):
+            data = {
+                "category": category_id,
+                "amount": "50000.60",
+                "transaction_type": "expense"
+            }
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user_panzelva)
+            response = self.client.post(self.transactions_url, data=data, format="json")
+            if category_id in range(1, 4):
+                self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            elif category_id in range(4, 10):
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user_lukasfuchs)
+            response = self.client.post(self.transactions_url, data=data, format="json")
+            if category_id in range(4, 7):
+                self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            elif category_id in range(1, 4) or category_id in range(7, 10):
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_transactions_creating_by_unauth_user(self):
-        pass
+        """
+        Unauth user must NOT be able to create transactions
+        """
+
+        for category_id in range(1, 11):
+            data = {
+                "category": category_id,
+                "amount": "50000.60",
+                "transaction_type": "expense"
+            }
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ')
+            response = self.client.post(self.transactions_url, data=data, format="json")
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_transactions_deleting_by_admin_user(self):
-        pass
+        """
+        Admin user must be able to delete transactions in all wallets
+        """
 
-    def test_transactions_deleting_by_basic_user(self):
-        pass
+        for transaction_id in range(1, 20):
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
+            response = self.client.delete(self.transactions_url + str(transaction_id) + "/", format="json")
+            if transaction_id in range(1, 11):
+                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_transactions_deleting_by_basic_user_1(self):
+        """
+        Basic user must be able to delete transactions in his wallets
+        """
+
+        for transaction_id in range(1, 20):
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user_panzelva)
+            response = self.client.delete(self.transactions_url + str(transaction_id) + "/", format="json")
+            if transaction_id in range(1, 4):
+                self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            elif transaction_id in range(4, 11):
+                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_transactions_deleting_by_basic_user_2(self):
+        """
+        Basic user must be able to delete transactions in his wallets
+        """
+
+        for transaction_id in range(1, 20):
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user_lukasfuchs)
+            response = self.client.delete(self.transactions_url + str(transaction_id) + "/", format="json")
+            if transaction_id in range(4, 7):
+                self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            elif transaction_id in range(1, 4) or transaction_id in range(7, 11):
+                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            else:
+                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_transactions_deleting_by_unauth_user(self):
-        pass
+        """
+        Unauth user must NOT be able to delete transactions in any wallets
+        """
+
+        for transaction_id in range(1, 20):
+            self.client.credentials(HTTP_AUTHORIZATION='JWT ')
+            response = self.client.delete(self.transactions_url + str(transaction_id) + "/", format="json")
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

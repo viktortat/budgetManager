@@ -26,6 +26,7 @@
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import WalletUser from '@/components/WalletUser.vue'
+import { tokenCheck } from '@/mixins.js'
 
 export default {
     data() {
@@ -67,6 +68,7 @@ export default {
     components: {
         WalletUser
     },
+    mixins: [tokenCheck],
     created() {
         this.loadData();
         this.walletName = this.wallet.name

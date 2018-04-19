@@ -1,7 +1,7 @@
 <template>
     <div class="transaction">
         <div class="transaction-category" @click="goToDetail()">
-            <aside class="transaction-category-stripe" :class="{selected: this.selected}" :style="{backgroundColor: this.categories.find(x => x.id === transaction.category).color }"></aside>
+            <aside class="transaction-category-stripe" :style="{backgroundColor: this.categories.find(x => x.id === transaction.category).color }"></aside>
             <p>{{ this.categories.find(x => x.id === transaction.category).name }}</p>
             <p class="transaction-date is-size-small">{{ transaction.date }}</p>
         </div>

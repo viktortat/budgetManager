@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import Transaction, Category, Wallet
+from .models import Transaction, Category, Wallet, Budget
 
 User = get_user_model()
 
@@ -35,3 +35,9 @@ class WalletSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "categories", "balance", "owner", "users", "users_id")
         read_only_fields = ["balance", "owner", "categories"]
 
+
+class BudgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Budget
+        fields = ("id", "name", "category", "wallet", "amount")
+        read_only_fields = ["wallet"]
