@@ -9,15 +9,37 @@
                     <h5 class="is-bold">Jméno</h5>
                     <input type="text" id="settings-wallet-name" class="input input-100" v-model="walletName">
                 </div>
-                <div>
-                    <h5 class="is-bold">Uživatelé</h5>
-                    <wallet-user v-for="user in wallet.users" :key="user.id" :user="user" />
-                </div>
             </div>
             <footer class="settings-footer">
                 <div></div>
                 <button class="button is-success" @click="editWalletName()">Uložit</button>
             </footer>
+        </div>
+        <div class="settings-container">
+            <header class="settings-header">
+                <h3>Pozvat uživatele</h3>
+            </header>
+            <div class="settings">
+                <div>
+                    <label for="settings-invite" class="label"><p>Email</p></label>
+                    <input type="email" class="input input-100" id="settings-invite" v-model="inviteUser">
+                </div>
+            </div>
+            <footer class="settings-footer">
+                <div></div>
+                <button class="button is-success" @click="inviteUserByEmail()">Pozvat</button>
+            </footer>
+        </div>
+        <div class="settings-container">
+            <header class="settings-header">
+                <h3>Uživatelé</h3>
+            </header>
+            <div class="settings">
+                <wallet-user v-for="user in wallet.users" :key="user.id" :user="user" />
+            </div>
+            <div class="settings">
+                <wallet-invitation v-for="invitation in invitations" :key="invitation.id" :invitation="invitation" />
+            </div>
         </div>
     </section>
 </template>
@@ -26,12 +48,15 @@
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import WalletUser from '@/components/WalletUser.vue'
+import WalletInvitation from '@/components/WalletInvitation.vue'
 import { tokenCheck } from '@/mixins.js'
 
 export default {
     data() {
         return {
-            walletName: ''
+            walletName: '',
+            inviteUser: '',
+            invitations: []
         }
     },
     methods: {
@@ -56,6 +81,33 @@ export default {
                     type: 'error'
                 })
             })
+        },
+        inviteUserByEmail() {
+            if(this.inviteUser) {
+                const data = {
+                    'invited_id': this.inviteUser,
+                    'wallet': this.wallet.id
+                }
+                const url = '/api/invitations/create/'
+                axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                    this.$notify({
+                        text: 'Uživatel pozván.',
+                        type: 'success'
+                    })
+                    this.loadInvitesData()
+                }).catch(err => {
+                    this.$notify({
+                        text: err.response.data,
+                        type: 'error'
+                    })                
+                })
+            }
+        },
+        loadInviteData() {
+            const url = '/api/invitations/' + '?wallet=' + this.wallet.id + '&status=pending'
+            axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.invitations = res.data
+            })
         }
     },
     computed: {
@@ -66,12 +118,15 @@ export default {
         ])
     },
     components: {
-        WalletUser
+        WalletUser,
+        WalletInvitation
     },
     mixins: [tokenCheck],
     created() {
         this.loadData();
         this.walletName = this.wallet.name
+
+        this.loadInviteData()
     }
 }
 </script>
@@ -125,6 +180,5 @@ export default {
     & h5
         margin-left: 5px
         margin-bottom: 5px
-
 
 </style>

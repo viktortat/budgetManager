@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class WalletTests(test.APITestCase):
-    fixtures = ["testdata.json"]
+    fixtures = ["data_basic.json"]
 
     def setUp(self):
         """
@@ -301,7 +301,7 @@ class WalletTests(test.APITestCase):
 
 
 class CategoriesTests(test.APITestCase):
-    fixtures = ["testdata.json"]
+    fixtures = ["data_basic.json"]
 
     def setUp(self):
         """
@@ -347,7 +347,7 @@ class CategoriesTests(test.APITestCase):
             self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_admin)
             response = self.client.post(self.categories_url, data, format="json")
             if wallet_id >= 4:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             else:
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -367,7 +367,7 @@ class CategoriesTests(test.APITestCase):
             if wallet_id == 1:
                 self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
             elif wallet_id >= 4:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             else:
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -382,7 +382,7 @@ class CategoriesTests(test.APITestCase):
             if wallet_id == 2:
                 self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
             elif wallet_id >= 4:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             else:
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -501,7 +501,7 @@ class CategoriesTests(test.APITestCase):
 
 
 class TransactionsTests(test.APITestCase):
-    fixtures = ["testdata.json"]
+    fixtures = ["data_basic.json"]
 
     def setUp(self):
         """
@@ -615,7 +615,7 @@ class TransactionsTests(test.APITestCase):
             if category_id in range(1, 10):
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             else:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_transactions_creating_by_basic_user(self):
         """
@@ -635,7 +635,7 @@ class TransactionsTests(test.APITestCase):
             elif category_id in range(4, 10):
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             else:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
             self.client.credentials(HTTP_AUTHORIZATION='JWT ' + self.token_for_user_lukasfuchs)
             response = self.client.post(self.transactions_url, data=data, format="json")
@@ -644,7 +644,7 @@ class TransactionsTests(test.APITestCase):
             elif category_id in range(1, 4) or category_id in range(7, 10):
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             else:
-                self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_transactions_creating_by_unauth_user(self):
         """

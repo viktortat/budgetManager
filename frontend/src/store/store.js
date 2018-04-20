@@ -64,10 +64,11 @@ export default new Vuex.Store({
         })
       )
     },
-    logUserOut: ({ commit }, payload) => {
-      commit('setToken', '')
-      commit('setIsUserLoggedIn', false)
-      commit('setUser', {})
+    logUserOut: (context, payload) => {
+      context.commit('setToken', '')
+      context.commit('setIsUserLoggedIn', false)
+      context.commit('setUser', {})
+      context.dispatch('dumpData', "")
       router.push({ name: 'Login' })
     },
     pickWallet: ({ commit }, payload) => {
@@ -98,6 +99,11 @@ export default new Vuex.Store({
           context.commit('setCategories', cat.data)
         })
       )
+    },
+    dumpData: (context, payload) => {
+      context.commit('setWallet', null)
+      context.commit('setCategories', [])
+      context.commit('setTransactions', [])
     }
   }
 })

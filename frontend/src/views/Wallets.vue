@@ -32,6 +32,16 @@
                 <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
             </div>
         </div>
+        <h2>Pozvánky</h2>
+        <div class="invitations">
+            <div class="invitation" v-for="invitation in invitations" :key="invitation.id">
+                <h5>Uživatel<br><br>{{ invitation.creator.email }}<br><br>Vás pozval do své peněženky!</h5>
+                <div class="invitation-buttons">
+                    <button class="button is-success" @click="acceptInvitation(invitation.id)">Přijmout</button>
+                    <button class="button is-danger" @click="declineInvitation(invitation.id)">Odmítnout</button>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -47,7 +57,8 @@ export default {
     data() {
         return {
             wallets: [],
-            walletName: ""
+            walletName: "",
+            invitations: []
         }
     },
     methods: {
@@ -85,10 +96,37 @@ export default {
                 headers: { Authorization: 'JWT ' + this.$store.state.token }
             }).then(res => {
                 this.wallets = res.data;
+                this.loadInviteData()
             }).catch(error => {
                 if(error.response.status === 401) {
                     this.logUserOut()
                 }
+            })
+        },
+        loadInviteData() {
+            const url = '/api/invitations/' + '?invited=' + this.user.id
+            axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.invitations = res.data
+            })
+        },
+        acceptInvitation(invitation_id) {
+            const data = {
+                'id': invitation_id,
+                'status': 'accepted'
+            }
+            const url = '/api/invitations/resolve/'
+            axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                console.log(res)
+            })
+        },
+        declineInvitation(invitation_id) {
+            const data = {
+                'id': invitation_id,
+                'status': 'refused'
+            }
+            const url = '/api/invitations/resolve/'
+            axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                console.log(res)
             })
         }
     },
@@ -129,25 +167,23 @@ export default {
         padding-left: 1rem
 
 .wallets
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 300px);
-    grid-gap: 10px;
-    margin: 10px;
+    display: grid
+    grid-template-columns: repeat(auto-fit, 300px)
+    grid-gap: 10px
+    margin: 10px
 
 .wallet
     @media screen and (min-width: 768px)
         &:hover
             background-color: #F2F2F2
 
-    height: 250px;
-    padding: 20px;
+    height: 250px
+    padding: 20px
 
     background-color: #FFFFFF
     border-radius: $border-radius
 
     cursor: pointer
-
-
 
 .wallet-create
     display: flex
@@ -166,5 +202,35 @@ export default {
     
     & .button
         width: 100%
+
+.invitations
+    display: grid
+    grid-template-columns: repeat(auto-fit, 300px)
+    grid-gap: 10px
+    margin: 10px
+
+.invitation
+    display: flex
+    flex-flow: column
+    justify-content: space-between
+    height: 250px
+    padding: 20px
+
+    background-color: #FFFFFF
+    border-radius: $border-radius
+
+.invitation-buttons
+    width: 100%
+    display: flex
+    justify-content: space-between
+
+    & > .button
+        border-radius: 0
+
+        &:first-child
+            border-radius: $border-radius 0 0 $border-radius
+        
+        &:last-child
+            border-radius: 0 $border-radius $border-radius 0
 
 </style>

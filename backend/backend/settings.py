@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # my apps
     'accounts',
     'transactions',
+    'invites',
     # DRF
     'rest_framework',
     'django_filters',
@@ -129,9 +130,9 @@ AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',  # Remove for production
         'rest_framework.authentication.BasicAuthentication',  # Remove for production
+        'rest_framework.authentication.SessionAuthentication',  # Remove for production
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -139,5 +140,5 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=5),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
 }

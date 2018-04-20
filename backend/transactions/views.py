@@ -38,11 +38,8 @@ class CategoryListView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         wallet_id = request.data.get("wallet", None)
         if wallet_id is not None:
-            try:
-                if not check_wallet_ownership(wallet_id, request.user):
-                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your wallet...")
-            except Wallet.DoesNotExist:
-                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your wallet does not exists...")
+            if not check_wallet_ownership(wallet_id, request.user):
+                return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your wallet...")
         return self.create(request, *args, **kwargs)
 
 
@@ -69,12 +66,10 @@ class TransactionListView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         category_id = request.data.get("category", None)
         if category_id is not None:
-            try:
-                category = Category.objects.get(id=category_id)
+            category = Category.objects.filter(id=category_id).first()
+            if category is not None:
                 if not check_wallet_ownership(category.wallet.id, request.user):
-                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your category...")
-            except Category.DoesNotExist:
-                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your category does not exists...")
+                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your category.")
         return self.create(request, *args, **kwargs)
 
 

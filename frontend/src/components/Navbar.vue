@@ -11,9 +11,11 @@
             <router-link :to="{name: 'Settings'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-cogs"></i></div>Nastavení</router-link>
         </div>
         <footer class="navbar-footer">
-            <div class="navbar-account"></div>
+            <div class="is-size-5 navbar-account" @click="changeWallet()">
+                <i class="fas fa-archive" />
+            </div>
             <div></div>
-            <div class="is-size-5 navbar-logout" @click="logUserOut"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="is-size-5 navbar-logout" @click="logUserOut()"><i class="fas fa-sign-out-alt"></i></div>
         </footer>
         <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu()"></div>
     </nav>
@@ -23,11 +25,6 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-    data() {
-        return {
-
-        }
-    },
     computed: {
         ...mapState([
             "isMenuActive"
@@ -37,7 +34,11 @@ export default {
         ...mapActions([
             "toggleMenu",
             "logUserOut"
-        ])
+        ]),
+        changeWallet() {
+            this.$store.dispatch('dumpData', '')
+            this.$router.push({name: 'Wallets'})
+        }
     }
 }
 </script>
@@ -131,6 +132,11 @@ export default {
     top: 0
     width: 56px
     height: 56px
+    display: flex
+    align-items: center
+    justify-content: center 
+    
+    cursor: pointer
 
     background-color: $navbar-color-secondary
 
