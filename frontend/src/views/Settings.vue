@@ -30,16 +30,31 @@
                 <button class="button is-success" @click="inviteUserByEmail()">Pozvat</button>
             </footer>
         </div>
-        <div class="settings-container">
+        <div class="settings-container no-padding-bottom">
             <header class="settings-header">
                 <h3>Uživatelé</h3>
             </header>
             <div class="settings">
                 <wallet-user v-for="user in wallet.users" :key="user.id" :user="user" />
             </div>
+        </div>
+        <div class="settings-container no-padding-bottom" v-if="invitations.length > 0">
+            <header class="settings-header">
+                <h3>Pozvánky</h3>
+            </header>
             <div class="settings">
-                <wallet-invitation v-for="invitation in invitations" :key="invitation.id" :invitation="invitation" />
+                <wallet-invitation v-for="invitation in invitations" :key="invitation.id" :invitation="invitation" :reloadInvitations="loadInviteData()" />
             </div>
+        </div>
+        <div class="settings-container">
+            <header class="settings-header">
+                <h3>Smazat peněženku</h3>
+            </header>
+            <footer class="settings-footer">
+                <div></div>
+                <button class="button is-danger" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
+                <button class="button is-danger" @click="deleteWallet()" v-else>Opravdu?</button>
+            </footer>
         </div>
     </section>
 </template>
@@ -56,13 +71,15 @@ export default {
         return {
             walletName: '',
             inviteUser: '',
-            invitations: []
+            invitations: [],
+            deleteCheck: false,
         }
     },
     methods: {
         ...mapActions([
             'loadData',
-            'refreshData'
+            'refreshData',
+            'dumpData'
         ]),
         editWalletName() {
             const data = {
@@ -85,7 +102,7 @@ export default {
         inviteUserByEmail() {
             if(this.inviteUser) {
                 const data = {
-                    'invited_id': this.inviteUser,
+                    'invited_email': this.inviteUser,
                     'wallet': this.wallet.id
                 }
                 const url = '/api/invitations/create/'
@@ -94,7 +111,7 @@ export default {
                         text: 'Uživatel pozván.',
                         type: 'success'
                     })
-                    this.loadInvitesData()
+                    this.loadInviteData()
                 }).catch(err => {
                     this.$notify({
                         text: err.response.data,
@@ -104,9 +121,25 @@ export default {
             }
         },
         loadInviteData() {
-            const url = '/api/invitations/' + '?wallet=' + this.wallet.id + '&status=pending'
+            const url = '/api/invitations/' + '?wallet=' + this.wallet.id + '&resolved=false'
             axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.invitations = res.data
+            })
+        },
+        deleteWallet() {
+            const url = '/api/wallets/' + this.wallet.id + '/'
+            axios.delete(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.$notify({
+                    text: 'Peněženka byla smazána.',
+                    type: 'success'
+                })
+                this.dumpData()
+                this.$router.push({ 'name': 'Wallets' })
+            }).catch(err => {
+                this.$notify({
+                    text: 'Vyskytl se problém, zkuste to prosím později.',
+                    type: 'error'
+                })
             })
         }
     },
@@ -123,9 +156,8 @@ export default {
     },
     mixins: [tokenCheck],
     created() {
-        this.loadData();
+        this.loadData()
         this.walletName = this.wallet.name
-
         this.loadInviteData()
     }
 }
@@ -151,6 +183,9 @@ export default {
 
     background-color: #FFFFFF
     border-radius: $border-radius
+
+.no-padding-bottom
+    padding-bottom: 20px
 
 .settings-header
     position: absolute

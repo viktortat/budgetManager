@@ -7,4 +7,4 @@ class InvitationFilterBackend(DRYPermissionFiltersBase):
         if request.user.is_staff:
             return queryset
         else:
-            return queryset.filter(Q(creator=request.user) | Q(invited=request.user)).distinct()
+            return queryset.filter(Q(creator=request.user) | Q(invited=request.user) | Q(wallet__owner=request.user)).distinct()

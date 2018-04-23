@@ -1,7 +1,8 @@
 <template>
-    <header class="header is-size-5">
-        <div class="header-burger" @click="toggleMenu()">2</div>
-        <h1 class="is-size-5">{{ $route.meta.name }}</h1>
+    <header class="header">
+        <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><i class="fas fa-bars fa-2x"></i></div>
+        <h1 class="is-size-4">{{ this.$route.meta.name }}</h1>
+        <button class="button" v-if="this.$route.name === 'Wallets'" @click="logUserOut()">Odhlásit se</button>
     </header>
 </template>
 
@@ -11,18 +12,15 @@ import { mapState, mapActions } from 'vuex'
 export default {
     computed: {
         ...mapState([
-            'isUserLoggedIn',
             'wallet',
             'user'
         ])
     },
     methods: {
         ...mapActions([
-            "toggleMenu"
+            "toggleMenu",
+            "logUserOut"
         ])
-    },
-    created() {
-
     }
 }
 </script>
@@ -53,7 +51,9 @@ export default {
 
 .header-burger
     @media screen and (max-width: 767px)
-        display: block 
+        display: flex
+        justify-content: center
+        align-items: center 
 
     display: none
     position: absolute

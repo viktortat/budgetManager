@@ -35,7 +35,6 @@ export default {
                 if(user.id !== this.user.id) data.users_id.push(user.id)
             }
             const url = '/api/wallets/' + this.wallet.id + '/'
-            console.log(data)
             axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.pickWallet(res.data)
                 this.$notify({

@@ -12,8 +12,9 @@ class InvitationSerializer(serializers.ModelSerializer):
     creator = UsersEmailSerializer(read_only=True)
     invited = UsersEmailSerializer(read_only=True)
     invited_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='invited', write_only=True, required=True)
+    invited_email = serializers.EmailField(allow_blank=False,  write_only=True)
 
     class Meta:
         model = Invitation
-        fields = ["date", "creator", "id", "invited", "invited_id", "wallet", "status"]
+        fields = ["id", "date", "creator", "invited", "invited_id", "invited_email", "wallet", "resolved"]
         read_only_fields = ["date", "creator"]

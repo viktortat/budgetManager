@@ -1,10 +1,7 @@
 <template>
     <div class="user-wrapper">
         <div>{{ invitation.invited.email }}</div>
-        <div class="controls-wrapper">
-            <div>Status: {{ invitation.status }}</div>
-            <button class="button is-danger is-square"><i class="fas fa-times"></i></button>
-        </div>
+        <button class="button is-danger is-square" @click="cancelInvitation()"><i class="fas fa-times"></i></button>
     </div>
 </template>
 
@@ -15,13 +12,20 @@ import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 export default {
     props: ['invitation'],
-    data() {
-        return {
-
-        }
-    },
     methods: {
-
+        cancelInvitation() {
+            const data = {
+                'id': this.invitation.id
+            }
+            const url = '/api/invitations/resolve/'
+            axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.$notify({
+                    text: 'Pozvánka zrušena.',
+                    type: 'success'
+                })
+                this.$emit('reloadInvitations')
+            })
+        }
     },
     computed: {
         ...mapState([
@@ -41,12 +45,5 @@ export default {
     padding: 10px
     margin-bottom: 10px
     height: 65px    
-
-.controls-wrapper
-    display: flex
-    align-items: center
-
-    & > div
-        margin-right: 30px
 
 </style>

@@ -18,7 +18,7 @@
                 <br>
                 <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}">{{ wallet.balance | formatCurrency }}</h4>
                 <br>
-                <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
+                <p v-for="user in wallet.users" :key="user.id" :class="{'is-bold': user.id == wallet.owner}" class="wallet-users">{{ user.email }}</p>
             </div>
         </div>
         <h2>Sdílené peněženky</h2>
@@ -28,8 +28,7 @@
                 <br>
                 <h4 class="is-bold" :class="{'is-success': wallet.balance > 0, 'is-danger': wallet.balance < 0}">{{ wallet.balance | formatCurrency }}</h4>
                 <br>
-                <p>Majitel: {{ wallet.owner }}</p>
-                <p v-for="user in wallet.users" :key="user.id">{{ user.email }}</p>
+                <p v-for="user in wallet.users" :key="user.id" :class="{'is-bold': user.id == wallet.owner}" class="wallet-users">{{ user.email }}</p>
             </div>
         </div>
         <h2>Pozvánky</h2>
@@ -104,7 +103,7 @@ export default {
             })
         },
         loadInviteData() {
-            const url = '/api/invitations/' + '?invited=' + this.user.id
+            const url = '/api/invitations/' + '?invited=' + this.user.id + '&resolved=false'
             axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.invitations = res.data
             })
@@ -112,21 +111,29 @@ export default {
         acceptInvitation(invitation_id) {
             const data = {
                 'id': invitation_id,
-                'status': 'accepted'
             }
             const url = '/api/invitations/resolve/'
             axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
-                console.log(res)
+                this.$notify({
+                    text: 'Pozvánka přijata.',
+                    type: 'success'
+                })
+                this.loadInviteData()
+                this.getWallets()
             })
         },
         declineInvitation(invitation_id) {
             const data = {
                 'id': invitation_id,
-                'status': 'refused'
             }
             const url = '/api/invitations/resolve/'
-            axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
-                console.log(res)
+            axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.$notify({
+                    text: 'Pozvánka odmítnuta.',
+                    type: 'success'
+                })
+                this.loadInviteData()
+                this.getWallets()
             })
         }
     },
@@ -184,6 +191,9 @@ export default {
     border-radius: $border-radius
 
     cursor: pointer
+
+.wallet-users
+    padding-top: 5px
 
 .wallet-create
     display: flex

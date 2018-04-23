@@ -21,6 +21,7 @@ export default new Vuex.Store({
     wallet: null,
     categories: [],
     transactions: [],
+    invitations: [],
     isMenuActive: false
   },
   mutations: {
@@ -79,15 +80,11 @@ export default new Vuex.Store({
         const walletID = context.state.wallet.id
         const token = context.state.token
         axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token)]).then(
-          axios.spread((cat, tran) => {
+          axios.spread((cat, tran, inv) => {
             context.commit('setTransactions', tran.data)
             context.commit('setCategories', cat.data)
           })
-        ).catch(error => {
-          if(error.response.status === 401) {
-            context.dispatch('logUserOut')
-          }
-        })
+        )
       }
     },
     refreshData: (context, payload) => {

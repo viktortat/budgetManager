@@ -29,60 +29,73 @@ class CreateInvitationView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        user_id = None
-        wallet_id = request.data.get("wallet", None)
-        invited_user_email = request.data.get("invited_id", None)
-
-        if invited_user_email is not None:
-            if str(request.user.email) == str(invited_user_email):
-                return response.Response(status=status.HTTP_400_BAD_REQUEST, data="You cant invite yourself.")
-            user_qs = User.objects.filter(email=invited_user_email)
-            if not user_qs:
-                return response.Response(status=status.HTTP_404_NOT_FOUND, data="This user does not exist or you did not provide email.")
-            user_id = user_qs.first().id
-
-        serializer = InvitationSerializer(data={'invited_id': user_id, 'wallet': wallet_id, 'status': 'pending'})
+        serializer = InvitationSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        if wallet_id is not None:
-            if not check_wallet_ownership(wallet_id, request.user):
-                return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your wallet.")
+        wallet = serializer.validated_data.get("wallet", None)
+        invited_user_email = serializer.validated_data.get("invited_email", None)
+        invited_user = User.objects.filter(email=invited_user_email).first()
 
-        if wallet_id is not None and invited_user_email is not None:
-            invited_user = User.objects.filter(email=invited_user_email).first()
-            if Wallet.objects.filter(Q(id=wallet_id) & (Q(owner=invited_user) | Q(users=invited_user))):
-                return response.Response(status=status.HTTP_400_BAD_REQUEST, data="User is already member in wallet.")
+        if request.user == invited_user:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data="You cant invite yourself.")
 
-            if Invitation.objects.filter(Q(invited__email=invited_user_email) & Q(wallet__id=wallet_id) & Q(status="pending")):
-                return response.Response(status=status.HTTP_400_BAD_REQUEST, data="User is already invited.")
+        if not invited_user:
+            return response.Response(status=status.HTTP_404_NOT_FOUND, data="This user does not exist.")
 
-        serializer.save(creator=request.user)
-        return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        if not check_wallet_ownership(wallet.id, request.user):
+            return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your wallet.")
+
+        if Wallet.objects.filter(Q(id=wallet.id) & (Q(owner=invited_user) | Q(users=invited_user))):
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data="User is already member in wallet.")
+
+        if Invitation.objects.filter(Q(invited__email=invited_user_email) & Q(wallet__id=wallet.id) & Q(resolved=False)):
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data="User is already invited.")
+
+        Invitation.objects.create(invited=invited_user, creator=request.user, wallet=wallet)
+        return response.Response(status=status.HTTP_201_CREATED)
 
 
 class ResolveInvitationView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    options = ['accepted', 'refused', 'canceled']
-
     def post(self, request):
         serializer = InvitationSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
-        invitation_id = serializer.validated_data.get('id', None)
-        invitation_status = serializer.validated_data.get('status', None)
-
-        if invitation_status not in self.options:
-            response_text = "Status '{}' is not valid.".format(invitation_status)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=response_text)
-
+        invitation_id = serializer.validated_data.get("id", None)
         invitation = Invitation.objects.filter(id=invitation_id).first()
+
         if not invitation:
-            response_text = "Invitation with id '{}' not found.".format(invitation_id)
-            return response.Response(status=status.HTTP_404_NOT_FOUND, data=response_text)
+            return response.Response(status=status.HTTP_404_NOT_FOUND, data="Invitation does not exist.")
 
-        if not check_wallet_ownership(invitation.wallet.id, request.user):
-            response_text = "You dont have rights to edit this invitation."
-            return response.Response(status=status.HTTP_404_NOT_FOUND, data=response_text)
+        if invitation.resolved:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data="Invitation is already resolved.")
 
-        return response.Response(status=status.HTTP_200_OK)
+        if request.user.is_staff or request.user == invitation.invited:
+            invitation.wallet.users.add(invitation.invited)
+            invitation.wallet.save()
+            invitation.resolved = True
+            invitation.save()
+            response_text = 'You accepted invitation to wallet: {}'.format(invitation.wallet.name)
+            return response.Response(status=status.HTTP_204_NO_CONTENT, data=response_text)
+
+        response_text = "You don't have permission to confirm this invitation."
+        return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
+
+    def patch(self, request):
+        serializer = InvitationSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        invitation_id = serializer.validated_data.get("id", None)
+        invitation = Invitation.objects.filter(id=invitation_id).first()
+
+        if not invitation:
+            return response.Response(status=status.HTTP_404_NOT_FOUND, data="Invitation does not exist.")
+
+        if request.user.is_staff or request.user == invitation.invited or request.user == invitation.wallet.owner or request.user == invitation.creator:
+            invitation.resolved = True
+            invitation.save()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+        response_text = "You don't have permission to cancel this invitation."
+        return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
