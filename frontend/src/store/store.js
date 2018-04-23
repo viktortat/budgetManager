@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import router from '@/router/router'
 import axios from 'axios'
 
-import { getApiCategories, getApiTransactions, getCurrentUser } from '@/utils.js'
+import { getApiCategories, getApiTransactions, getCurrentUser, getApiBudgets } from '@/utils.js'
 
 import createPersistedState from 'vuex-persistedstate'
 
@@ -19,6 +19,7 @@ export default new Vuex.Store({
     token: '',
     isUserLoggedIn: false,
     wallet: null,
+    budgets: [],
     categories: [],
     transactions: [],
     invitations: [],
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     },
     setWallet: (state, payload) => {
       state.wallet = payload
+    },
+    setBudgets: (state, payload) => {
+      state.budgets = payload
     },
     setCategories: (state, payload) => {
       state.categories = payload
@@ -79,10 +83,11 @@ export default new Vuex.Store({
       if (context.state.transactions.length === 0 || context.state.transactions.length === 0) {
         const walletID = context.state.wallet.id
         const token = context.state.token
-        axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token)]).then(
-          axios.spread((cat, tran, inv) => {
+        axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token), getApiBudgets(walletID, token)]).then(
+          axios.spread((cat, tran, budg) => {
             context.commit('setTransactions', tran.data)
             context.commit('setCategories', cat.data)
+            context.commit('setBudgets', budg.data)
           })
         )
       }
@@ -90,10 +95,11 @@ export default new Vuex.Store({
     refreshData: (context, payload) => {
       const walletID = context.state.wallet.id
       const token = context.state.token
-      axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token)]).then(
-        axios.spread((cat, tran) => {
+      axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token), getApiBudgets(walletID, token)]).then(
+        axios.spread((cat, tran, budg) => {
           context.commit('setTransactions', tran.data)
           context.commit('setCategories', cat.data)
+          context.commit('setBudgets', budg.data)
         })
       )
     },
@@ -101,6 +107,7 @@ export default new Vuex.Store({
       context.commit('setWallet', null)
       context.commit('setCategories', [])
       context.commit('setTransactions', [])
+      context.commit('setBudgets', [])
     }
   }
 })

@@ -281,10 +281,7 @@ export default {
 @import "../styles/variables.styl"
 
 .dashboard-wrapper
-    @media screen and (max-width: 767px)
-        min-height: 100vh
-        
-    min-height: 100.06vh
+    min-height: 100vh
 
     background-color: $background-color-primary
 

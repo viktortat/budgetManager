@@ -91,14 +91,14 @@ class BudgetListView(generics.ListCreateAPIView):
     filter_class = BudgetFilter
 
     def post(self, request, *args, **kwargs):
-        category_id = request.data.get("category", None)
-        if category_id is not None:
-            try:
-                budget = Budget.objects.get(id=category_id)
-                if not check_wallet_ownership(budget.wallet.id, request.user):
-                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your category...")
-            except Budget.DoesNotExist:
-                return response.Response(status=status.HTTP_404_NOT_FOUND, data="Sorry, it seems like your category does not exists...")
+        category = Category.objects.filter(id= request.data.get("category")).first()
+        if category:
+            if not check_wallet_ownership(category.wallet.id, request.user):
+                response_text = "Sorry, it seems like this is not your category."
+                return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
+        else:
+            response_text = "Sorry, it seems like your category does not exists."
+            return response.Response(status=status.HTTP_404_NOT_FOUND, data=response_text)
         return self.create(request, *args, **kwargs)
 
 

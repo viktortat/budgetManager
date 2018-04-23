@@ -1,6 +1,9 @@
 <template>
     <section class="section transactions-wrapper">
-        <div class="filters">
+        <div class="show-filter" v-if="filtersHidden && showFilterButton" @click="filtersHidden = !filtersHidden">
+            Ukázat filtry
+        </div>
+        <div class="filters" v-else>
             <div class="filter">
                 <label for="filter-date-from" class="label">
                     <p>Datum od:</p>
@@ -54,7 +57,8 @@
                 </select>
             </div>
             <footer class="filters-footer">
-                <div></div>
+                <button class="button" @click="filtersHidden = !filtersHidden" v-if="showFilterButton">Zavřít</button>
+                <div v-else></div>
                 <button class="button is-danger" @click="clearFilter()">Reset filtru</button>
             </footer>
         </div>
@@ -80,7 +84,9 @@ export default {
             amountTo: '',
             type: '',
             category: '',
-            author: ''
+            author: '',
+            filtersHidden: true,
+            showFilterButton: true
         }
     },
     computed: {
@@ -121,6 +127,10 @@ export default {
     },
     created() {
         this.loadData();
+        if (window.innerWidth > 768) {
+            this.filtersHidden = false
+            this.showFilterButton = false
+        }
     }
 }
 </script>
@@ -136,7 +146,17 @@ export default {
 
     background-color: $background-color-primary
 
-.filters
+.show-filter
+    display: flex
+    justify-content: center
+    align-items: center
+    margin: 10px
+    height: 50px
+
+    background-color: #FFFFFF
+    border-radius: $border-radius
+
+.filters        
     position: relative
     display: grid
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))

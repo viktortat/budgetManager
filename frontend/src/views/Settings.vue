@@ -43,7 +43,7 @@
                 <h3>Pozvánky</h3>
             </header>
             <div class="settings">
-                <wallet-invitation v-for="invitation in invitations" :key="invitation.id" :invitation="invitation" :reloadInvitations="loadInviteData()" />
+                <wallet-invitation v-for="invitation in invitations" :key="invitation.id" :invitation="invitation" @reloadInvitations="loadInviteData()" />
             </div>
         </div>
         <div class="settings-container">
@@ -112,6 +112,7 @@ export default {
                         type: 'success'
                     })
                     this.loadInviteData()
+                    this.inviteUser = ""
                 }).catch(err => {
                     this.$notify({
                         text: err.response.data,
@@ -215,5 +216,14 @@ export default {
     & h5
         margin-left: 5px
         margin-bottom: 5px
+
+.user-wrapper
+    display: flex
+    justify-content: space-between
+    align-items: center
+    flex-wrap: wrap
+    padding: 10px
+    margin-bottom: 10px
+    height: 65px  
 
 </style>

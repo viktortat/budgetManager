@@ -14,18 +14,8 @@
         </div>
     </div>
     <div class="category category-create" v-else>
-        <p> 
-            <label :for="'category-name-' + category.id" class="label">
-                <p>Jméno kategorie</p>
-            </label>
-            <input type="text" :id="'category-name-' + category.id" class="input input-100" v-model="name">
-        </p>
-        <p>
-            <label :for="'category-color-' + category.id" class="label">
-                <p>Barva kategorie</p>
-            </label>
-            <input type="text" :id="'category-color-' + category.id" class="input input-100" v-model="color">
-        </p>
+        <input type="text" class="input input-100" v-model="name" placeholder="Jméno kategorie">
+        <input type="text" class="input input-100" v-model="color" placeholder="Barva kategorie">
         <div class="category-edit">
             <button class="button" @click="close(false, false, false)">Zavřít</button>
             <button class="button is-success" @click="editCategory()">Uložit</button>
@@ -35,7 +25,6 @@
 
 <script>
 import axios from 'axios'
-
 import { mapState, mapActions } from 'vuex';
 
 export default {

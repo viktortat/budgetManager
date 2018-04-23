@@ -10,6 +10,7 @@ import Categories from '@/views/Categories.vue'
 import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import Wallets from '@/views/Wallets.vue'
+import Budgets from '@/views/Budgets.vue'
 
 import Header from '@/components/Header.vue'
 import Navbar from '@/components/Navbar.vue'
@@ -30,6 +31,27 @@ export default new Router({
       },
       meta: {
         'name': 'Přehled'
+      },
+      beforeEnter: (to, from, next) => {
+        if (!store.state.isUserLoggedIn) {
+          next({ name: 'Login', query: {redirect: to.fullPath} })
+        } else if (store.state.wallet == null) {
+          next({ name: 'Wallets', query: {redirect: to.fullPath} })
+        } else {
+          next()
+        }
+      }
+    },
+    {
+      path: '/rozpocty',
+      name: 'Budgets',
+      components: {
+        default: Budgets,
+        header: Header,
+        navbar: Navbar
+      },
+      meta: {
+        'name': 'Rozpočty'
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.isUserLoggedIn) {

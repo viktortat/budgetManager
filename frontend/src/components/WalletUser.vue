@@ -60,16 +60,3 @@ export default {
     },
 }
 </script>
-
-
-<style lang="stylus" scoped>
-
-.user-wrapper
-    display: flex
-    justify-content: space-between
-    align-items: center
-    padding: 10px
-    margin-bottom: 10px
-    height: 65px    
-
-</style>

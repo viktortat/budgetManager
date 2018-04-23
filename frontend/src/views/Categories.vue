@@ -2,18 +2,8 @@
     <section class="section categories-wrapper">
         <div class="categories">
             <div class="category category-create">
-                <p>
-                    <label for="category-name" class="label">
-                        <p>Jméno kategorie</p>
-                    </label>
-                    <input type="text" id="category-name" class="input input-100" v-model="categoryName">
-                </p>
-                <p>
-                    <label for="category-color" class="label">
-                        <p>Barva kategorie</p>
-                    </label>
-                    <input type="text" id="category-color" class="input input-100" v-model="categoryColor">
-                </p>
+                <input type="text" id="category-name" class="input input-100" v-model="categoryName" placeholder="Jméno kategorie">
+                <input type="text" id="category-color" class="input input-100" v-model="categoryColor" placeholder="Barva kategorie">
                 <button class="button is-success" @click.prevent="createCategory()">Přidat kategorii</button>
             </div>
             <category v-for="category in categories" :key="category.id" :category='category'></category>
@@ -85,17 +75,14 @@ export default {
 @import "../styles/variables.styl"
 
 .categories-wrapper
-    @media screen and (max-width: 767px)
-        min-height: 100vh
+    min-height: 100vh
         
-    min-height: 100.06vh
-
     background-color: $background-color-primary
 
 .categories
     position: relative
     display: grid
-    grid-template-columns: repeat(auto-fit, 260px)
+    grid-template-columns: repeat(auto-fit, 300px)
     grid-gap: 10px
     justify-content: center
     margin-left: 10px
@@ -104,8 +91,11 @@ export default {
     margin-right: 10px
 
 .category
+    @media screen and (max-width: 767px)
+        cursor: initial
+        
     position: relative
-    height: 260px
+    height: 200px
     padding-left: 20px
     padding-right: 20px
     padding-top: 20px

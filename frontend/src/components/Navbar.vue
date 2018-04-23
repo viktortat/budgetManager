@@ -8,6 +8,7 @@
             <router-link :to="{name: 'Dashboard'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-chart-area"></i></div>Přehled</router-link>
             <router-link :to="{name: 'Transactions'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-credit-card"></i></div>Transakce</router-link>
             <router-link :to="{name: 'Categories'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-list"></i></div>Kategorie</router-link>
+            <router-link :to="{name: 'Budgets'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-list"></i></div>Rozpočty</router-link>
             <router-link :to="{name: 'Settings'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-cogs"></i></div>Nastavení</router-link>
         </div>
         <footer class="navbar-footer">
