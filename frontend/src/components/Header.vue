@@ -2,7 +2,9 @@
     <header class="header">
         <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><i class="fas fa-bars fa-2x"></i></div>
         <h1 class="is-size-4">{{ this.$route.meta.name }}</h1>
-        <button class="button" v-if="this.$route.name === 'Wallets'" @click="logUserOut()">Odhlásit se</button>
+        <transition name="fade">
+            <button class="button" v-if="this.$route.name === 'Wallets'" @click="logUserOut()">Odhlásit se</button>
+        </transition>
     </header>
 </template>
 

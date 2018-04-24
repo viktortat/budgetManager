@@ -22,7 +22,7 @@ class WalletFilterBackendFK(DRYPermissionFiltersBase):
 
 def check_wallet_ownership(wallet_id, user):
     wallet = Wallet.objects.filter(id=wallet_id).first()
-    if wallet is not None:
+    if wallet:
         return user == wallet.owner or user in wallet.users.all() or user.is_staff
     else:
         return True

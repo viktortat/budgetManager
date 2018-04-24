@@ -35,12 +35,17 @@ class CategoryListView(generics.ListCreateAPIView):
     filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
     filter_class = CategoryFilter
 
-    def post(self, request, *args, **kwargs):
-        wallet_id = request.data.get("wallet", None)
-        if wallet_id is not None:
-            if not check_wallet_ownership(wallet_id, request.user):
-                return response.Response(status=status.HTTP_403_FORBIDDEN, data="Sorry, it seems like this is not your wallet...")
-        return self.create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        wallet = serializer.validated_data.get("wallet")
+        if not check_wallet_ownership(wallet.id, request.user):
+            return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your wallet.")
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -63,14 +68,17 @@ class TransactionListView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    def post(self, request, *args, **kwargs):
-        category_id = request.data.get("category", None)
-        if category_id is not None:
-            category = Category.objects.filter(id=category_id).first()
-            if category is not None:
-                if not check_wallet_ownership(category.wallet.id, request.user):
-                    return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your category.")
-        return self.create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        category = serializer.validated_data.get("category")
+        if not check_wallet_ownership(category.wallet.id, request.user):
+            return response.Response(status=status.HTTP_403_FORBIDDEN, data="This is not your category.")
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -90,16 +98,18 @@ class BudgetListView(generics.ListCreateAPIView):
     filter_backends = [WalletFilterBackendFK, django_filters.DjangoFilterBackend]
     filter_class = BudgetFilter
 
-    def post(self, request, *args, **kwargs):
-        category = Category.objects.filter(id= request.data.get("category")).first()
-        if category:
-            if not check_wallet_ownership(category.wallet.id, request.user):
-                response_text = "Sorry, it seems like this is not your category."
-                return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
-        else:
-            response_text = "Sorry, it seems like your category does not exists."
-            return response.Response(status=status.HTTP_404_NOT_FOUND, data=response_text)
-        return self.create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        category = serializer.validated_data.get("category")
+        if not check_wallet_ownership(category.wallet.id, request.user):
+            response_text = "Sorry, it seems like this is not your category."
+            return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):

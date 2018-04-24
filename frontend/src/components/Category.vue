@@ -126,23 +126,4 @@ export default {
     width: 100%
     height: 4px
 
-
-.fade-enter-active, .fade-leave-active
-    transition: opacity 0.2s
-
-.fade-enter, .fade-leave-to
-    opacity: 0
-
-
-.move-enter-active, .move-leave-active
-    transition: all 0.1s ease-in-out
-
-.move-enter
-    opacity: 0
-    transform: translateY(-30px)
-
-.move-leave-to
-    opacity: 0
-    transform: translateY(30px)
-
 </style>

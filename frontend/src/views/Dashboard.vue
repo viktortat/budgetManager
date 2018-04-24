@@ -303,7 +303,7 @@ export default {
 
 .dashboard-filters
     @media screen and (max-width: 767px)
-        display: none
+        display: flex
 
     margin: 10px
     margin-bottom: 0
@@ -327,6 +327,14 @@ export default {
 
         &:last-child
             margin-right: 0
+
+    @media screen and (max-width: 767px)
+        display: flex
+        flex-wrap: wrap
+        justify-content: space-between
+
+        & > *
+            margin: 0
 
 .columns 
     display: flex

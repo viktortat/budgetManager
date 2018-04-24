@@ -186,15 +186,4 @@ export default {
 
     background-color: #FFFFFF
 
-.move-enter-active, .move-leave-active
-    transition: all 0.1s ease-in-out
-
-.move-enter
-    opacity: 0
-    transform: translateY(-30px)
-
-.move-leave-to
-    opacity: 0
-    transform: translateY(30px)
-
 </style>
