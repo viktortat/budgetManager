@@ -1,26 +1,30 @@
 <template>
-    <div class="category" v-if="!editMode" @click="editMode = !editMode">
-        <aside class="category-color" :style="{backgroundColor: category.color }"></aside>
-        <h3 class="is-bold">{{ category.name }}</h3>
-        <p>Transakcí: {{ category.transactions.length }}</p>
-        <p class="is-bold" :class="{'is-success': Number(category.balance) > 0, 'is-danger': Number(category.balance) < 0 }">{{ category.balance | formatCurrency }}</p>
-    </div>
-    <div class="category" v-else-if="!menuMode">
-        <button class="button is-100" @click="close(false, false, false)">Zavřít</button>
-        <button class="button is-success is-100" @click="menuMode = !menuMode">Upravit</button>
-        <div>
-            <button class="button is-danger is-100" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
-            <button class="button is-danger is-100" @click="deleteCategory()" v-else >Opravdu?</button>
+    <transition name="fade" mode="out-in">
+        <div :key="1" class="category" v-if="!editMode" @click="editMode = !editMode">
+            <aside class="category-color" :style="{backgroundColor: category.color }"></aside>
+            <h3 class="is-bold">{{ category.name }}</h3>
+            <p>Transakcí: {{ category.transactions.length }}</p>
+            <p class="is-bold" :class="{'is-success': Number(category.balance) > 0, 'is-danger': Number(category.balance) < 0 }">{{ category.balance | formatCurrency }}</p>
         </div>
-    </div>
-    <div class="category category-create" v-else>
-        <input type="text" class="input input-100" v-model="name" placeholder="Jméno kategorie">
-        <input type="text" class="input input-100" v-model="color" placeholder="Barva kategorie">
-        <div class="category-edit">
-            <button class="button" @click="close(false, false, false)">Zavřít</button>
-            <button class="button is-success" @click="editCategory()">Uložit</button>
+        <div :key="2" class="category" v-else-if="!menuMode">
+            <button class="button is-100" @click="close(false, false, false)">Zavřít</button>
+            <button class="button is-success is-100" @click="menuMode = !menuMode">Upravit</button>
+            <div>
+                <transition name="move" mode="out-in">
+                    <button :key="1" class="button is-danger is-100" @click="deleteCheck = !deleteCheck" v-if="!deleteCheck">Smazat</button>
+                    <button :key="2" class="button is-danger is-100" @click="deleteCategory()" v-else >Opravdu?</button>
+                </transition>
+            </div>
         </div>
-    </div>
+        <div :key="3" class="category category-create" v-else>
+            <input type="text" class="input input-100" v-model="name" placeholder="Jméno kategorie">
+            <input type="text" class="input input-100" v-model="color" placeholder="Barva kategorie">
+            <div class="category-edit">
+                <button class="button" @click="close(false, false, false)">Zavřít</button>
+                <button class="button is-success" @click="editCategory()">Uložit</button>
+            </div>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -121,5 +125,24 @@ export default {
     top: 0
     width: 100%
     height: 4px
+
+
+.fade-enter-active, .fade-leave-active
+    transition: opacity 0.2s
+
+.fade-enter, .fade-leave-to
+    opacity: 0
+
+
+.move-enter-active, .move-leave-active
+    transition: all 0.1s ease-in-out
+
+.move-enter
+    opacity: 0
+    transform: translateY(-30px)
+
+.move-leave-to
+    opacity: 0
+    transform: translateY(30px)
 
 </style>

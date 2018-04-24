@@ -10,7 +10,7 @@
                 </select>
                 <button class="button is-100 is-success" @click="createBudget()">Přidat</button>
             </div>
-            <budget v-for="budget in budgets" :key="budget.id" :budget="budget" />
+            <budget v-for="budget in budgets" :key="budget.id" :budget="budget" :categories="categories" />
         </div>
     </section>
 </template>
@@ -47,6 +47,9 @@ export default {
                     text: 'Rozpočet byl vytvořen.',
                     type: 'success'
                 });
+                this.name = ""
+                this.amount = ""
+                this.category = ""
             }).catch(error => {
                 this.$notify({
                     text: 'Vyskytl se problém, zkuste to prosím později.',
@@ -91,12 +94,15 @@ export default {
     margin-right: 10px
 
 .budget
+    @media screen and (max-width: 767px)
+        cursor: initial
+
     position: relative
     height: 250px
     padding-left: 20px
     padding-right: 20px
     padding-top: 20px
-    padding-bottom: 20px
+    padding-bottom: 30px
     display: flex
     flex-flow: column
     justify-content: space-between
@@ -104,4 +110,5 @@ export default {
     border-radius: $border-radius
     background-color: #FFFFFF
 
+    cursor: pointer
 </style>

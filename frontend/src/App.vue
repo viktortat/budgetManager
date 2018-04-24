@@ -1,8 +1,10 @@
 <template>
     <div id="app" class="app">
-        <router-view name="header"/>
+        <router-view name="header"/> 
         <router-view name="navbar"/>
-        <router-view/>
+        <transition name="fade" mode="out-in">
+            <router-view/>
+        </transition>
         <notifications/>
     </div>
 </template>
@@ -15,5 +17,13 @@
         min-height: 100vh
 
     min-height: 100.06vh
+
+
+.fade-enter-active, .fade-leave-active
+  transition: opacity 0.4s
+
+.fade-enter, .fade-leave-to
+  opacity: 0
+
 
 </style>

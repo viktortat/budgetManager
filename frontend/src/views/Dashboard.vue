@@ -41,7 +41,10 @@
                 <h4>Poslední transakce</h4>
                 <transaction-simple v-for="transaction in lastTransactions" :key="transaction.id" :transaction='transaction' :categories='categories' />
             </div>
-            <div class="column"></div>
+            <div class="column">
+                <h4>Rozpočty - {{ currentMonth }}</h4>
+                <dashboard-budget v-for="budget in lastBudgets" :key="budget.id" :budget="budget" :dateTo="dateTo" :dateFrom="dateFrom" />
+            </div>
             <div class="column">
                 <h4>Výdaje</h4>
                 <p v-if="categoriesDataset.datasets[0].data.length === 0">Žádná data k zobrazení...</p>
@@ -61,9 +64,11 @@
 import axios from 'axios'
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
+
 import TransactionSimple from '@/components/TransactionSimple.vue'
 import DoughnutChart from '@/components/DoughnutChart.js'
 import LineChart from '@/components/LineChart.js'
+import DashboardBudget from '@/components/DashboardBudget.vue'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -79,6 +84,9 @@ export default {
         ...mapActions([
             'loadData'
         ]),
+        filterTransactions() {
+            return this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+        },
         calculateBalance(balance, transactions) {
             for(let transaction of transactions) {
                 if(transaction.transaction_type === "income") {
@@ -150,7 +158,7 @@ export default {
             }
         },
         calculateExpenses() {
-            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let transactions = this.filterTransactions()
             let balance = 0
             for (let trn of transactions) {
                 if(trn.transaction_type === 'expense') {
@@ -160,7 +168,7 @@ export default {
             return balance
         },
         calculateIncome() {
-            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let transactions = this.filterTransactions()
             let balance = 0
             for (let trn of transactions) {
                 if(trn.transaction_type === 'income') {
@@ -174,8 +182,12 @@ export default {
         ...mapState([
             'wallet',
             'transactions',
-            'categories'
+            'categories',
+            'budgets'
         ]),
+        lastBudgets() {
+            return this.budgets.slice(0, 3)
+        },
         lastTransactions() {
             return this.transactions.slice(0, 5)
         },
@@ -184,7 +196,7 @@ export default {
                 datasets: [{ data: [], backgroundColor: [] }],
                 labels: []
             }   
-            let transactions = this.transactions.filter(trn => trn.date >= this.dateFrom && trn.date <= this.dateTo)
+            let transactions = this.filterTransactions()
             let categories = this.categories.slice()
             const expenses = this.calculateExpenses()
             for (let cat of categories) {
@@ -233,7 +245,7 @@ export default {
             let dateFrom = this.dateFrom
             let dateTo = this.dateTo
             for(var i = 0; i < 6; i++) {
-                let transactions = this.transactions.filter(trn => trn.date >= dateFrom && trn.date <= dateTo)
+                let transactions = this.filterTransactions()
                 data.datasets[0].data.unshift(Number(this.calculateBalance(0, transactions)))
                 if(this.isMonthSelected()) {
                     data.labels.unshift(moment(dateFrom).format('MMMM'))
@@ -262,13 +274,17 @@ export default {
         },
         computeChange() {
             return Math.round((this.calculateIncome() - this.calculateExpenses()) * 100) / 100
+        },
+        currentMonth() {
+            return moment(this.dateFrom).format('YYYY MMMM')
         }
     },
     components: {
         TransactionSimple,
         flatPickr,
         DoughnutChart,
-        LineChart
+        LineChart,
+        DashboardBudget
     },
     created() {
         this.loadData() 
