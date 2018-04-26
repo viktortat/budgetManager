@@ -142,10 +142,7 @@ export default new Router({
       }
     },
     { path: '/',
-      name: 'Home',
-      components: {
-        default: Home
-      }
+      name: 'Home', redirect: { name: 'Dashboard' }
     },
     {
       path: '/nastaveni',
