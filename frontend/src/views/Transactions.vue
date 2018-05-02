@@ -57,9 +57,9 @@
                 </select>
             </div>
             <footer class="filters-footer">
-                <button class="button" @click="filtersHidden = !filtersHidden" v-if="showFilterButton">Zavřít</button>
+                <app-button class="button" @click="filtersHidden = !filtersHidden" v-if="showFilterButton">Zavřít</app-button>
                 <div v-else></div>
-                <button class="button is-danger" @click="clearFilter()">Reset filtru</button>
+                <app-button class="button is-danger" @click="clearFilter()">Reset filtru</app-button>
             </footer>
         </div>
         <transition-group name="fade">
@@ -69,11 +69,13 @@
 </template>
 
 <script>
-import Transaction from '@/components/TransactionExtended.vue'
 import { mapState, mapActions } from 'vuex'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
+
+import AppButton from '@/components/AppButton.vue'
+import Transaction from '@/components/TransactionExtended.vue'
 
 export default {
     data() {
@@ -123,7 +125,8 @@ export default {
     },
     components: {
         Transaction,
-        flatPickr
+        flatPickr,
+        AppButton
     },
     created() {
         this.loadData();
@@ -144,7 +147,7 @@ export default {
         
     min-height: 100.06vh
 
-    background-color: $background-color-primary
+    background-color: $BACKGROUND-COLOR-PRIMARY
 
 .show-filter
     display: flex
@@ -154,7 +157,7 @@ export default {
     height: 50px
 
     background-color: #FFFFFF
-    border-radius: $border-radius
+    border-radius: $BORDER-RADIUS
 
 .filters        
     position: relative
@@ -171,7 +174,7 @@ export default {
     margin-right: 10px
 
     background-color: #FFFFFF
-    border-radius: $border-radius
+    border-radius: $BORDER-RADIUS
 
 .filters-footer
     position: absolute

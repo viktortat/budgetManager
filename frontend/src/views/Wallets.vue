@@ -3,15 +3,15 @@
         <h2>Vaše peněženky</h2>
         <div class="wallets">
             <div class="wallet wallet-create">
-                <form>
+                <div>
                     <p>
                         <label for="wallet-name" class="label">
                             <p>Jméno peněženky</p>
                         </label>
                         <input type="text" id="wallet-name" class="input input-100" v-model="walletName">
                     </p>
-                    <button class="button is-success" @click.prevent="createWallet()">Vytvořit peněženku</button>
-                </form>
+                    <app-button class="button is-success" @click="createWallet()">Vytvořit peněženku</app-button>
+                </div>
             </div>
             <div class="wallet" v-for="wallet in ownedWallets" :key="wallet.id" @click="setWalletAndRedirect(wallet)">
                 <h2>{{ wallet.name }}</h2>
@@ -44,13 +44,11 @@
     </section>
 </template>
 
-<style lang="stylus" scoped>
-
-</style>
 
 <script>
-import axios from 'axios'
-import { mapState ,mapActions } from "vuex"
+import { mapState, mapActions } from "vuex"
+
+import AppButton from '@/components/AppButton.vue'
 
 export default {
     data() {
@@ -75,7 +73,7 @@ export default {
                     'name': this.walletName
                 }
                 const url = "/api/wallets/"
-                axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+                this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                     this.wallets.push(res.data)
                     this.$notify({
                         text: 'Peneženka byla vytvořena.',
@@ -91,7 +89,7 @@ export default {
             }
         },
         getWallets() {
-            axios.get("/api/wallets/", { 
+            this.$axios.get("/api/wallets/", { 
                 headers: { Authorization: 'JWT ' + this.$store.state.token }
             }).then(res => {
                 this.wallets = res.data;
@@ -104,7 +102,7 @@ export default {
         },
         loadInviteData() {
             const url = '/api/invitations/' + '?invited=' + this.user.id + '&resolved=false'
-            axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+            this.$axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.invitations = res.data
             })
         },
@@ -113,7 +111,7 @@ export default {
                 'id': invitation_id,
             }
             const url = '/api/invitations/resolve/'
-            axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+            this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.$notify({
                     text: 'Pozvánka přijata.',
                     type: 'success'
@@ -127,7 +125,7 @@ export default {
                 'id': invitation_id,
             }
             const url = '/api/invitations/resolve/'
-            axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
+            this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
                 this.$notify({
                     text: 'Pozvánka odmítnuta.',
                     type: 'success'
@@ -150,6 +148,9 @@ export default {
             return wallets
         }
     },
+    components: {
+        AppButton
+    },
     created() {
         this.getWallets()
     }
@@ -166,7 +167,7 @@ export default {
         
     min-height: 100.06vh
 
-    background-color: $background-color-primary
+    background-color: $BACKGROUND-COLOR-PRIMARY
 
     & > h2
         padding-top: 1rem
@@ -188,7 +189,7 @@ export default {
     padding: 20px
 
     background-color: #FFFFFF
-    border-radius: $border-radius
+    border-radius: $BORDER-RADIUS
 
     cursor: pointer
 
@@ -227,7 +228,7 @@ export default {
     padding: 20px
 
     background-color: #FFFFFF
-    border-radius: $border-radius
+    border-radius: $BORDER-RADIUS
 
 .invitation-buttons
     width: 100%
@@ -238,9 +239,9 @@ export default {
         border-radius: 0
 
         &:first-child
-            border-radius: $border-radius 0 0 $border-radius
+            border-radius: $BORDER-RADIUS 0 0 $BORDER-RADIUS
         
         &:last-child
-            border-radius: 0 $border-radius $border-radius 0
+            border-radius: 0 $BORDER-RADIUS $BORDER-RADIUS 0
 
 </style>

@@ -32,8 +32,8 @@
                     <p>Typ transakce</p>                     
                 </label>
                 <select id="transaction-type" class="input input-100" v-model="transaction.transaction_type">
+                    <option value="" selected>Výdej</option>
                     <option value="income">Příjem</option>
-                    <option value="expense">Výdej</option>
                 </select>
             </p>
             <footer class="transaction-footer">
@@ -73,13 +73,14 @@ export default {
             'refreshData'
         ]),
         createTransaction() {
-            const data = {
+            let data = {
                 'category': this.transaction.category,
                 'amount': this.transaction.amount,
                 'transaction_type': this.transaction.transaction_type,
                 'notes': this.transaction.notes,
                 'date': this.transaction.date
             }
+            if (this.transaction.transaction_type === "") data.transaction_type = "expense"
             if (true) {
                 const url = "/api/transactions/"
                 axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {

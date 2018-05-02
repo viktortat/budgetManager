@@ -1,7 +1,7 @@
 <template>
     <section class="login">
         <h1 class="is-bold">Přihlásit se</h1>
-        <form class="form">
+        <div class="form">
             <p>
                 <label for="username-login" class="label">
                     <p>Email</p>                     
@@ -14,14 +14,15 @@
                 </label>
                 <input type="password" id="password-login" class="input input-medium" v-model="password">
             </p>
-            <button class="button" @click.prevent="login">Přihlásit se</button>
-        </form>
+            <app-button class="button" @click="login()">Přihlásit se</app-button>
+        </div>
     </section>
 </template>
 
 <script>
-import axios from 'axios';
 import { mapActions } from "vuex";
+
+import AppButton from '@/components/AppButton.vue'
 
 export default {
     data() {
@@ -39,7 +40,7 @@ export default {
                 "email": this.email,
                 "password": this.password 
             };
-            axios.post("/api/auth/login/", data).then(res => {
+            this.$axios.post("/api/auth/login/", data).then(res => {
                 this.logUserIn(res.data.token);
                 this.$router.push(this.$route.query.redirect || {name: 'Wallets'});
             }).catch(err => {
@@ -49,6 +50,9 @@ export default {
                 });
             })
         }
+    },
+    components: {
+        AppButton
     }
 }
 </script>

@@ -1,60 +1,20 @@
 <template>
-    <section id="dashboard" class="dashboard-wrapper section">
-        <div class="dashboard-filters">
-            <div class="dashboard-filter">
-                <button class="button is-square" @click="subtractDate()"><i class="fas fa-angle-left"></i></button>
-                <flat-pickr v-model="dateFrom" class="input" id="dashboard-date-from"></flat-pickr>
-                <flat-pickr v-model="dateTo" class="input" id="dashboard-date-to"></flat-pickr>
-                <button class="button is-square" @click="addDate()"><i class="fas fa-angle-right"></i></button>
-            </div>
-            <div class="dashboard-filter">
-                <button class="button is-link" @click="setFilterDate('thisMonth')">současný měsíc</button>
-                <button class="button is-link" @click="setFilterDate('lastMonth')">minulý měsíc</button>
-                <button class="button is-link" @click="setFilterDate('thisYear')">současný rok</button>
-                <button class="button is-link" @click="setFilterDate('lastYear')">minulý rok</button>
-            </div>
+    <section class="dashboard section">
+        <div>
+            <h4>Stav</h4>
+            <p>{{ wallet.balance | formatCurrency }}</p>
         </div>
-        <div class="columns">
-            <div class="column column-small">
-                <h4>Stav</h4>
-                <br>
-                <p class="is-size-1 is-bold">{{ wallet.balance | formatCurrency }}</p>
-            </div>
-            <div class="column column-small">
-                <h4>Příjmy</h4>
-                <br>
-                <p class="is-size-1 is-bold">{{ computeIncome | formatCurrency }}</p>
-            </div>
-            <div class="column column-small">
-                <h4>Výdaje</h4>
-                <br>
-                <p class="is-size-1 is-bold">{{ computeExpenses | formatCurrency }}</p>
-            </div>
-            <div class="column column-small">
-                <h4>Změna</h4>
-                <br>
-                <p class="is-size-1 is-bold" :class="{'is-danger': computeChange < 0, 'is-success': computeChange > 0}">{{ computeChange | formatCurrency }}</p>
-            </div>
+        <div>
+            <h4>Příjmy</h4>
+            <p>{{ computeIncome | formatCurrency }}</p>
         </div>
-        <div class="columns">
-            <div class="column">
-                <h4>Poslední transakce</h4>
-                <transaction-simple v-for="transaction in lastTransactions" :key="transaction.id" :transaction='transaction' :categories='categories' />
-            </div>
-            <div class="column">
-                <h4>Rozpočty - {{ currentMonth }}</h4>
-                <dashboard-budget v-for="budget in lastBudgets" :key="budget.id" :budget="budget" :dateTo="dateTo" :dateFrom="dateFrom" />
-            </div>
-            <div class="column">
-                <h4>Výdaje</h4>
-                <p v-if="categoriesDataset.datasets[0].data.length === 0">Žádná data k zobrazení...</p>
-                <doughnut-chart v-else :chartData="categoriesDataset" :options="categoriesOptions" />
-            </div>
+        <div>
+            <h4>Výdaje</h4>
+            <p>{{ computeExpenses | formatCurrency }}</p>
         </div>
-        <div class="columns">
-            <div class="column">
-                <line-chart :chartData="transactionsDataset" :options="{responsive: true, maintainAspectRatio: false}" />
-            </div>
+        <div>
+            <h4>Změna</h4>
+            <p :class="{'is-danger': computeChange < 0, 'is-success': computeChange > 0}">{{ computeChange | formatCurrency }}</p>
         </div>
     </section>
 </template>
@@ -65,10 +25,8 @@ import axios from 'axios'
 import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
 
-import TransactionSimple from '@/components/TransactionSimple.vue'
-import DoughnutChart from '@/components/DoughnutChart.js'
-import LineChart from '@/components/LineChart.js'
-import DashboardBudget from '@/components/DashboardBudget.vue'
+import AppButton from '@/components/AppButton.vue'
+import AppInput from '@/components/AppInput.vue'
 
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -77,7 +35,8 @@ export default {
     data() {
         return {
             dateTo: moment().endOf('month').format('YYYY-MM-DD'), 
-            dateFrom: moment().startOf('month').format('YYYY-MM-DD')
+            dateFrom: moment().startOf('month').format('YYYY-MM-DD'),
+            test: ""
         }
     },
     methods: {
@@ -185,16 +144,10 @@ export default {
             'categories',
             'budgets'
         ]),
-        lastBudgets() {
-            return this.budgets.slice(0, 3)
-        },
-        lastTransactions() {
-            return this.transactions.slice(0, 5)
-        },
         categoriesDataset() {
             let data = {
-                datasets: [{ data: [], backgroundColor: [] }],
-                labels: []
+                labels: [],
+                series: []
             }   
             let transactions = this.filterTransactions()
             let categories = this.categories.slice()
@@ -210,43 +163,24 @@ export default {
                     }
                 }
                 if(balance) {
-                    data.datasets[0].data.push((balance/expenses)*100)
-                    data.datasets[0].backgroundColor.push(cat.color)
+                    data.series.push((balance/expenses)*100)
                     data.labels.push(cat.name)
                 }
             }
             return data
         },
-        categoriesOptions() {
-            const options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                tooltips: {
-                    callbacks: {
-                        label: (tooltipItem, data) => {
-                            let dataset = data.datasets[tooltipItem.datasetIndex];
-                            let total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-                                return previousValue + currentValue;
-                            })
-                            let currentValue = dataset.data[tooltipItem.index];
-                            let precentage = Math.floor(((currentValue/total) * 100)+0.5)
-                            return precentage + " %"
-                        }
-                    }
-                } 
-            }
-            return options
-        },
         transactionsDataset() {
             let data = {
-                datasets: [{ data: [], backgroundColor: [], borderColor: [], lineTension: 0 }],
+                series: [
+                    []
+                ],
                 labels: []
             }
             let dateFrom = this.dateFrom
             let dateTo = this.dateTo
             for(var i = 0; i < 6; i++) {
-                let transactions = this.filterTransactions()
-                data.datasets[0].data.unshift(Number(this.calculateBalance(0, transactions)))
+                let transactions = this.transactions.filter(trn => trn.date >= dateFrom && trn.date <= dateTo)
+                data.series[0].unshift(Number(this.calculateBalance(0, transactions)))
                 if(this.isMonthSelected()) {
                     data.labels.unshift(moment(dateFrom).format('MMMM'))
                     dateFrom = moment(dateFrom).subtract(1, 'months').format('YYYY-MM-DD')
@@ -262,8 +196,6 @@ export default {
                     dateFrom = moment(dateFrom).subtract(difference + 1, 'days').format('YYYY-MM-DD')
                 }
             }
-            data.datasets[0].backgroundColor.push('rgba(211, 234, 251, 0.5)')
-            data.datasets[0].borderColor.push('#2599ee')
             return data
         },
         computeExpenses() {
@@ -280,11 +212,9 @@ export default {
         }
     },
     components: {
-        TransactionSimple,
         flatPickr,
-        DoughnutChart,
-        LineChart,
-        DashboardBudget
+        AppButton,
+        AppInput
     },
     created() {
         this.loadData() 
@@ -294,64 +224,10 @@ export default {
 
 
 <style lang="stylus" scoped>
-@import "../styles/variables.styl"
 
-.dashboard-wrapper
-    min-height: 100vh
-
-    background-color: $background-color-primary
-
-.dashboard-filters
-    @media screen and (max-width: 767px)
-        display: flex
-
-    margin: 10px
-    margin-bottom: 0
-    padding: 10px
-    display: inline-flex
-    flex-flow: column
-    align-items: center
-
-    background-color: #FFFFFF
-
-.dashboard-filter
-    margin-bottom: 20px
-    display: inline-flex
-    align-items: center
-    
-    &:last-child
-        margin-bottom: 0
-
-    & > *
-        margin-right: 10px
-
-        &:last-child
-            margin-right: 0
-
-    @media screen and (max-width: 767px)
-        display: flex
-        flex-wrap: wrap
-        justify-content: space-between
-
-        & > *
-            margin: 0
-
-.columns 
-    display: flex
-    flex-wrap: wrap
-    margin: 10px
-
-.column
-    flex: 1 1 auto
-    min-height: 33vh
-    max-height: 50vh
-    width: 300px
-    padding: 20px
-
-    border-radius: $border-radius
-    background-color: #FFFFFF
-
-    &.column-small
-        min-height: 10vh
+.dashboard
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+    grid-gap: 10px
 
 </style>

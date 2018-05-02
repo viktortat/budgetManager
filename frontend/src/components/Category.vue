@@ -2,7 +2,7 @@
     <transition name="fade" mode="out-in">
         <div :key="1" class="category" v-if="!editMode" @click="editMode = !editMode">
             <aside class="category-color" :style="{backgroundColor: category.color }"></aside>
-            <h3 class="is-bold">{{ category.name }}</h3>
+            <h3 class="is-bold">{{ category.name | shortenString(35) }}</h3>
             <p>Transakcí: {{ category.transactions.length }}</p>
             <p class="is-bold" :class="{'is-success': Number(category.balance) > 0, 'is-danger': Number(category.balance) < 0 }">{{ category.balance | formatCurrency }}</p>
         </div>

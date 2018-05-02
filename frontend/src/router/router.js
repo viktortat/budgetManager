@@ -12,8 +12,8 @@ import Home from '@/views/Home.vue'
 import Wallets from '@/views/Wallets.vue'
 import Budgets from '@/views/Budgets.vue'
 
-import Header from '@/components/Header.vue'
-import Navbar from '@/components/Navbar.vue'
+import Header from '@/components/AppHeader.vue'
+import Navbar from '@/components/AppNavbar.vue'
 
 import store from '@/store/store.js'
 

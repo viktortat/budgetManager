@@ -2,10 +2,9 @@
     <div class="transaction">
         <div class="transaction-category" @click="selected =! selected">
             <aside class="transaction-category-stripe" :class="{selected: this.selected}" :style="{backgroundColor: this.categories.find(x => x.id === transaction.category).color }"></aside>
-            <p>{{ this.categories.find(x => x.id === transaction.category).name }}</p>
+            <p>{{ this.categories.find(x => x.id === transaction.category).name | shortenString(12) }}</p>
             <p class="transaction-date is-size-small">{{ transaction.date }}</p>
         </div>
-        <div @click="goToDetail()" class="transaction-owner">{{ getUserEmail }}</div>
         <div @click="goToDetail()" class="transaction-notes">{{ transaction.notes }}<span v-if="!transaction.notes">--</span></div>
         <div @click="goToDetail()" class="transaction-amount" :class="{'is-success': transaction.transaction_type === 'income', 'is-danger': transaction.transaction_type === 'expense'}">
             <span v-if="transaction.transaction_type === 'expense'">-</span> {{ transaction.amount | formatCurrency }}

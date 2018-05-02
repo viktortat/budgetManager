@@ -2,33 +2,29 @@
     <header class="header">
         <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><i class="fas fa-bars fa-2x"></i></div>
         <h1 class="is-size-4">{{ this.$route.meta.name }}</h1>
-        <transition name="fade">
-            <button class="button" v-if="this.$route.name === 'Wallets'" @click="logUserOut()">Odhlásit se</button>
-        </transition>
+        <app-button class="button" @click="logUserOut()" v-if="this.$route.name === 'Wallets'">Odhlásit se</app-button>
     </header>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
+
+import AppButton from '@/components/AppButton.vue'
 
 export default {
-    computed: {
-        ...mapState([
-            'wallet',
-            'user'
-        ])
-    },
     methods: {
         ...mapActions([
             "toggleMenu",
             "logUserOut"
         ])
+    },
+    components: {
+        AppButton
     }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import "../styles/variables.styl"
 
 .header
     @media screen and (max-width: 767px)
