@@ -35,7 +35,7 @@ export default {
 
 @import "./styles/reset"
 @import "./styles/variables"
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,500,600')
 
 .app
     min-height: 100vh

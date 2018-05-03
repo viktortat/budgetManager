@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><i class="fas fa-bars fa-2x"></i></div>
+        <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><icon name="bars" scale="2" /></div>
         <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
         <app-button class="button" @click="logUserOut()" v-if="this.$route.name === 'Wallets'">Odhlásit se</app-button>
     </header>
@@ -66,16 +66,5 @@ export default {
 .header-heading 
     font-size: $FONT-SIZE * 1.5
     font-weight: 400
-
-.account
-    display: flex
-    align-items: center 
-    justify-content: space-between
-
-    font-weight: 600
-
-.account-email
-    @media screen and (max-width: 767px)
-        display: none
 
 </style>

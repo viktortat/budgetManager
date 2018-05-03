@@ -61,7 +61,7 @@ export const actions = {
         context.dispatch('loadBudgets', true)
     },
     dumpData: (context, payload) => {
-        context.commit('setWallet', {})
+        context.commit('setWallet', null)
         context.commit('setWallets', [])
         context.commit('setCategories', [])
         context.commit('setTransactions', [])

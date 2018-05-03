@@ -3,14 +3,15 @@ import Router from 'vue-router'
 
 import Dashboard from '@/views/Dashboard.vue'
 import Transactions from '@/views/Transactions.vue'
+import TransactionsDetail from '@/views/TransactionsDetail.vue'
 import Categories from '@/views/Categories.vue'
 import Budgets from '@/views/Budgets.vue'
 import Settings from '@/views/Settings.vue'
 import Login from '@/views/Login.vue'
 import Wallets from '@/views/Wallets.vue'
 
-import Header from '@/components/AppHeader.vue'
-import Navbar from '@/components/AppNavbar.vue'
+import Header from '@/components/TheHeader.vue'
+import Navbar from '@/components/TheNavbar.vue'
 
 import store from '@/store/store.js'
 
@@ -46,6 +47,52 @@ export default new Router({
             name: 'Transactions',
             components: {
                 default: Transactions,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Transakce'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
+            path: '/transakce/new',
+            name: 'TransactionsNew',
+            components: {
+                default: TransactionsDetail,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Transakce'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
+            path: '/transakce/:id',
+            name: 'TransactionsDetail',
+            components: {
+                default: TransactionsDetail,
                 header: Header,
                 navbar: Navbar
             },

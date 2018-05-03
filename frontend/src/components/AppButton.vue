@@ -31,6 +31,16 @@
     &:focus
         outline: 0
 
+    &.is-warning
+        &:hover
+            background-color: $WARNING-COLOR-LIGHT
+
+        &:active
+            background-color: $WARNING-COLOR-DARK
+            box-shadow: inset 0px 2px 0px 0px rgba(0,0,0,0.3);
+
+        background-color: $WARNING-COLOR
+
     &.is-success
         &:hover
             background-color: $SUCCESS-COLOR-LIGHT

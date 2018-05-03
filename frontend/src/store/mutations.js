@@ -22,6 +22,12 @@ export const mutations = {
         state.budgets = payload
     },
 
+    deleteTransaction: (state, payload) => {
+        let transactions = state.transactions.slice()
+        transactions.splice(payload, 1)
+        state.transactions = transactions
+    },
+
     setIsMenuActive: (state, payload) => {
         state.isMenuActive = payload
     }

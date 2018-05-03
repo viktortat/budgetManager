@@ -5,6 +5,8 @@ Vue.filter('formatCurrency', value => {
 })
   
 Vue.filter('shortenString', (value, lng) => {
-    if (value.length > lng) return value.substring(0, lng).trim() + '...'
-    else return value
+    if (value) {
+        if (value.length > lng) return value.substring(0, lng).trim() + '...'
+        else return value
+    } else return '--'
 })

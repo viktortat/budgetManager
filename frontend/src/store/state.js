@@ -1,7 +1,7 @@
 export const state = {
     user: {},
     token: '',
-    wallet: {},
+    wallet: null,
     
     wallets: [],
     transactions: [],
