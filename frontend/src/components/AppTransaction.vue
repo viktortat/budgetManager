@@ -2,7 +2,7 @@
     <div class="transaction">
         <aside class="transaction-category-bar" :style="{ backgroundColor: this.categories.find(x => x.id === transaction.category).color }"></aside>
         <div class="transaction-left">
-            <div class="transaction-small-text">{{ transaction.date }}</div>
+            <div class="transaction-small-text">{{ this.$moment(transaction.date).format('DD.MM.YYYY') }}</div>
             <div class="transaction-big-text">{{ this.categories.find(x => x.id === transaction.category).name | shortenString(12) }}</div>
             <div class="transaction-small-text">{{ transaction.notes | shortenString(12) }}</div>
         </div>
@@ -11,7 +11,13 @@
             <app-button class="button transaction-option" key="2" @click="goToDetail(transaction.id)"><icon name="pencil-alt" /></app-button>
             <app-button class="button transaction-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
         </div>
-        <div class="transaction-right" key="price" v-else @click="options = true">{{ transaction.amount | formatCurrency }}</div>
+        <div 
+            class="transaction-right" 
+            key="price" v-else 
+            @click="options = true" 
+            :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}">
+            {{ transaction.amount | formatCurrency }}
+        </div>
     </div>
 </template>
 
@@ -64,23 +70,27 @@ export default {
 <style lang="stylus" scoped>
 @import '../styles/variables'
 
-$height = 56px
-$padding-top-bottom = 5px
+$height = 3.5em
+$padding-top-bottom = 0.625em
+$border-color = #D9D9D9
 
 .transaction
+    @media screen and (min-width: 768px)
+        font-size: 20px
+
     position: relative
     width: 100%
-    max-width: 700px
+    max-width: 43.750em
     height: $height
     padding-left: 13px
     padding-right: 10px
     padding-top: $padding-top-bottom 
     padding-bottom: $padding-top-bottom
-    margin-top: 5px
-    margin-bottom: 5px
     display: flex
     justify-content: space-between
     align-items: center
+
+    border-bottom: 1px solid $border-color
 
 .transaction-category-bar
     position: absolute
@@ -101,23 +111,26 @@ $padding-top-bottom = 5px
     justify-content: space-between
     align-items: unset
 
+.transaction-right
+    font-weight: 500
+
 .transaction-small-text
-    font-size: 12px
+    font-size: 0.750em
     font-weight: 400
 
 .transaction-big-text
-    font-size: 14px
+    font-size: 0.875em
     font-weight: 500
 
 .transaction-options
-    width: 140px
+    width: 8.750em
     display: flex
     justify-content: space-around
     align-items: center
 
 .transaction-option
-    width: 30px
-    height: 30px
+    width: 1.875em
+    height: 1.875em
     display: flex
     justify-content: center
     align-items: center
@@ -125,4 +138,9 @@ $padding-top-bottom = 5px
     color: #FFFFFF
     border-radius: 50%
 
+.is-positive 
+    color: $SUCCESS-COLOR
+
+.is-negative
+    color: $DANGER-COLOR
 </style>

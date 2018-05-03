@@ -3,6 +3,7 @@
         <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><icon name="bars" scale="2" /></div>
         <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
         <app-button class="button" @click="logUserOut()" v-if="this.$route.name === 'Wallets'">Odhlásit se</app-button>
+        <div class="header-filter" @click="toggleFilter()" v-else><icon name="filter" scale="2" /></div>
     </header>
 </template>
 
@@ -15,7 +16,8 @@ export default {
     methods: {
         ...mapActions([
             "toggleMenu",
-            "logUserOut"
+            "logUserOut",
+            "toggleFilter"
         ])
     },
     components: {
@@ -48,6 +50,14 @@ export default {
 
     border-bottom: solid 1px #E5E5E5
 
+.header-burger, .header-filter
+    position: absolute
+    top: 0
+    width: 54px
+    height: 54px
+    
+    cursor: pointer
+
 .header-burger
     @media screen and (max-width: 767px)
         display: flex
@@ -55,13 +65,13 @@ export default {
         align-items: center 
 
     display: none
-    position: absolute
     left: 0
-    top: 0
-    width: 54px
-    height: 54px
-    
-    cursor: pointer
+
+.header-filter
+    right: 16px
+    display: flex
+    justify-content: center
+    align-items: center 
 
 .header-heading 
     font-size: $FONT-SIZE * 1.5

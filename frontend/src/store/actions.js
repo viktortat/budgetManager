@@ -72,5 +72,9 @@ export const actions = {
     toggleMenu: (context, payload) => {
         if(payload === undefined) context.commit('setIsMenuActive', !context.state.isMenuActive)
         else context.commit('setIsMenuActive', payload)
-    }
+    },
+    toggleFilter: (context, payload) => {
+        if(payload === undefined) context.commit('setIsFilterActive', !context.state.isFilterActive)
+        else context.commit('setIsFilterActive', payload)
+    },
 }

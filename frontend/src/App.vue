@@ -4,10 +4,13 @@
         <router-view name="navbar" />
         <router-view />
         <notifications />
+        <the-filter />
     </div>
 </template>
 
 <script>
+import TheFilter from '@/components/TheFilter.vue'
+
 export default {
     // name
     // mixins
@@ -19,6 +22,10 @@ export default {
     // methods
     // watch
     // lifecycle hooks
+
+    components: {
+        TheFilter
+    }
 }
 </script>
 
@@ -39,6 +46,7 @@ export default {
 
 .app
     min-height: 100vh
+    position: relative
 
     font-family: 'Montserrat', sans-serif
     font-size: $FONT-SIZE
@@ -61,6 +69,13 @@ export default {
 
     &.top
         padding-left: 0
+
+.fa-icon
+    width: auto
+    height: 1em
+
+    max-width: 100%
+    max-height: 100%
 
 </style>
 

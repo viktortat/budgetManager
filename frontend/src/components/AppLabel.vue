@@ -18,7 +18,7 @@ export default {
 @import '../styles/variables'
 
 .label
-    font-size: 12px
+    font-size: 0.75em
 
     & > p
         padding-bottom: 7px

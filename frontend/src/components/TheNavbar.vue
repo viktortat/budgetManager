@@ -5,18 +5,18 @@
             <div class="navbar-button-wrapper">
                 <app-button class="button is-success" @click="createTransaction()">Nová transakce</app-button>
             </div>
-            <router-link :to="{name: 'Dashboard'}" class="navbar-item is-size-5" active-class="is-active"><div><icon name='chart-area'/></div>Přehled</router-link>
-            <router-link :to="{name: 'Transactions'}" class="navbar-item is-size-5" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
-            <router-link :to="{name: 'Categories'}" class="navbar-item is-size-5" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
-            <router-link :to="{name: 'Budgets'}" class="navbar-item is-size-5" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
-            <router-link :to="{name: 'Settings'}" class="navbar-item is-size-5" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link>
+            <router-link :to="{name: 'Dashboard'}" class="navbar-item" active-class="is-active"><div><icon name='chart-area'/></div>Přehled</router-link>
+            <router-link :to="{name: 'Transactions'}" class="navbar-item" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
+            <router-link :to="{name: 'Categories'}" class="navbar-item" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
+            <router-link :to="{name: 'Budgets'}" class="navbar-item" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
+            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link>
         </div>
         <footer class="navbar-footer">
-            <div class="is-size-5 navbar-account" @click="changeWallet()">
+            <div class="navbar-account" @click="changeWallet()">
                 <icon name='archive'/>
             </div>
             <div></div>
-            <div class="is-size-5 navbar-logout" @click="logUserOut()"><icon name='sign-out-alt'/></div>
+            <div class="navbar-logout" @click="logUserOut()"><icon name='sign-out-alt'/></div>
         </footer>
         <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu(false)"></div>
     </nav>
@@ -43,8 +43,7 @@ export default {
             this.$router.push({name: 'Wallets'})
         },
         createTransaction() {
-            console.log("pushed")
-            this.$router.push({name: 'TransactionNew'})
+            this.$router.push({name: 'TransactionsNew'})
         }
     },
     components: {
@@ -95,6 +94,8 @@ $navbar-color-active = #53A6FA
     padding-left: 70px
     padding-top: 18px
     padding-bottom: 18px
+
+    font-size: 18px
 
     text-decoration: none
     color: inherit

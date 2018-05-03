@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const state = {
     user: {},
     token: '',
@@ -8,5 +10,14 @@ export const state = {
     categories: [],
     budgets: [],
 
-    isMenuActive: false
+    isMenuActive: false,
+    isFilterActive: false,
+
+    // filter
+    filter: {
+        dateFrom: moment().startOf('month').format('YYYY-MM-DD'),
+        dateTo: moment().endOf('month').format('YYYY-MM-DD'),
+        type: '',
+    }
+
 }
