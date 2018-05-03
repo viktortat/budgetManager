@@ -2,6 +2,6 @@ import createPersistedState from 'vuex-persistedstate'
 
 export const plugins = [
     createPersistedState({
-        paths: ['token', 'isUserLoggedIn', 'user'],
+        paths: ['token', 'user', 'wallet', 'transactions', 'categories', 'budgets', 'wallets'],
     })
 ]

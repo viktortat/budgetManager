@@ -1,58 +1,76 @@
-import { getApiCategories, getApiTransactions, getCurrentUser, getApiBudgets } from '@/utils.js'
 import router from '@/router/router'
 import axios from 'axios'
 
 export const actions = {
-    toggleMenu: (context, payload) => {
-        context.commit('setIsMenuActive', payload)
-    },
+    // user actions
     logUserIn: (context, payload) => {
         context.commit('setToken', payload)
-        context.commit('setIsUserLoggedIn', true)
-        axios.all([getCurrentUser(payload)]).then(
-            axios.spread((user) => {
-                context.commit('setUser', user.data)
-            })
-        )
+        const url = "/auth/users/current/"
+        axios.get(url, { headers: { Authorization: 'JWT ' + payload }}).then(response => {
+            context.commit('setUser', response.data)
+        })
     },
     logUserOut: (context, payload) => {
         context.commit('setToken', '')
-        context.commit('setIsUserLoggedIn', false)
         context.commit('setUser', {})
-        context.dispatch('dumpData', "")
+        context.dispatch('dumpData', '')
         router.push({ name: 'Login' })
     },
-    pickWallet: ({ commit }, payload) => {
-        commit('setWallet', payload)
-    },
-    loadData: (context, payload) => {
-        if (context.state.transactions.length === 0 || context.state.transactions.length === 0) {
+
+    // data actions
+    loadTransactions: (context, payload) => {
+        if (payload) {
             const walletID = context.state.wallet.id
             const token = context.state.token
-            axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token), getApiBudgets(walletID, token)]).then(
-                axios.spread((cat, tran, budg) => {
-                    context.commit('setTransactions', tran.data)
-                    context.commit('setCategories', cat.data)
-                    context.commit('setBudgets', budg.data)
-                })
-            )
+            const url = "/transactions/" + "?wallet=" + walletID
+            axios.get(url, { headers: { Authorization: 'JWT ' + token }}).then(response => {
+                context.commit('setTransactions', response.data)
+            })
         }
     },
-    refreshData: (context, payload) => {
-        const walletID = context.state.wallet.id
-        const token = context.state.token
-        axios.all([getApiCategories(walletID, token), getApiTransactions(walletID, token), getApiBudgets(walletID, token)]).then(
-            axios.spread((cat, tran, budg) => {
-                context.commit('setTransactions', tran.data)
-                context.commit('setCategories', cat.data)
-                context.commit('setBudgets', budg.data)
+    loadCategories: (context, payload) => {
+        if (payload) {
+            const walletID = context.state.wallet.id
+            const token = context.state.token
+            const url = "/categories/" + "?wallet=" + walletID
+            axios.get(url, { headers: { Authorization: 'JWT ' + token }}).then(response => {
+                context.commit('setCategories', response.data)
             })
-        )
+        }
+    },
+    loadBudgets: (context, payload) => {
+        if (payload) {
+            const walletID = context.state.wallet.id
+            const token = context.state.token
+            const url = "/budgets/" + "?wallet=" + walletID
+            axios.get(url, { headers: { Authorization: 'JWT ' + token }}).then(response => {
+                context.commit('setBudgets', response.data)
+            })
+        }
+    },
+
+    loadData: (context, payload) => {
+        const dataIsNotLoaded = context.state.transactions.length === 0 && context.state.categories.length === 0 && context.state.budgets.length === 0
+        context.dispatch('loadTransactions', dataIsNotLoaded)
+        context.dispatch('loadCategories', dataIsNotLoaded)
+        context.dispatch('loadBudgets', dataIsNotLoaded)
+    },
+    refreshData: (context, payload) => {
+        context.dispatch('loadTransactions', true)
+        context.dispatch('loadCategories', true)
+        context.dispatch('loadBudgets', true)
     },
     dumpData: (context, payload) => {
-        context.commit('setWallet', null)
+        context.commit('setWallet', {})
+        context.commit('setWallets', [])
         context.commit('setCategories', [])
         context.commit('setTransactions', [])
         context.commit('setBudgets', [])
+    },
+
+    // menu
+    toggleMenu: (context, payload) => {
+        if(payload === undefined) context.commit('setIsMenuActive', !context.state.isMenuActive)
+        else context.commit('setIsMenuActive', payload)
     }
 }

@@ -18,12 +18,12 @@
             <div></div>
             <div class="is-size-5 navbar-logout" @click="logUserOut()"><i class="fas fa-sign-out-alt"></i></div>
         </footer>
-        <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu()"></div>
+        <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu(false)"></div>
     </nav>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 import AppButton from '@/components/AppButton.vue'
 
@@ -35,8 +35,8 @@ export default {
     },
     methods: {
         ...mapActions([
-            "toggleMenu",
-            "logUserOut"
+            "logUserOut",
+            'toggleMenu'
         ]),
         changeWallet() {
             this.$store.dispatch('dumpData', '')

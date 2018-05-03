@@ -1,25 +1,66 @@
 <template>
     <div id="app" class="app">
-        <transition name="slide-down" appear>
-            <router-view name="header"/> 
-        </transition>
-        <transition name="slide-right" appear>
-            <router-view name="navbar"/>
-        </transition>
-        <transition name="fade" mode="out-in" appear>
-            <router-view/>
-        </transition>
-        <notifications/>
+        <router-view name="header" /> 
+        <router-view name="navbar" />
+        <router-view />
+        <notifications />
     </div>
 </template>
 
+<script>
+export default {
+    // name
+    // mixins
+    // extending of other components
+    // props
+	// data
+	// computed
+    // components
+    // methods
+    // watch
+    // lifecycle hooks
+}
+</script>
+
+
 <style lang="stylus">
-@import "./styles/global.styl"
+// @rules   
+// Layout and box-model properties (margin, padding, box-sizing, overflow, position, display, width/height, etc.)
+// Typographic properties (font-, line-height, letter-spacing, text-, etc.)
+// Stylistic properties (color, background-*, animation, border, etc.)
+// UI properties (appearance, cursor, user-select, pointer-events, etc.)
+// Pseudo-elements (::after, ::before, ::selection, etc.)
+// Pseudo-selectors (:hover, :focus, :active, etc.)
+// Nested elements
+
+@import "./styles/reset"
+@import "./styles/variables"
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
 
 .app
-    @media screen and (max-width: 767px)
-        min-height: 100vh
+    min-height: 100vh
 
-    min-height: 100.06vh
+    font-family: 'Montserrat', sans-serif
+    font-size: $FONT-SIZE
+    font-weight: 400
+    line-height: 1
+
+    color: $FONT-COLOR-DARK
+
+.section
+    @media screen and (max-width: 767px)
+        padding-left: 0
+        padding-top: 56px
+        padding-right: 0
+        padding-bottom: 10px
+
+    padding-left: 208px
+    padding-top: 56px
+    padding-right: 0
+    padding-bottom: 10px
+
+    &.top
+        padding-left: 0
 
 </style>
+

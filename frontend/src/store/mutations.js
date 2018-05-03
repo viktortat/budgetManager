@@ -1,15 +1,16 @@
 export const mutations = {
+    setUser: (state, payload) => {
+        state.user = payload
+    },
     setToken: (state, payload) => {
         state.token = payload
-    },
-    setIsUserLoggedIn: (state, payload) => {
-        state.isUserLoggedIn = payload
     },
     setWallet: (state, payload) => {
         state.wallet = payload
     },
-    setBudgets: (state, payload) => {
-        state.budgets = payload
+
+    setWallets: (state, payload) => {
+        state.wallets = payload
     },
     setCategories: (state, payload) => {
         state.categories = payload
@@ -17,15 +18,11 @@ export const mutations = {
     setTransactions: (state, payload) => {
         state.transactions = payload
     },
-    setUser: (state, payload) => {
-        state.user = payload
+    setBudgets: (state, payload) => {
+        state.budgets = payload
     },
+
     setIsMenuActive: (state, payload) => {
-        if (payload) {
-            if (payload == 'true') payload = true
-            else payload = false
-            state.isMenuActive = payload
-        }
-        else state.isMenuActive = !state.isMenuActive
+        state.isMenuActive = payload
     }
 }

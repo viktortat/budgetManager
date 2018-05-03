@@ -1,7 +1,7 @@
 <template>
     <header class="header">
         <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><i class="fas fa-bars fa-2x"></i></div>
-        <h1 class="is-size-4">{{ this.$route.meta.name }}</h1>
+        <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
         <app-button class="button" @click="logUserOut()" v-if="this.$route.name === 'Wallets'">Odhlásit se</app-button>
     </header>
 </template>
@@ -25,6 +25,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../styles/variables'
 
 .header
     @media screen and (max-width: 767px)
@@ -61,6 +62,10 @@ export default {
     height: 54px
     
     cursor: pointer
+
+.header-heading 
+    font-size: $FONT-SIZE * 1.5
+    font-weight: 400
 
 .account
     display: flex

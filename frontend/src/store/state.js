@@ -1,11 +1,12 @@
 export const state = {
     user: {},
     token: '',
-    isUserLoggedIn: false,
-    wallet: null,
-    budgets: [],
-    categories: [],
+    wallet: {},
+    
+    wallets: [],
     transactions: [],
-    invitations: [],
+    categories: [],
+    budgets: [],
+
     isMenuActive: false
 }

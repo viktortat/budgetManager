@@ -1,18 +1,11 @@
 <template>
-    <input :type="type" @input="$emit('input', $event.target.value)" :value="value">
+    <input @input="$emit('input', $event.target.value)" :value="value">
 </template>
 
 
 <script>
 export default {
-    props: {
-        type: {
-            type: String,
-            default: 'text'
-        },
-        value: {}
-
-    }
+    props: ['value']
 }
 </script>
 
@@ -20,25 +13,32 @@ export default {
 <style lang="stylus" scoped>
 @import '../styles/variables'
 
-.input
-    width: 200px
-    height: 40px
-    padding-left: 10px
+$border-color = #D9D9D9
 
-    font-size: inherit
+.input
+    width: 250px
+    height: 45px
+    padding-left: 18px
+
+    font-size: 14px
+    font-weight: 400
     font-family: inherit 
 
-    background-color: #F2F2F2
+    background-color: #FFFFFF
     border-radius: $BORDER-RADIUS
+    border: 1px solid $border-color
 
-    &.input-medium 
-        width: 280px
+    &::placeholder
+        color: $border-color
 
-    &.input-large 
-        width: 300px
+    &:hover
+        border: 1px solid #808080
 
-    &.input-100 
-        width: 100%
+    &:focus
+        border: 1px solid $PRIMARY-COLOR
+        outline: none
+
+
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button

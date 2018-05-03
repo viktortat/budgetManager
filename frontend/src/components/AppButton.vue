@@ -11,6 +11,7 @@
     height: 45px
     width: 156px
 
+    font-family: inherit 
     font-size: inherit
     font-weight: 600
 
