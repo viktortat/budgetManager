@@ -10,3 +10,8 @@ Vue.filter('shortenString', (value, lng) => {
         else return value
     } else return '--'
 })
+
+Vue.filter('appendMinusSign', (value, type) => {
+    if (type === 'expense') return '- ' + value
+    else return value
+})

@@ -45,7 +45,10 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,500,600')
 
 .app
-    min-height: 100vh
+    @media screen and (max-width: 767px)
+        min-height: 100vh
+
+    min-height: 100.06vh
     position: relative
 
     font-family: 'Montserrat', sans-serif

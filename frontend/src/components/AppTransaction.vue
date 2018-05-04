@@ -16,7 +16,7 @@
             key="price" v-else 
             @click="options = true" 
             :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}">
-            {{ transaction.amount | formatCurrency }}
+            {{ transaction.amount | formatCurrency | appendMinusSign(transaction.transaction_type) }}
         </div>
     </div>
 </template>

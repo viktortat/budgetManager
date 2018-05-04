@@ -69,7 +69,7 @@ $navbar-color-active = #53A6FA
     height: 100vh
     padding-top: 56px
     padding-bottom: 56px
-    z-index: 50
+    z-index: 150
 
     background-color: $navbar-color-primary
     color: #CCCCCC

@@ -110,14 +110,19 @@ $border-color = #D9D9D9
 .transactions-date-wrapper
     @media screen and (min-width: 768px)
         font-size: 20px
+        width: calc(100% - 208px)
 
+    position: fixed
+    top: 56px
     height: 2em
     width: 100%
     display: flex
     justify-content: space-between
     align-items: center
+    z-index: 50
 
     border-bottom: 1px solid $border-color
+    background-color: #FFFFFF
 
 .transactions-date-arrow
     @media screen and (min-width: 768px)

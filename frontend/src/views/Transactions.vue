@@ -9,19 +9,28 @@
 
 
 <script>
-import { mapState } from 'vuex'
-
 import AppTransaction from '@/components/AppTransaction.vue'
 import TransactionsDate from '@/components/TransactionsDate.vue'
 
-import { filterMixin } from '@/mixins'
+import { filterMixin, sortMixin } from '@/mixins'
 
 export default {
-    mixins: [filterMixin],
+    mixins: [filterMixin, sortMixin],
+    data() {
+        return {
+            sortBy: '',
+            descend: false
+        }
+    },
+    methods: {
+        processTransactions() {
+            let transactions = this.filterTransactions(this.$store.state.transactions)
+            return this.sortTransactions(transactions, this.sortBy, this.descend)
+        }
+    },
     computed: {
         transactions() {
-            let transactions = this.$store.state.transactions
-            return transactions.sort((a, b) => new Date(b.date) - new Date(a.date))
+            return this.processTransactions()
         }
     },
     components: {
@@ -33,6 +42,12 @@ export default {
 
 
 <style lang="stylus" scoped>
+
+.section    
+    @media screen and (min-width: 768px)
+        font-size: 20px
+
+    padding-top: calc(2em + 56px)
 
 .transactions
     display: flex
