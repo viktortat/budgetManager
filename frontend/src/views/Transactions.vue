@@ -1,192 +1,61 @@
 <template>
-    <section class="section transactions-wrapper">
-        <div class="show-filter" v-if="filtersHidden && showFilterButton" @click="filtersHidden = !filtersHidden">
-            Ukázat filtry
-        </div>
-        <div class="filters" v-else>
-            <div class="filter">
-                <label for="filter-date-from" class="label">
-                    <p>Datum od:</p>
-                </label>
-                <flat-pickr v-model="dateFrom" class="input input-100"></flat-pickr>
-            </div>
-            <div class="filter">
-                <label for="filter-date-to" class="label">
-                    <p>Datum do:</p>
-                </label>
-                <flat-pickr v-model="dateTo" class="input input-100"></flat-pickr>
-            </div>
-            <div class="filter">
-                <label for="filter-amount-from" class="label">
-                    <p>Částka od:</p>
-                </label>
-                <input type="number" class="input input-100" id="filter-amount-from" v-model="amountFrom"> 
-            </div>
-            <div class="filter">
-                <label for="filter-amount-to" class="label">
-                    <p>Částka do:</p>
-                </label>
-                <input type="number" class="input input-100" id="filter-amount-to" v-model="amountTo">
-            </div>
-            <div class="filter">
-                <label for="filter-transaction-type" class="label">
-                    <p>Typ transakce</p>                     
-                </label>
-                <select id="filter-transaction-type" class="input input-100" v-model="type">
-                    <option value="" selected>Příjem a Výdej</option>
-                    <option value="income">Příjem</option>
-                    <option value="expense">Výdej</option>
-                </select>
-            </div>
-            <div class="filter">
-                <label for="filter-category" class="label">
-                    <p>Kategorie</p>                     
-                </label>
-                <select id="filter-category" class="input input-100" v-model="category">
-                    <option value="" selected>Vše ({{ categories.length }})</option>
-                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </select>
-            </div>
-            <div class="filter">
-                <label for="filter-category" class="label">
-                    <p>Autor</p>                     
-                </label>
-                <select id="filter-category" class="input input-100" v-model="author">
-                    <option value="" selected>Vše ({{ wallet.users.length }})</option>
-                    <option v-for="user in wallet.users" :key="user.id" :value="user.id">{{ user.email }}</option>
-                </select>
-            </div>
-            <footer class="filters-footer">
-                <button class="button" @click="filtersHidden = !filtersHidden" v-if="showFilterButton">Zavřít</button>
-                <div v-else></div>
-                <button class="button is-danger" @click="clearFilter()">Reset filtru</button>
-            </footer>
-        </div>
-        <transition-group name="fade">
-            <transaction v-for="(transaction, index) in filteredTransactions" :key="index" :transaction="transaction" :categories="categories" :wallet="wallet" />
-        </transition-group>
-    </section>
+    <main class="section">
+        <app-date-slider />
+        <section class="transactions">
+            <app-balance></app-balance>
+            <app-transaction v-for="transaction in transactions" :key="transaction.id" :transaction=transaction></app-transaction>
+        </section>
+    </main>
 </template>
 
-<script>
-import Transaction from '@/components/TransactionExtended.vue'
-import { mapState, mapActions } from 'vuex'
 
-import flatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
+<script>
+import AppTransaction from '@/components/AppTransaction.vue'
+import AppDateSlider from '@/components/AppDateSlider.vue'
+import AppBalance from '@/components/AppBalance.vue'
+
+import { filterMixin, sortMixin } from '@/mixins'
 
 export default {
+    mixins: [filterMixin, sortMixin],
     data() {
         return {
-            dateFrom: '',
-            dateTo: '',
-            amountFrom: '',
-            amountTo: '',
-            type: '',
-            category: '',
-            author: '',
-            filtersHidden: true,
-            showFilterButton: true
+            sortBy: '',
+            descend: false
+        }
+    },
+    methods: {
+        processTransactions() {
+            let transactions = this.filterTransactions(this.$store.state.transactions)
+            return this.sortTransactions(transactions, this.sortBy, this.descend)
         }
     },
     computed: {
-        ...mapState([
-            'transactions',
-            'categories',
-            'wallet'
-        ]),
-        filteredTransactions() {
-            let transactions = this.transactions.slice();
-            if(this.dateFrom !== "") transactions = transactions.filter(trn => trn.date >= this.dateFrom);
-            if(this.dateTo !== "") transactions = transactions.filter(trn => trn.date <= this.dateTo);
-            if(this.amountFrom !== "") transactions = transactions.filter(trn => Number(trn.amount) >= Number(this.amountFrom));
-            if(this.amountTo !== "") transactions = transactions.filter(trn =>  Number(trn.amount) <=  Number(this.amountTo));
-            if(this.type !== "") transactions = transactions.filter(trn => trn.transaction_type === this.type);
-            if(this.category !== "") transactions = transactions.filter(trn =>  trn.category === this.category);
-            if(this.author !== "") transactions = transactions.filter(trn =>  trn.user === this.author);
-            return transactions;
-        }
-    },  
-    methods: {
-        ...mapActions([
-            'loadData'
-        ]),
-        clearFilter() {
-            this.dateFrom = ""
-            this.dateTo = ""
-            this.amountFrom = ""
-            this.amountTo = ""
-            this.type = ''
-            this.category = ''
-            this.author = ''
+        transactions() {
+            return this.processTransactions()
         }
     },
     components: {
-        Transaction,
-        flatPickr
-    },
-    created() {
-        this.loadData();
-        if (window.innerWidth > 768) {
-            this.filtersHidden = false
-            this.showFilterButton = false
-        }
+        AppTransaction,
+        AppDateSlider,
+        AppBalance
     }
 }
 </script>
 
+
 <style lang="stylus" scoped>
-@import "../styles/variables.styl"
 
-.transactions-wrapper
-    @media screen and (max-width: 767px)
-        min-height: 100vh
-        
-    min-height: 100.06vh
+.section    
+    @media screen and (min-width: 768px)
+        font-size: 20px
 
-    background-color: $background-color-primary
+    padding-top: calc(2em + 56px)
 
-.show-filter
+.transactions
     display: flex
-    justify-content: center
-    align-items: center
-    margin: 10px
-    height: 50px
-
-    background-color: #FFFFFF
-    border-radius: $border-radius
-
-.filters        
-    position: relative
-    display: grid
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
-    grid-gap: 10px
-    padding-left: 20px
-    padding-right: 20px
-    padding-top: 20px
-    padding-bottom: 75px
-    margin-left: 10px
-    margin-top: 10px
-    margin-bottom: 10px
-    margin-right: 10px
-
-    background-color: #FFFFFF
-    border-radius: $border-radius
-
-.filters-footer
-    position: absolute
-    bottom: 0
-    left: 0
-    width: 100%
-    padding: 20px
-    display: flex
-    justify-content: space-between
+    flex-flow: column
     align-items: center
 
-.fade-enter-active, .fade-leave-active
-    transition: opacity 0.5s
-
-.fade-enter, .fade-leave-to
-    opacity: 0
-
+    
 </style>

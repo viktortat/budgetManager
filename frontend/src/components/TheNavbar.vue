@@ -3,27 +3,31 @@
         <header class="navbar-header"></header>
         <div class="navbar-menu">
             <div class="navbar-button-wrapper">
-                <router-link :to="{name: 'TransactionNew'}" tag="button" class="button is-success">Nová transakce</router-link>
+                <app-button class="button is-success" @click="createTransaction()">Nová transakce</app-button>
             </div>
-            <router-link :to="{name: 'Dashboard'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-chart-area"></i></div>Přehled</router-link>
-            <router-link :to="{name: 'Transactions'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-credit-card"></i></div>Transakce</router-link>
-            <router-link :to="{name: 'Categories'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-list"></i></div>Kategorie</router-link>
-            <router-link :to="{name: 'Budgets'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-dollar-sign"></i></div>Rozpočty</router-link>
-            <router-link :to="{name: 'Settings'}" class="navbar-item is-size-5" active-class="is-active"><div><i class="fas fa-cogs"></i></div>Nastavení</router-link>
+            <router-link :to="{name: 'Dashboard'}" class="navbar-item" active-class="is-active"><div><icon name='chart-area'/></div>Přehled</router-link>
+            <router-link :to="{name: 'Transactions'}" class="navbar-item" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
+            <router-link :to="{name: 'Categories'}" class="navbar-item" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
+            <router-link :to="{name: 'Budgets'}" class="navbar-item" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
+            <!-- 
+            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link> 
+            -->
         </div>
         <footer class="navbar-footer">
-            <div class="is-size-5 navbar-account" @click="changeWallet()">
-                <i class="fas fa-archive" />
+            <div class="navbar-account" @click="changeWallet()">
+                <icon name='archive'/>
             </div>
             <div></div>
-            <div class="is-size-5 navbar-logout" @click="logUserOut()"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="navbar-logout" @click="logUserOut()"><icon name='sign-out-alt'/></div>
         </footer>
-        <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu()"></div>
+        <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu(false)"></div>
     </nav>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
+
+import AppButton from '@/components/AppButton.vue'
 
 export default {
     computed: {
@@ -33,19 +37,29 @@ export default {
     },
     methods: {
         ...mapActions([
-            "toggleMenu",
-            "logUserOut"
+            "logUserOut",
+            'toggleMenu'
         ]),
         changeWallet() {
             this.$store.dispatch('dumpData', '')
             this.$router.push({name: 'Wallets'})
+        },
+        createTransaction() {
+            this.$router.push({name: 'TransactionsNew'})
         }
+    },
+    components: {
+        AppButton
     }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import "../styles/variables.styl"
+
+$navbar-color-primary = #19232E
+$navbar-color-secondary = #242f3d
+$navbar-color-tertiary = #1E2835
+$navbar-color-active = #53A6FA
 
 .navbar
     @media screen and (max-width: 767px)
@@ -57,11 +71,12 @@ export default {
     height: 100vh
     padding-top: 56px
     padding-bottom: 56px
-    z-index: 50
+    z-index: 150
 
     background-color: $navbar-color-primary
-    transition: transform 0.3s ease-in-out
     color: #CCCCCC
+
+    transition: all .4s ease
 
     &.is-active
         transform: translateX(0)
@@ -83,6 +98,8 @@ export default {
     padding-left: 70px
     padding-top: 18px
     padding-bottom: 18px
+
+    font-size: 18px
 
     text-decoration: none
     color: inherit

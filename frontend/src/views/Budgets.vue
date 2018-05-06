@@ -1,114 +1,72 @@
 <template>
-    <section class="section budgets-wrapper">
-        <div class="budgets">
-            <div class="budget budget-create">
-                <input type="text" class="input input-100" placeholder="Jméno rozpočtu" v-model="name">
-                <input type="number" class="input input-100" placeholder="Velikost rozpočtu" v-model="amount">
-                <select type="text" class="input input-100" placeholder="Kategorie" v-model="category">
-                    <option value="" selected></option>
-                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </select>
-                <button class="button is-100 is-success" @click="createBudget()">Přidat</button>
+    <main class="section">
+        <app-date-slider/>
+        <section class="budgets"> 
+            <div class="create-budget" @click="createBudget">
+                <p>Nový rozpočet</p>
             </div>
-            <budget v-for="budget in budgets" :key="budget.id" :budget="budget" :categories="categories" />
-        </div>
-    </section>
+            <budgets-budget v-for="budget in budgets" :budget="budget" :key="budget.id" />
+        </section>
+    </main>
 </template>
 
 
 <script>
-import Budget from '@/components/Budget.vue'
-import { mapState, mapActions } from 'vuex'
-import axios from 'axios'
+import { mapState } from 'vuex'
+
+import BudgetsBudget from '@/components/BudgetsBudget.vue'
+import AppDateSlider from '@/components/AppDateSlider.vue'
 
 export default {
-    data() {
-        return {
-            name: "",
-            amount: "",
-            category: ""
-        }
-    },
-    methods: {
-        ...mapActions([
-            'loadData',
-            'refreshData'
-        ]),
-        createBudget() {
-            const data = {
-                'name': this.name,
-                'amount': this.amount,
-                'category': this.category
-            }
-            const url = '/api/budgets/'
-            axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
-                this.refreshData()
-                this.$notify({
-                    text: 'Rozpočet byl vytvořen.',
-                    type: 'success'
-                });
-                this.name = ""
-                this.amount = ""
-                this.category = ""
-            }).catch(error => {
-                this.$notify({
-                    text: 'Vyskytl se problém, zkuste to prosím později.',
-                    type: 'error'
-                });                
-            })
-        }
-    },
     computed: {
         ...mapState([
-            'categories',
             'budgets'
-        ])
+        ]),
+    },
+    methods: {
+        createBudget() {
+            this.$router.push({name: 'BudgetsNew'})
+        }
     },
     components: {
-        Budget
-    },
-    created() {
-        this.loadData()
+        BudgetsBudget,
+        AppDateSlider
     }
 }
 </script>
 
 
 <style lang="stylus" scoped>
-@import "../styles/variables.styl"
 
-.budgets-wrapper
-    min-height: 100vh
+$padding-top-bottom = 1em
+$border-color = #D9D9D9
 
-    background-color: $background-color-primary
+.section    
+    @media screen and (min-width: 768px)
+        font-size: 20px
+
+    padding-top: calc(2em + 56px)
 
 .budgets
-    position: relative
-    display: grid
-    grid-template-columns: repeat(auto-fit, 300px)
-    grid-gap: 10px
-    justify-content: center
-    margin-left: 10px
-    margin-top: 10px
-    margin-bottom: 10px
-    margin-right: 10px
-
-.budget
-    @media screen and (max-width: 767px)
-        cursor: initial
-
-    position: relative
-    height: 250px
-    padding-left: 20px
-    padding-right: 20px
-    padding-top: 20px
-    padding-bottom: 30px
     display: flex
     flex-flow: column
-    justify-content: space-between
+    align-items: center
 
-    border-radius: $border-radius
-    background-color: #FFFFFF
+.create-budget
+    @media screen and (min-width: 768px)
+        cursor: pointer
+    
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 100%
+    max-width: 43.750em
+    padding-top: $padding-top-bottom
+    padding-bottom: $padding-top-bottom
 
-    cursor: pointer
+    border-bottom: 1px solid $border-color
+
+    &:hover 
+        @media screen and (min-width: 768px)
+            background-color: $border-color
 </style>

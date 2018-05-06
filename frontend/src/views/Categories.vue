@@ -1,120 +1,75 @@
 <template>
-    <section class="section categories-wrapper">
-        <div class="categories">
-            <div class="category category-create">
-                <input type="text" id="category-name" class="input input-100" v-model="categoryName" placeholder="Jméno kategorie">
-                <input type="text" id="category-color" class="input input-100" v-model="categoryColor" placeholder="Barva kategorie">
-                <button class="button is-success" @click.prevent="createCategory()">Přidat kategorii</button>
+    <main class="section">
+        <app-date-slider />
+        <section class="categories">
+            <div class="create-category" @click="createCategory">
+                <p>Nová kategorie</p>
             </div>
-            <category v-for="category in categories" :key="category.id" :category='category'></category>
-        </div>
-    </section>
+            <categories-category v-for="category in categories" :key="category.id" :category="category" />
+        </section>
+    </main>
 </template>
 
+
 <script>
-import axios from 'axios'
-import { mapState, mapActions } from 'vuex'
-import Category from '@/components/Category.vue'
-import { tokenCheck } from '@/mixins.js'
+import { mapState } from 'vuex'
+
+import AppDateSlider from '@/components/AppDateSlider.vue'
+import CategoriesCategory from '@/components/CategoriesCategory.vue'
+import AppButton from '@/components/AppButton.vue'
 
 export default {
-    data() {
-        return {
-            categoryName: '',
-            categoryColor: ''
-        }
-    },
     computed: {
         ...mapState([
-            'wallet',
-            'transactions',
             'categories'
-        ]),
+        ])
     },
     methods: {
-        ...mapActions([
-            'loadData',
-            'refreshData'
-        ]),
         createCategory() {
-            if(this.categoryName && this.categoryColor) {  
-                const url = "/api/categories/"              
-                const data = {
-                    "name": this.categoryName,
-                    "color": this.categoryColor,
-                    "wallet": this.wallet.id
-                }
-                axios.post(url, data, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(res => {
-                    this.$notify({
-                        text: 'Kategorie byla vytvořena.',
-                        type: 'success'
-                    });
-                    this.refreshData()
-                }).catch(err => {
-                    this.$notify({
-                        text: 'Vyskytl se problém, zkuste to prosím později.',
-                        type: 'error'
-                    });
-                })
-                this.categoryName = ""
-                this.categoryColor = ""
-            }
+            this.$router.push({name: 'CategoriesNew'})
         }
     },
     components: {
-        Category
-    },
-    mixins: [tokenCheck],
-    created() {
-        this.loadData();
+        CategoriesCategory,
+        AppDateSlider,
+        AppButton
     }
 }
 </script>
 
-<style lang="stylus" scoped>
-@import "../styles/variables.styl"
 
-.categories-wrapper
-    min-height: 100vh
-        
-    background-color: $background-color-primary
+<style lang="stylus" scoped>
+
+$padding-top-bottom = 1em
+$border-color = #D9D9D9
+
+.section    
+    @media screen and (min-width: 768px)
+        font-size: 20px
+
+    padding-top: calc(2em + 56px)
 
 .categories
-    position: relative
-    display: grid
-    grid-template-columns: repeat(auto-fit, 300px)
-    grid-gap: 10px
-    justify-content: center
-    margin-left: 10px
-    margin-top: 10px
-    margin-bottom: 10px
-    margin-right: 10px
-
-.category
-    @media screen and (max-width: 767px)
-        cursor: initial
-        
-    position: relative
-    height: 200px
-    padding-left: 20px
-    padding-right: 20px
-    padding-top: 20px
-    padding-bottom: 20px
     display: flex
     flex-flow: column
-    justify-content: space-between
-
-    border-radius: $border-radius
-    background-color: #FFFFFF
-    overflow: hidden
-
-    cursor: pointer
-
-.category-create
-    cursor: unset
     align-items: center
-    
-    & .button
-        width: 100%
+
+.create-category
+    @media screen and (min-width: 768px)
+        cursor: pointer
+
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 100%
+    max-width: 43.750em
+    padding-top: $padding-top-bottom
+    padding-bottom: $padding-top-bottom
+
+    border-bottom: 1px solid $border-color
+
+    &:hover 
+        @media screen and (min-width: 768px)
+            background-color: $border-color
 
 </style>

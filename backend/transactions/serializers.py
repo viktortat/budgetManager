@@ -24,6 +24,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ("id", "name", "transactions", "color", "balance", "wallet")
         read_only_fields = ["balance", "transactions"]
+        extra_kwargs = {'wallet': {'required': True}}
 
 
 class WalletSerializer(serializers.ModelSerializer):
@@ -37,7 +38,9 @@ class WalletSerializer(serializers.ModelSerializer):
 
 
 class BudgetSerializer(serializers.ModelSerializer):
+    categories = serializers.PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
+
     class Meta:
         model = Budget
-        fields = ("id", "name", "category", "wallet", "amount")
+        fields = ("id", "name", "categories", "wallet", "amount", "period")
         read_only_fields = ["wallet"]

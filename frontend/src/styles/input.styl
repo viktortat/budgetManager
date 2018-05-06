@@ -1,0 +1,31 @@
+@import 'variables.styl'
+
+$border-color = #D9D9D9
+
+.input
+    width: 15.625em
+    height: 2.8125em
+    padding-left: 1.125em
+
+    font-size: 0.875em
+    font-weight: 400
+    font-family: inherit 
+
+    background-color: #FFFFFF
+    border-radius: $BORDER-RADIUS
+    border: 1px solid $border-color
+
+    &::placeholder
+        color: $border-color
+
+    &:hover
+        border: 1px solid #808080
+
+    &:focus
+        border: 1px solid $PRIMARY-COLOR
+        outline: none
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button
+    -webkit-appearance: none
+    margin: 0

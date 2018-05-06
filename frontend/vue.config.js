@@ -8,5 +8,11 @@ module.exports = {
         changeOrigin: true
       }
     }
+  },
+  pwa: {
+    workboxPluginMode: 'GenerateSW',
+    workboxOptions: {
+      
+    }
   }
 }
