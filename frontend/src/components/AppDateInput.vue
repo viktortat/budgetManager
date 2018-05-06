@@ -1,5 +1,5 @@
 <template>
-    <flat-pickr @input="$emit('input', $event)" :value="value"></flat-pickr>
+    <flat-pickr @input="$emit('input', $event)" :value="value" class="input"></flat-pickr>
 </template>
 
 
