@@ -50,6 +50,7 @@ export default {
 @import "./styles/reset"
 @import "./styles/variables"
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,500,600')
+@import './styles/input.styl'
 
 .app
     @media screen and (max-width: 767px)
