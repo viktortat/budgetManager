@@ -1,7 +1,8 @@
 <template>
     <main class="section">
-        <transactions-date></transactions-date>
+        <app-date-slider />
         <section class="transactions">
+            <app-balance></app-balance>
             <app-transaction v-for="transaction in transactions" :key="transaction.id" :transaction=transaction></app-transaction>
         </section>
     </main>
@@ -10,7 +11,8 @@
 
 <script>
 import AppTransaction from '@/components/AppTransaction.vue'
-import TransactionsDate from '@/components/TransactionsDate.vue'
+import AppDateSlider from '@/components/AppDateSlider.vue'
+import AppBalance from '@/components/AppBalance.vue'
 
 import { filterMixin, sortMixin } from '@/mixins'
 
@@ -35,7 +37,8 @@ export default {
     },
     components: {
         AppTransaction,
-        TransactionsDate
+        AppDateSlider,
+        AppBalance
     }
 }
 </script>

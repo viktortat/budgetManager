@@ -18,6 +18,9 @@ export const state = {
         dateFrom: moment().startOf('month').format('YYYY-MM-DD'),
         dateTo: moment().endOf('month').format('YYYY-MM-DD'),
         type: '',
+        category: '',
+        amountFrom: '',
+        amountTo: ''
     }
 
 }

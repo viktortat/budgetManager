@@ -34,7 +34,21 @@ router.beforeEach((to, from, next) => {
 })
 
 // Font awesome
-import 'vue-awesome/icons'
+import 'vue-awesome/icons/trash'
+import 'vue-awesome/icons/chevron-left'
+import 'vue-awesome/icons/chevron-right'
+import 'vue-awesome/icons/pencil-alt'
+import 'vue-awesome/icons/times'
+import 'vue-awesome/icons/bars'
+import 'vue-awesome/icons/filter'
+import 'vue-awesome/icons/chart-area'
+import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/list'
+import 'vue-awesome/icons/cogs'
+import 'vue-awesome/icons/sign-out-alt'
+import 'vue-awesome/icons/archive'
+import 'vue-awesome/icons/dollar-sign'
+import 'vue-awesome/icons/ellipsis-v'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
 

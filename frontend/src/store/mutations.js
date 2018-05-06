@@ -24,17 +24,6 @@ export const mutations = {
         state.budgets = payload
     },
 
-    deleteTransaction: (state, payload) => {
-        let transactions = state.transactions.slice()
-        transactions.splice(payload, 1)
-        state.transactions = transactions
-    },
-    addTransaction: (state, payload) => {
-        let transactions = state.transactions.slice()
-        transactions.unshift(payload)
-        state.transactions = transactions
-    },
-
     setIsMenuActive: (state, payload) => {
         state.isMenuActive = payload
     },
@@ -49,14 +38,26 @@ export const mutations = {
     updateDateTo: (state, payload) => {
         state.filter.dateTo = payload
     },
+    updateAmountFrom: (state, payload) => {
+        state.filter.amountFrom = payload
+    },
+    updateAmountTo: (state, payload) => {
+        state.filter.amountTo = payload
+    },
     updateType: (state, payload) => {
         state.filter.type = payload
+    },
+    updateCategory: (state, payload) => {
+        state.filter.category = payload
     },
     resetFilter: (state, payload) => {
         state.filter = {
             dateFrom: moment().startOf('month').format('YYYY-MM-DD'),
             dateTo: moment().endOf('month').format('YYYY-MM-DD'),
-            type: '',        
+            type: '',
+            category: '',
+            amountFrom: '',
+            amountTo: ''   
         }
     }
 }

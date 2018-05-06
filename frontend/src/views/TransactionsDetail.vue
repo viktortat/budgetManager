@@ -84,7 +84,7 @@ export default {
             if (this.isNew) {
                 const url = '/transactions/'
                 this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                    this.addTransaction(response.data)
+                    this.refreshData()
                     this.resetTransaction()
                 })
             } else {
@@ -100,6 +100,12 @@ export default {
             this.transaction.notes = ''
             this.transaction.date = this.$moment().format('YYYY-MM-DD')
             this.transaction.category = ''
+        }
+    },
+    watch: {
+        '$route'(to, from) {
+            this.isNew = true
+            this.resetTransaction()
         }
     },
     components: {

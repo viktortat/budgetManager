@@ -15,3 +15,12 @@ Vue.filter('appendMinusSign', (value, type) => {
     if (type === 'expense') return '- ' + value
     else return value
 })
+
+Vue.filter('formatNumber', value => {
+    let num = parseFloat(value)
+    return num.toFixed(2)
+})
+
+Vue.filter('formatPercents', value => {
+    return (value * 100) + ' %'
+})

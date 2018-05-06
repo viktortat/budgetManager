@@ -1,8 +1,23 @@
 <template>
     <header class="header">
-        <div class="header-burger" @click="toggleMenu()" v-if="this.$route.name !== 'Wallets'"><icon name="bars" scale="2" /></div>
+        <div 
+            class="header-burger" 
+            @click="toggleMenu()" 
+            v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) === -1">
+            <icon name="bars" scale="2" />
+        </div>
+        <div 
+            class="navbar-wallets-back" 
+            v-if="['WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1" 
+            @click="goToWallets">
+            <icon name="chevron-left" scale="2" />
+        </div>
         <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
-        <app-button class="button" @click="logUserOut()" v-if="this.$route.name === 'Wallets'">Odhlásit se</app-button>
+        <app-button class="button" 
+            @click="logUserOut()" 
+            v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1">
+            Odhlásit se
+        </app-button>
         <div class="header-filter" @click="toggleFilter()" v-else><icon name="filter" scale="2" /></div>
     </header>
 </template>
@@ -18,7 +33,10 @@ export default {
             "toggleMenu",
             "logUserOut",
             "toggleFilter"
-        ])
+        ]),
+        goToWallets() {
+            this.$router.push({name: 'Wallets'})
+        }
     },
     components: {
         AppButton
@@ -50,7 +68,11 @@ export default {
 
     border-bottom: solid 1px #E5E5E5
 
-.header-burger, .header-filter
+.header-left
+    display: flex
+    align-items: center
+
+.header-burger, .header-filter, .navbar-wallets-back
     position: absolute
     top: 0
     width: 54px
@@ -69,6 +91,12 @@ export default {
 
 .header-filter
     right: 16px
+    display: flex
+    justify-content: center
+    align-items: center 
+
+.navbar-wallets-back
+    left: 0
     display: flex
     justify-content: center
     align-items: center 

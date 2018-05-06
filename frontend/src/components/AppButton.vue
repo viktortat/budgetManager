@@ -12,8 +12,8 @@
     width: 156px
 
     font-family: inherit 
-    font-size: inherit
-    font-weight: 600
+    font-size: 1em
+    font-weight: 500
 
     color: $FONT-COLOR-LIGHT
     background-color: $PRIMARY-COLOR

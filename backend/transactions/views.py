@@ -102,10 +102,11 @@ class BudgetListView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        category = serializer.validated_data.get("category")
-        if not check_wallet_ownership(category.wallet.id, request.user):
-            response_text = "Sorry, it seems like this is not your category."
-            return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
+        categories = serializer.validated_data.get("categories")
+        for category in categories:
+            if not check_wallet_ownership(category.wallet.id, request.user):
+                response_text = "Sorry, it seems like this is not your category."
+                return response.Response(status=status.HTTP_403_FORBIDDEN, data=response_text)
 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

@@ -1,5 +1,5 @@
 <template>
-    <select @input="$emit('input', $event.target.value)" :value="value">
+    <select v-model="selected" :multiple="multiple">
         <option v-if="empty" value=""></option>
         <slot></slot>
         <option v-for="item in content" :key="item[contentKey]" :value="item[contentValue]">{{ item[contentName] }}</option>
@@ -10,7 +10,7 @@
 <script>
 export default {
     props: {
-        value: [String, Number],
+        value: [String, Number, Array],
         content: [Array, Object],
         contentKey: {
             type: String,
@@ -27,7 +27,21 @@ export default {
         empty: {
             type: Boolean,
             default: true
+        },
+        multiple: {
+            type: Boolean,
+            default: false
         }
+    },
+    computed: {
+        selected: {
+            get() {
+                return this.value
+            },
+            set(value) {
+                this.$emit('input', value)
+            }
+        },
     }
 }
 </script>

@@ -5,10 +5,13 @@ import Dashboard from '@/views/Dashboard.vue'
 import Transactions from '@/views/Transactions.vue'
 import TransactionsDetail from '@/views/TransactionsDetail.vue'
 import Categories from '@/views/Categories.vue'
+import CategoriesDetail from '@/views/CategoriesDetail.vue'
 import Budgets from '@/views/Budgets.vue'
+import BudgetsDetail from '@/views/BudgetsDetail.vue'
 import Settings from '@/views/Settings.vue'
 import Login from '@/views/Login.vue'
 import Wallets from '@/views/Wallets.vue'
+import WalletsDetail from '@/views/WalletsDetail.vue'
 
 import Header from '@/components/TheHeader.vue'
 import Navbar from '@/components/TheNavbar.vue'
@@ -135,10 +138,102 @@ export default new Router({
             }
         },
         { 
+            path: '/kategorie/new',
+            name: 'CategoriesNew',
+            components: {
+                default: CategoriesDetail,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Kategorie'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
+            path: '/kategorie/:id',
+            name: 'CategoriesDetail',
+            components: {
+                default: CategoriesDetail,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Kategorie'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
             path: '/rozpocty',
             name: 'Budgets',
             components: {
                 default: Budgets,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Rozpočty'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
+            path: '/rozpocty/new',
+            name: 'BudgetsNew',
+            components: {
+                default: BudgetsDetail,
+                header: Header,
+                navbar: Navbar
+            },
+            meta: {
+                'name': 'Rozpočty'
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } 
+                else if (store.state.wallet == null) {
+                    next({ name: 'Wallets', query: {redirect: to.fullPath} })
+                } 
+                else {
+                    next()
+                }
+            }
+        },
+        { 
+            path: '/rozpocty/:id',
+            name: 'BudgetsDetail',
+            components: {
+                default: BudgetsDetail,
                 header: Header,
                 navbar: Navbar
             },
@@ -185,6 +280,36 @@ export default new Router({
             name: 'Wallets',
             components: {
                 default: Wallets,
+                header: Header
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } else {
+                    next()
+                }
+            }
+        },
+        {
+            path: '/penezenky/new',
+            name: 'WalletsNew',
+            components: {
+                default: WalletsDetail,
+                header: Header
+            },
+            beforeEnter: (to, from, next) => {
+                if (!store.state.token) {
+                    next({ name: 'Login', query: {redirect: to.fullPath} })
+                } else {
+                    next()
+                }
+            }
+        },
+        {
+            path: '/penezenky/:id',
+            name: 'WalletsDetail',
+            components: {
+                default: WalletsDetail,
                 header: Header
             },
             beforeEnter: (to, from, next) => {

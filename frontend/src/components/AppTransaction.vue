@@ -13,7 +13,8 @@
         </div>
         <div 
             class="transaction-right" 
-            key="price" v-else 
+            key="price" 
+            v-else 
             @click="options = true" 
             :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}">
             {{ transaction.amount | formatCurrency | appendMinusSign(transaction.transaction_type) }}
@@ -55,8 +56,7 @@ export default {
             const index = this.$store.state.transactions.indexOf(this.transaction)
             const url = '/transactions/' + id + '/'
             this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.$store.commit('deleteTransaction', index)
-                // this.refreshData()
+                this.refreshData()
             })
         }
     },
@@ -143,4 +143,5 @@ $border-color = #D9D9D9
 
 .is-negative
     color: $DANGER-COLOR
+
 </style>

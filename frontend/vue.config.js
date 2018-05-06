@@ -12,7 +12,7 @@ module.exports = {
   pwa: {
     workboxPluginMode: 'GenerateSW',
     workboxOptions: {
-        globPatterns: ['dist/*.{js,html,css}']
+      
     }
   }
 }

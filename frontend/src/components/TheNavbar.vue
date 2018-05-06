@@ -9,7 +9,9 @@
             <router-link :to="{name: 'Transactions'}" class="navbar-item" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
             <router-link :to="{name: 'Categories'}" class="navbar-item" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
             <router-link :to="{name: 'Budgets'}" class="navbar-item" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
-            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link>
+            <!-- 
+            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link> 
+            -->
         </div>
         <footer class="navbar-footer">
             <div class="navbar-account" @click="changeWallet()">
@@ -73,6 +75,8 @@ $navbar-color-active = #53A6FA
 
     background-color: $navbar-color-primary
     color: #CCCCCC
+
+    transition: all .4s ease
 
     &.is-active
         transform: translateX(0)

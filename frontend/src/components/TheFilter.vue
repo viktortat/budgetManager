@@ -1,27 +1,49 @@
-<template>
-    <section class="filter-wrapper" v-if="isFilterActive">
-        <div>
-            <app-label class="label" for="filter-date-from">DateFrom</app-label>
-            <app-date-input class="input" id="filter-date-from" v-model="dateFrom"></app-date-input>
-        </div>
-        <div>
-            <app-label class="label" for="filter-date-to">DateTo</app-label>
-            <app-date-input class="input" id="filter-date-to" v-model="dateTo"></app-date-input>
-        </div>
-        <app-button class="button is-link" @click="setFilterDate('thisMonth')">tento měsíc</app-button>
-        <app-button class="button is-link" @click="setFilterDate('lastMonth')">minulý měsíc</app-button>
-        <app-button class="button is-link" @click="setFilterDate('thisYear')">současný rok</app-button>
-        <app-button class="button is-link" @click="setFilterDate('lastYear')">minulý rok</app-button>
-        <div>
-            <app-label class="label" for="filter-date-type">Type</app-label>
-            <app-select class="input" id="filter-date-type" v-model="type">
-                <option value="expense">Výdej</option>
-                <option value="income">Příjem</option>
-            </app-select>
-        </div>
-        <app-button class="button is-danger" @click="resetFilter()">Reset</app-button>
-        <app-button class="button is-success" @click="setIsFilterActive(false)">Zavřít</app-button>
-    </section>
+<template>        
+    <transition name="slide-right">
+        <section class="filter-wrapper" v-if="isFilterActive">
+            <div>
+                <app-label class="label" for="filter-date-from">Datum od</app-label>
+                <app-date-input class="input" id="filter-date-from" v-model="dateFrom"></app-date-input>
+            </div>
+            <div>
+                <app-label class="label" for="filter-date-to">Datum do</app-label>
+                <app-date-input class="input" id="filter-date-to" v-model="dateTo"></app-date-input>
+            </div>
+            <div>
+                <app-button class="button is-link divider" @click="setFilterDate('thisMonth')">současný měsíc</app-button>
+                <app-button class="button is-link" @click="setFilterDate('lastMonth')">minulý měsíc</app-button>
+            </div>
+            <div>
+                <app-button class="button is-link divider" @click="setFilterDate('thisYear')">současný rok</app-button>
+                <app-button class="button is-link" @click="setFilterDate('lastYear')">minulý rok</app-button>
+            </div>
+            <div>
+                <app-label class="label" for="filter-amount-from">Částka od</app-label>
+                <app-input class="input" id="filter-amount-from" v-model="amountFrom"></app-input>
+            </div>
+            <div>
+                <app-label class="label" for="filter-amount-to">Částka do</app-label>
+                <app-input class="input" id="filter-amount-to" v-model="amountTo"></app-input>
+            </div>
+            <div>
+                <app-label class="label" for="filter-type">Typ transakce</app-label>
+                <app-select class="input" id="filter-type" v-model="type">
+                    <option value="expense">Výdej</option>
+                    <option value="income">Příjem</option>
+                </app-select>
+            </div>
+            <div>
+                <app-label class="label" for="filter-category">Kategorie</app-label>
+                <app-select class="input" id="filter-category" v-model="category">
+                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                </app-select>
+            </div>
+            <div>
+                <app-button class="button is-danger" @click="resetFilter()">Reset</app-button>
+                <app-button class="button is-success" @click="setIsFilterActive(false)">Zavřít</app-button>
+            </div>
+        </section>
+    </transition>
 </template>
 
 
@@ -37,7 +59,8 @@ import AppSelect from '@/components/AppSelect.vue'
 export default {
     computed: {
         ...mapState([
-            'isFilterActive'
+            'isFilterActive',
+            'categories'
         ]),
         dateFrom: {
             get() {
@@ -55,6 +78,22 @@ export default {
                 this.updateDateTo(value)
             }            
         },
+        amountFrom: {
+            get() {
+                return this.$store.state.filter.amountFrom
+            },
+            set(value) {
+                this.updateAmountFrom(value)
+            }
+        },
+        amountTo: {
+            get() {
+                return this.$store.state.filter.amountTo
+            },
+            set(value) {
+                this.updateAmountTo(value)
+            }            
+        },
         type: {
             get() {
                 return this.$store.state.filter.type
@@ -62,6 +101,14 @@ export default {
             set(value) {
                 this.updateType(value)
             }               
+        },
+        category: {
+            get() {
+                return this.$store.state.filter.category
+            },
+            set(value) {
+                this.updateCategory(value)
+            }             
         }
     },
     methods: {
@@ -70,6 +117,9 @@ export default {
             'updateDateTo',
             'updateDateFrom',
             'updateType',
+            'updateCategory',
+            'updateAmountFrom',
+            'updateAmountTo',
             'resetFilter'
         ]),
         setFilterDate(value) {
@@ -105,8 +155,28 @@ export default {
 
 
 <style lang="stylus" scoped>
+@import '../styles/variables'
+
+$height = 3.5em
+$padding-top-bottom = 0.625em
+$border-color = #D9D9D9
 
 .filter-wrapper
+    @media screen and (min-width: 768px)
+        top: 60px
+        left: unset
+        bottom: unset
+        right: 4px
+        padding: 15px
+
+        border: 1px solid $border-color 
+        border-radius: $BORDER-RADIUS
+
+        & > * 
+            padding-bottom: 15px
+        & > *:last-child
+            padding-bottom: 0px
+
     position: fixed
     z-index: 100
     top: 0
@@ -119,5 +189,8 @@ export default {
     justify-content: space-around
 
     background-color: white
+
+.divider
+    padding-right: 1em
 
 </style>
