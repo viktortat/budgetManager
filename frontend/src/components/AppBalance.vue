@@ -1,7 +1,11 @@
 <template>
     <section class="balance-wrapper">
-        <div class="balance">
-            <p class="balance-heading">Součet</p>
+        <div class="balance" @click="balanceComplete = !balanceComplete" v-if="balanceComplete">
+            <p class="balance-heading">Součet celkem</p>
+            <p :class="{'is-positive': getCompleteBalance > 0, 'is-negative': getCompleteBalance < 0}">{{ getCompleteBalance | formatNumber | formatCurrency }}</p>
+        </div>
+        <div class="balance" @click="balanceComplete = !balanceComplete" v-else>
+            <p class="balance-heading">Součet za období</p>
             <p :class="{'is-positive': getBalance > 0, 'is-negative': getBalance < 0}">{{ getBalance | formatNumber | formatCurrency }}</p>
         </div>
         <div class="balance">
@@ -17,12 +21,20 @@ import { filterMixin, dateMixin, balanceMixin } from '@/mixins'
 
 export default {
     mixins: [filterMixin, dateMixin, balanceMixin],
+    data() {
+        return {
+            balanceComplete: false
+        }
+    },
     computed: {
         getBalance() {
             return this.calculateBalance(this.filterTransactions(this.$store.state.transactions))
         },
         getChange() {
             return this.calculateChange(this.$store.state.transactions)
+        },
+        getCompleteBalance() {
+            return this.calculateBalance(this.$store.state.transactions)
         }
     },
     methods: {
