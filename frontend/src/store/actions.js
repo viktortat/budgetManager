@@ -19,7 +19,7 @@ export const actions = {
 
     // data actions
     loadTransactions: (context, payload) => {
-        if (payload) {
+        if(payload) {
             const walletID = context.state.wallet.id
             const token = context.state.token
             const url = "/transactions/" + "?wallet=" + walletID
@@ -29,7 +29,7 @@ export const actions = {
         }
     },
     loadCategories: (context, payload) => {
-        if (payload) {
+        if(payload) {
             const walletID = context.state.wallet.id
             const token = context.state.token
             const url = "/categories/" + "?wallet=" + walletID
@@ -39,13 +39,22 @@ export const actions = {
         }
     },
     loadBudgets: (context, payload) => {
-        if (payload) {
+        if(payload) {
             const walletID = context.state.wallet.id
             const token = context.state.token
             const url = "/budgets/" + "?wallet=" + walletID
             axios.get(url, { headers: { Authorization: 'JWT ' + token }}).then(response => {
                 context.commit('setBudgets', response.data)
             })
+        }
+    },
+    loadWallets: (context, payload) => {
+        if(payload) {
+            const token = context.state.token
+            const url = '/wallets/'
+            axios.get(url, { headers: { Authorization: 'JWT ' + token }}).then(response => {
+                context.commit('setWallets', response.data)
+            }).catch(error => {})
         }
     },
 

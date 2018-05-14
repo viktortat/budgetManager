@@ -6,7 +6,7 @@
             <p class="category-text-small">Transakcí celkem: {{ category.transactions.length }}</p>
         </div>
         <div class="category-options" key="option" v-if="options">
-            <app-button class="button category-option is-danger" key="1" @click="deleteCategory(category.id)"><icon name="trash" /></app-button>
+            <app-button class="button category-option is-danger" key="1" @click="confirmDeleting(category.id)"><icon name="trash" /></app-button>
             <app-button class="button category-option" key="2" @click="goToDetail(category.id)"><icon name="pencil-alt" /></app-button>
             <app-button class="button category-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
         </div>
@@ -57,6 +57,17 @@ export default {
         },
         goToDetail(id) {
             this.$router.push({ 'name': 'CategoriesDetail', params: {'id': id} })
+        },
+        confirmDeleting(id) {
+            const params = {
+                title: 'Smazání kategorie',
+                message: 'Tato akce nenávratně smaže kategorii a všechny její transakce. Přejete si pokračovat?', 
+                showConfirmButton: true,
+                onConfirm: () => {
+                    return this.deleteCategory(id)
+                }
+            }
+            this.$modal.show(params)
         },
         deleteCategory(id) {
             const url = '/categories/' + id + '/'

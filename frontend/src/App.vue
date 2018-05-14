@@ -12,11 +12,13 @@
 
         <notifications />
         <the-filter />
+        <app-modal />
     </div>
 </template>
 
 <script>
 import TheFilter from '@/components/TheFilter.vue'
+import AppModal from '@/components/AppModal.vue'
 
 export default {
     // name
@@ -31,7 +33,8 @@ export default {
     // lifecycle hooks
 
     components: {
-        TheFilter
+        TheFilter,
+        AppModal
     }
 }
 </script>

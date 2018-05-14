@@ -7,7 +7,7 @@
             <div class="transaction-small-text">{{ transaction.notes | shortenString(12) }}</div>
         </div>
         <div class="transaction-options" key="option" v-if="options">
-            <app-button class="button transaction-option is-danger" key="1" @click="deleteTransaction(transaction.id)"><icon name="trash" /></app-button>
+            <app-button class="button transaction-option is-danger" key="1" @click="confirmDeleting(transaction.id)"><icon name="trash" /></app-button>
             <app-button class="button transaction-option" key="2" @click="goToDetail(transaction.id)"><icon name="pencil-alt" /></app-button>
             <app-button class="button transaction-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
         </div>
@@ -51,6 +51,17 @@ export default {
         ]),
         goToDetail(id) {
             this.$router.push({ 'name': 'TransactionsDetail', params: { 'id': id } })
+        },
+        confirmDeleting(id) {
+            const params = {
+                title: 'Smazání transakce',
+                message: 'Tato akce nenávratně smaže transakci. Přejete si pokračovat?', 
+                showConfirmButton: true,
+                onConfirm: () => {
+                    return this.deleteTransaction(id)
+                }
+            }
+            this.$modal.show(params)
         },
         deleteTransaction(id) {
             const index = this.$store.state.transactions.indexOf(this.transaction)
