@@ -28,14 +28,9 @@ export default {
             'setWallet'
         ]),
         ...mapActions([
-            'refreshData'
+            'refreshData',
+            'loadWallets'
         ]),
-        getWallets() {
-            const url = '/wallets/'
-            this.$axios.get(url, { headers: { Authorization: 'JWT ' + this.$store.state.token }}).then(response => {
-                this.setWallets(response.data)
-            }).catch(error => {})
-        },
         pickWallet(walletID) {
             const wallet = this.wallets.find(x => x.id === walletID)
             this.setWallet(wallet)
@@ -50,7 +45,7 @@ export default {
         WalletsWallet
     },
     created() {
-        this.getWallets()
+        this.loadWallets(true)
     }
 }
 </script>

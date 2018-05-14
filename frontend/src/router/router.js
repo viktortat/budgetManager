@@ -20,7 +20,7 @@ import store from '@/store/store.js'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/prehled',
@@ -333,3 +333,10 @@ export default new Router({
     ],
     mode: 'history'
 })
+
+router.beforeEach((to, from, next) => {
+    store.dispatch("toggleMenu", false)
+    next()
+})
+
+export default router

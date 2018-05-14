@@ -52,13 +52,14 @@ export default {
             if(this.isNew) {
                 const url = '/wallets/'
                 this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                    this.wallet.name = ''
                     this.getWallets()
+                    this.$router.push({name: 'Wallets'})
                 })
             } else {
                 const url = '/wallets/' + this.wallet.id + '/'
                 this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
                     this.getWallets()
+                    this.$router.push({name: 'Wallets'})
                 })
             }
         },
