@@ -91,6 +91,7 @@ export default {
                 const url = '/transactions/' + this.transaction.id + '/'
                 this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
                     this.refreshData()
+                    this.$router.push({name: 'Transactions'})
                 })
             }
         },

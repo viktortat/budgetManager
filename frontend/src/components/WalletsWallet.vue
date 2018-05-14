@@ -5,7 +5,7 @@
         </p>
         <app-button class="button wallet-button" @click="pickWallet">Vybrat</app-button>
         <div class="wallet-options" key="option" v-if="options">
-            <app-button class="button wallet-option is-danger" key="1" @click="deleteWallet"><icon name="trash" /></app-button>
+            <app-button class="button wallet-option is-danger" key="1" @click="confirmDeleting"><icon name="trash" /></app-button>
             <app-button class="button wallet-option" key="2" @click="goToDetail"><icon name="pencil-alt" /></app-button>
             <app-button class="button wallet-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
         </div>
@@ -39,15 +39,27 @@ export default {
     },
     methods: {
         ...mapActions([
-            'refreshData'
+            'refreshData',
+            'loadWallets'
         ]),
         pickWallet() {
             this.$emit("pickWallet", this.wallet.id)
         },
+        confirmDeleting() {
+            const params = {
+                title: 'Smazání peněženky',
+                message: 'Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?', 
+                showConfirmButton: true,
+                onConfirm: () => {
+                    return this.deleteWallet()
+                }
+            }
+            this.$modal.show(params)
+        },
         deleteWallet() {
             const url = '/wallets/' + this.wallet.id + '/'
             this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.refreshData()
+                this.loadWallets(true)
             })
         },
         goToDetail() {

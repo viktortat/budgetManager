@@ -70,6 +70,7 @@ export default {
                 const url = '/categories/' + this.category.id + '/'
                 this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
                     this.refreshData()
+                    this.$router.push({name: 'Categories'})
                 })
             }
         },
