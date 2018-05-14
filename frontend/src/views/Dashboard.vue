@@ -10,6 +10,7 @@
             <div class="graph">
                 <vue-chartist :data="categoriesDataset" :options="{fullWidth: true, chartPadding: 20}" type='Pie' :ratio="'ct-perfect-fifth'" />
             </div>
+            <categories-category v-for="category in biggestCategories" :key="category.id" :category="category" />
         </section>
     </main>
 </template>
@@ -22,6 +23,7 @@ import AppDateSlider from '@/components/AppDateSlider.vue'
 import AppBalance from '@/components/AppBalance.vue'
 import DashboardIncomeAndExpense from '@/components/DashboardIncomeAndExpense.vue'
 import VueChartist from '@/components/VueChartist.vue'
+import CategoriesCategory from '@/components/CategoriesCategory.vue'
 
 import { filterMixin, dateMixin, balanceMixin } from '@/mixins'
 
@@ -64,35 +66,55 @@ export default {
                 labels: []
             }
 
-            let transactions = this.filterTransactionsByDate(this.transactions, this.filter.dateFrom, this.filter.dateTo)
-            let categories = this.categories.slice()
-            const expenses = this.calculateExpenses(transactions)
-            for (let cat of categories) {
-                let balance = 0
-                for (let i = 0; i < cat.transactions.length; i++) {
-                    let trn = transactions.find(x => x.id === cat.transactions[i])
-                    if(trn) {
-                        if (trn.transaction_type === "expense") {
-                            balance += Number(trn.amount)
-                        }
-                    }
+            let categories = this.sortedCategories()
+            let iterations = 0
+            let balance = 0
+            for(let cat of categories) {
+                if(iterations < 5) {
+                    cat.dateExpenses === 0 ? data.labels.push('') : data.labels.push(cat.name)
+                    data.series.push(cat.dateExpenses)
+                } else {
+                    balance += cat.dateExpenses
                 }
-                data.series.push(balance)
-                data.labels.push(cat.name)
+                iterations++
             }
+            balance === 0 ? data.labels.push('') : data.labels.push("Zbytek")
+            data.series.push(balance)
+
             return data
+        },
+        biggestCategories() {
+            return this.sortedCategories().splice(0, 5) 
         }
     },
     methods: {
         ...mapActions([
             'loadData'
-        ])
+        ]),
+        sortedCategories() {
+            const transactions = this.filterTransactionsByDate(this.transactions, this.filter.dateFrom, this.filter.dateTo)
+            let categories = this.categories.slice()
+            for(let cat of categories) {
+                let expenses = 0
+                for (let i = 0; i < cat.transactions.length; i++) {
+                    let trn = transactions.find(x => x.id === cat.transactions[i])
+                    if(trn) {
+                        if (trn.transaction_type === "expense") {
+                            expenses += Number(trn.amount)
+                        }
+                    }
+                }
+                cat.dateExpenses = expenses
+            }
+            return categories.sort((a, b) => b.dateExpenses - a.dateExpenses)
+        },
     },
     components: {
         AppDateSlider,
         AppBalance,
         DashboardIncomeAndExpense,
-        VueChartist
+        VueChartist,
+        CategoriesCategory
     },
     created() {
         this.loadData()
