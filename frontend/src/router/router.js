@@ -1,49 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Dashboard = resolve => {
-    require.ensure(['@/views/Dashboard.vue'], () => resolve(require('@/views/Dashboard.vue')))
-}
-
-const Transactions = resolve => {
-    require.ensure(['@/views/Transactions.vue'], () => resolve(require('@/views/Transactions.vue')))
-}
-
-const TransactionsDetail = resolve => {
-    require.ensure(['@/views/TransactionsDetail.vue'], () => resolve(require('@/views/TransactionsDetail.vue')))
-}
-
-const Categories = resolve => {
-    require.ensure(['@/views/Categories.vue'], () => resolve(require('@/views/Categories.vue')))
-}
-
-const CategoriesDetail = resolve => {
-    require.ensure(['@/views/CategoriesDetail.vue'], () => resolve(require('@/views/CategoriesDetail.vue')))
-}
-
-const Budgets = resolve => {
-    require.ensure(['@/views/Budgets.vue'], () => resolve(require('@/views/Budgets.vue')))
-}
-
-const BudgetsDetail = resolve => {
-    require.ensure(['@/views/BudgetsDetail.vue'], () => resolve(require('@/views/BudgetsDetail.vue')))
-}
-
-const Settings = resolve => {
-    require.ensure(['@/views/Settings.vue'], () => resolve(require('@/views/Settings.vue')))
-}
-
-const Login = resolve => {
-    require.ensure(['@/views/Login.vue'], () => resolve(require('@/views/Login.vue')))
-}
-
-const Wallets = resolve => {
-    require.ensure(['@/views/Wallets.vue'], () => resolve(require('@/views/Wallets.vue')))
-}
-
-const WalletsDetail = resolve => {
-    require.ensure(['@/views/WalletsDetail.vue'], () => resolve(require('@/views/WalletsDetail.vue')))
-}
+const Dashboard = () => import('@/views/Dashboard.vue')
+const Transactions = () => import('@/views/Transactions.vue')
+const TransactionsDetail = () => import('@/views/TransactionsDetail.vue')
+const Categories = () => import('@/views/Categories.vue')
+const CategoriesDetail = () => import('@/views/CategoriesDetail.vue')
+const Budgets = () => import('@/views/Budgets.vue')
+const BudgetsDetail = () => import('@/views/BudgetsDetail.vue')
+const Settings = () => import('@/views/Settings.vue')
+const Login = () => import('@/views/Login.vue')
+const Wallets = () => import('@/views/Wallets.vue')
+const WalletsDetail = () => import('@/views/WalletsDetail.vue')
 
 import Header from '@/components/TheHeader.vue'
 import Navbar from '@/components/TheNavbar.vue'
