@@ -1,7 +1,7 @@
 <template>
     <div class="category">
         <aside class="category-color" :style="{ backgroundColor: category.color }"></aside>
-        <div class="category-left">
+        <div class="category-left" @click="showTransactions">
             <p class="category-text-big">{{ category.name | shortenString(14) }}</p>
             <p class="category-text-small">Transakcí celkem: {{ category.transactions.length }}</p>
         </div>
@@ -19,7 +19,7 @@
 
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { filterMixin, balanceMixin } from '@/mixins'
 
 import AppButton from '@/components/AppButton.vue'
@@ -51,6 +51,9 @@ export default {
         ...mapActions([
             'refreshData'
         ]),
+        ...mapMutations([
+            'updateCategory'
+        ]),
         getTransactions() {
             let trns = this.filterTransactionsByDate(this.$store.state.transactions)
             return this.filterTransactionsByCategory(trns, this.category.id)
@@ -74,6 +77,10 @@ export default {
             this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
                 this.refreshData()
             })
+        },
+        showTransactions() {
+            this.updateCategory(this.category.id)
+            this.$router.push({name: 'Transactions'})
         }
     },
     components: {
@@ -116,6 +123,9 @@ $border-color = #D9D9D9
     left: 0
 
 .category-left, .category-right
+    @media screen and (min-width: 768px)
+        cursor: pointer
+
     height: $height - $padding-top-bottom * 2 
     width: 50%
     display: flex
