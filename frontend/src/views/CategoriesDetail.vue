@@ -8,7 +8,7 @@
                 </div>
                 <div class="category-detail-form-item">
                     <app-label class="label" for="category-color">Barva</app-label>
-                    <app-input v-model="category.color" class="input" id="category-color" type="text" />
+                    <app-colorpicker v-model="category.color" id="category-color"></app-colorpicker>
                 </div>
                 <app-button class="button is-success" @click="createOrUpdateCategory" >
                     <span v-if="isNew">Přidat</span>
@@ -28,6 +28,7 @@ import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
 import AppLabel from '@/components/AppLabel.vue'
 import AppSelect from '@/components/AppSelect.vue'
+import AppColorpicker from '@/components/AppColorpicker.vue'
 
 export default {
     data() {
@@ -84,7 +85,8 @@ export default {
         AppInput,
         AppLabel,
         AppDateInput,
-        AppSelect
+        AppSelect,
+        AppColorpicker
     },
     created() {
         this.loadData()
