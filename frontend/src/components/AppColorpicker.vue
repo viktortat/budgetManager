@@ -1,9 +1,12 @@
 <template>
     <div class="colorpicker-wrapper">
+        <transition name="fade">
+            <div class="colorpicker-background" v-if="visible" @click="visible = !visible" :style="{ 'background-color': background }"></div>
+        </transition>
         <div class="colorpicker-picked-color" :style="{ 'background-color': pickedColor }" @click="visible = !visible"></div>
-        <transition name="roll">
-            <div class="colorpicker-popup" v-if="visible" :style="{ 'grid-template-columns': ' 1fr'.repeat(columns) }">
-                <div class="colorpicker-popup-color" v-for="color in sortedColors" :key="color" :style="{ 'background-color': color }" @click="pickColor(color)"></div>
+        <transition name="fade">
+            <div class="colorpicker-popup" :class="{compact: compact}" v-if="visible" :style="{ 'grid-template-columns': ' 1fr'.repeat(columns) }">
+                <div class="colorpicker-popup-color" :class="{compact: compact}" v-for="color in colors" :key="color" :style="{ 'background-color': color }" @click="pickColor(color)"></div>
             </div>
         </transition>
     </div>
@@ -11,7 +14,7 @@
 
 
 <script>
-import { baseColors } from './AppColorpickerColors'
+import { baseColors } from "./AppColorpickerColors";
 
 export default {
     props: {
@@ -25,35 +28,37 @@ export default {
         columns: {
             type: Number,
             default: 4
+        },
+        background: {
+            type: String
+        },
+        compact: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
-            visible: false,
-            pickedColor: ''
-        }
-    },
-    computed: {
-        sortedColors() {
-            return this.colors
-        }
+        visible: false,
+        pickedColor: ""
+        };
     },
     methods: {
         pickColor(color) {
-            this.pickedColor = color
-            this.visible = false
-            this.$emit('input', this.pickedColor)
+        this.pickedColor = color;
+        this.visible = false;
+        this.$emit("input", this.pickedColor);
         }
     },
     watch: {
         value(newVal) {
-            this.pickedColor = newVal
+        this.pickedColor = newVal;
         }
     },
     mounted() {
-        this.pickedColor = this.value
+        this.pickedColor = this.value;
     }
-}
+};
 </script>
 
 
@@ -61,6 +66,16 @@ export default {
 
 .colorpicker-wrapper
     position: relative
+    z-index: 500
+
+.colorpicker-background
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+    background-color: rgba(0, 0, 0, 0.2) 
 
 .colorpicker-picked-color
     @media screen and (min-width: 768px)
@@ -75,13 +90,17 @@ export default {
     border-radius: 10px
 
 .colorpicker-popup
-    @media screen and (min-width: 768px)
-        top: 70px
-        right: unset
-        position: absolute
-        
-    position: fixed
-    right: 10px
+    @media screen and (max-width: 767px)
+        position: fixed
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+
+    max-width: 90vw
+    max-height: 90vh
+    top: 70px
+    right: unset
+    position: absolute
     display: grid
     grid-gap: 10px
     padding: 10px
@@ -91,25 +110,33 @@ export default {
     border-radius: 10px
     background-color: #FFFFFF
 
-    transform-origin: top left
-    // transform: translateX(calc(60px - 100%))
+    overflow: auto
+
+    &.compact
+        grid-gap: 0
 
 .colorpicker-popup-color    
     @media screen and (min-width: 768px)
         cursor: pointer
-    
+
     width: 60px
     height: 60px 
 
     border: 1px solid lightgrey
     border-radius: 10px
 
-// transitions
-.roll-enter-active, .roll-leave-active 
-    transition: transform .3s ease-in-out, opacity .3s ease-in-out
+&.compact
+    width: 25px
+    height: 25px 
 
-.roll-enter, .roll-leave-to 
+    border: none
+    border-radius: 0
+
+// transitions
+.fade-enter-active, .fade-leave-active 
+    transition: opacity .3s ease-in-out
+
+.fade-enter, .fade-leave-to 
     opacity: 0
-    transform: translateY(-30px)
 
 </style>

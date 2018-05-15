@@ -72,6 +72,8 @@ export default {
                 this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
                     this.refreshData()
                     this.$router.push({name: 'Categories'})
+                }).catch(error => {
+                    console.log(error.response)
                 })
             }
         },

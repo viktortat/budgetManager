@@ -77,7 +77,7 @@ post_save.connect(post_save_users_update, sender=Wallet)
 
 class Category(models.Model):
     name = models.CharField(_("Name"), max_length=128)
-    color = models.CharField(_("Color"), max_length=16)
+    color = models.CharField(_("Color"), max_length=32)
     wallet = models.ForeignKey(Wallet, verbose_name=_("Wallet"), related_name="categories", on_delete=models.CASCADE, null=True)
     balance = models.DecimalField(_('Balance'), max_digits=11, decimal_places=2, default=0.0)
 
