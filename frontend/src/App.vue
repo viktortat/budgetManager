@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="app">
-        <router-view name="header" /> 
+        <router-view name="header" />
 
         <transition name="slide-left" mode="out-in">
             <router-view name="navbar" />
@@ -21,27 +21,26 @@ import TheFilter from '@/components/TheFilter.vue'
 import AppModal from '@/components/AppModal.vue'
 
 export default {
-    // name
-    // mixins
-    // extending of other components
-    // props
-	// data
-	// computed
-    // methods
-    // watch
-    // components
-    // lifecycle hooks
+  // name
+  // mixins
+  // extending of other components
+  // props
+  // data
+  // computed
+  // methods
+  // watch
+  // components
+  // lifecycle hooks
 
-    components: {
-        TheFilter,
-        AppModal
-    }
+  components: {
+    TheFilter,
+    AppModal
+  }
 }
 </script>
 
-
 <style lang="stylus">
-// @rules   
+// @rules
 // Layout and box-model properties (margin, padding, box-sizing, overflow, position, display, width/height, etc.)
 // Typographic properties (font-, line-height, letter-spacing, text-, etc.)
 // Stylistic properties (color, background-*, animation, border, etc.)
@@ -91,8 +90,7 @@ export default {
     max-width: 100%
     max-height: 100%
 
-
-.slide-enter-active, .slide-leave-active 
+.slide-enter-active, .slide-leave-active
     transition: all .4s ease
 
 .slide-enter
@@ -103,29 +101,25 @@ export default {
     transform: translateX(-100%)
     opacity: 0
 
-
-.slide-left-enter-active, .slide-left-leave-active 
+.slide-left-enter-active, .slide-left-leave-active
     transition: all .4s ease
 
 .slide-left-enter, .slide-left-leave-to
     transform: translateX(-100%)
     opacity: 0
 
-
-.slide-right-enter-active, .slide-right-leave-active 
+.slide-right-enter-active, .slide-right-leave-active
     transition: all .4s ease
 
 .slide-right-enter, .slide-right-leave-to
     transform: translateX(100%)
     opacity: 0
 
-
-.fade-enter-active, .fade-leave-active 
+.fade-enter-active, .fade-leave-active
     transition: opacity .4s ease
 
 .fade-enter, .fade-leave-to
     opacity: 0
-
 
 .list-complete-item
     transition: all 1s
@@ -136,9 +130,7 @@ export default {
     opacity: 0
     transform: translateY(30px)
 
-.list-complete-leave-active 
+.list-complete-leave-active
     position: absolute
 
-
 </style>
-

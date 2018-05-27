@@ -24,7 +24,6 @@
     </div>
 </template>
 
-
 <script>
 import { mapState, mapActions } from 'vuex'
 import { filterMixin, balanceMixin } from '@/mixins'
@@ -32,65 +31,64 @@ import { filterMixin, balanceMixin } from '@/mixins'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    mixins: [filterMixin, balanceMixin],
-    props: {
-        budget: {
-            type: Object
-        }
-    },
-    data() {
-        return {
-            options: false
-        }
-    },
-    computed: {
-        ...mapState([
-            'budgets',
-            'filter',
-            'categories',
-            'transactions',
-            'token'
-        ]),
-        budgetBalance() {
-            return this.calculateExpenses(this.getTransactions())
-        },
-        budgetPercents() {
-            return this.budgetBalance / this.budget.amount
-        },
-        budgetPercentsCapped() {
-            const val = this.budgetBalance / this.budget.amount
-            return val > 1 ? 1 : val
-        }
-    },
-    methods: {
-        ...mapActions([
-            'refreshData'
-        ]),
-        getTransactions() {
-            const trns = this.filterTransactionsByDate(this.$store.state.transactions)
-            let finalTrns = []
-            for(let category of this.budget.categories) {
-                finalTrns = finalTrns.concat(this.filterTransactionsByCategory(trns, category))
-            }
-            return finalTrns
-        },
-        deleteBudget(id) {
-            const index = this.$store.state.budgets.indexOf(this.budget)
-            const url = '/budgets/' + id + '/'
-            this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.refreshData()
-            })
-        },
-        goToDetail(id) {
-            this.$router.push({ 'name': 'BudgetsDetail', params: { 'id': id } })
-        }
-    },
-    components: {
-        AppButton
+  mixins: [filterMixin, balanceMixin],
+  props: {
+    budget: {
+      type: Object
     }
+  },
+  data () {
+    return {
+      options: false
+    }
+  },
+  computed: {
+    ...mapState([
+      'budgets',
+      'filter',
+      'categories',
+      'transactions',
+      'token'
+    ]),
+    budgetBalance () {
+      return this.calculateExpenses(this.getTransactions())
+    },
+    budgetPercents () {
+      return this.budgetBalance / this.budget.amount
+    },
+    budgetPercentsCapped () {
+      const val = this.budgetBalance / this.budget.amount
+      return val > 1 ? 1 : val
+    }
+  },
+  methods: {
+    ...mapActions([
+      'refreshData'
+    ]),
+    getTransactions () {
+      const trns = this.filterTransactionsByDate(this.$store.state.transactions)
+      let finalTrns = []
+      for (let category of this.budget.categories) {
+        finalTrns = finalTrns.concat(this.filterTransactionsByCategory(trns, category))
+      }
+      return finalTrns
+    },
+    deleteBudget (id) {
+      const index = this.$store.state.budgets.indexOf(this.budget)
+      const url = '/budgets/' + id + '/'
+      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+        this.refreshData()
+      })
+    },
+    goToDetail (id) {
+      this.$router.push({ 'name': 'BudgetsDetail', params: { 'id': id } })
+    }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -108,7 +106,7 @@ $border-color = #D9D9D9
     max-width: 43.750em
     padding-left: 10px
     padding-right: 10px
-    padding-top: $padding-top-bottom 
+    padding-top: $padding-top-bottom
     padding-bottom: $padding-top-bottom
 
     border-bottom: 1px solid $border-color
@@ -159,7 +157,7 @@ $border-color = #D9D9D9
     top: 50%
     left: 1em
     transform: translateY(-50%)
-    
+
     font-weight: 600
 
     color: $FONT-COLOR-LIGHT

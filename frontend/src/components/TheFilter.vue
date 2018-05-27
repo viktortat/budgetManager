@@ -1,4 +1,4 @@
-<template>        
+<template>
     <transition name="slide-right">
         <section class="filter-wrapper" v-if="isFilterActive">
             <div>
@@ -46,7 +46,6 @@
     </transition>
 </template>
 
-
 <script>
 import { mapState, mapMutations } from 'vuex'
 
@@ -57,102 +56,101 @@ import AppLabel from '@/components/AppLabel.vue'
 import AppSelect from '@/components/AppSelect.vue'
 
 export default {
-    computed: {
-        ...mapState([
-            'isFilterActive',
-            'categories'
-        ]),
-        dateFrom: {
-            get() {
-                return this.$store.state.filter.dateFrom
-            },
-            set(value) {
-                this.updateDateFrom(value)
-            }
-        },
-        dateTo: {
-            get() {
-                return this.$store.state.filter.dateTo
-            },
-            set(value) {
-                this.updateDateTo(value)
-            }            
-        },
-        amountFrom: {
-            get() {
-                return this.$store.state.filter.amountFrom
-            },
-            set(value) {
-                this.updateAmountFrom(value)
-            }
-        },
-        amountTo: {
-            get() {
-                return this.$store.state.filter.amountTo
-            },
-            set(value) {
-                this.updateAmountTo(value)
-            }            
-        },
-        type: {
-            get() {
-                return this.$store.state.filter.type
-            },
-            set(value) {
-                this.updateType(value)
-            }               
-        },
-        category: {
-            get() {
-                return this.$store.state.filter.category
-            },
-            set(value) {
-                this.updateCategory(value)
-            }             
-        }
+  computed: {
+    ...mapState([
+      'isFilterActive',
+      'categories'
+    ]),
+    dateFrom: {
+      get () {
+        return this.$store.state.filter.dateFrom
+      },
+      set (value) {
+        this.updateDateFrom(value)
+      }
     },
-    methods: {
-        ...mapMutations([
-            'setIsFilterActive',
-            'updateDateTo',
-            'updateDateFrom',
-            'updateType',
-            'updateCategory',
-            'updateAmountFrom',
-            'updateAmountTo',
-            'resetFilter'
-        ]),
-        setFilterDate(value) {
-            switch(value) {
-                case 'thisMonth':
-                    this.updateDateFrom(this.$moment().startOf('month').format('YYYY-MM-DD'))
-                    this.updateDateTo(this.$moment().endOf('month').format('YYYY-MM-DD'))
-                    break
-                case 'lastMonth':
-                    this.updateDateFrom(this.$moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'))
-                    this.updateDateTo(this.$moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD'))
-                    break
-                case 'thisYear':
-                    this.updateDateFrom(this.$moment().startOf('year').format('YYYY-MM-DD'))
-                    this.updateDateTo(this.$moment().endOf('year').format('YYYY-MM-DD'))
-                    break
-                case 'lastYear':
-                    this.updateDateFrom(this.$moment().subtract(1, 'years').startOf('year').format('YYYY-MM-DD'))
-                    this.updateDateTo(this.$moment().subtract(1, 'years').endOf('year').format('YYYY-MM-DD'))
-                    break
-            }
-        }
+    dateTo: {
+      get () {
+        return this.$store.state.filter.dateTo
+      },
+      set (value) {
+        this.updateDateTo(value)
+      }
     },
-    components: {
-        AppButton,
-        AppInput,
-        AppLabel,
-        AppDateInput,
-        AppSelect
+    amountFrom: {
+      get () {
+        return this.$store.state.filter.amountFrom
+      },
+      set (value) {
+        this.updateAmountFrom(value)
+      }
     },
+    amountTo: {
+      get () {
+        return this.$store.state.filter.amountTo
+      },
+      set (value) {
+        this.updateAmountTo(value)
+      }
+    },
+    type: {
+      get () {
+        return this.$store.state.filter.type
+      },
+      set (value) {
+        this.updateType(value)
+      }
+    },
+    category: {
+      get () {
+        return this.$store.state.filter.category
+      },
+      set (value) {
+        this.updateCategory(value)
+      }
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'setIsFilterActive',
+      'updateDateTo',
+      'updateDateFrom',
+      'updateType',
+      'updateCategory',
+      'updateAmountFrom',
+      'updateAmountTo',
+      'resetFilter'
+    ]),
+    setFilterDate (value) {
+      switch (value) {
+        case 'thisMonth':
+          this.updateDateFrom(this.$moment().startOf('month').format('YYYY-MM-DD'))
+          this.updateDateTo(this.$moment().endOf('month').format('YYYY-MM-DD'))
+          break
+        case 'lastMonth':
+          this.updateDateFrom(this.$moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'))
+          this.updateDateTo(this.$moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD'))
+          break
+        case 'thisYear':
+          this.updateDateFrom(this.$moment().startOf('year').format('YYYY-MM-DD'))
+          this.updateDateTo(this.$moment().endOf('year').format('YYYY-MM-DD'))
+          break
+        case 'lastYear':
+          this.updateDateFrom(this.$moment().subtract(1, 'years').startOf('year').format('YYYY-MM-DD'))
+          this.updateDateTo(this.$moment().subtract(1, 'years').endOf('year').format('YYYY-MM-DD'))
+          break
+      }
+    }
+  },
+  components: {
+    AppButton,
+    AppInput,
+    AppLabel,
+    AppDateInput,
+    AppSelect
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -169,10 +167,10 @@ $border-color = #D9D9D9
         right: 4px
         padding: 15px
 
-        border: 1px solid $border-color 
+        border: 1px solid $border-color
         border-radius: $BORDER-RADIUS
 
-        & > * 
+        & > *
             padding-bottom: 15px
         & > *:last-child
             padding-bottom: 0px

@@ -16,47 +16,46 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 
 import AppButton from '@/components/AppButton.vue'
 import AppInput from '@/components/AppInput.vue'
 import AppLabel from '@/components/AppLabel.vue'
 
 export default {
-    data() {
-        return {
-            email: "",
-            password: ""
-        }
-    },
-    methods: {
-        ...mapActions([
-            "logUserIn"
-        ]),
-        login() {
-            const data = {
-                "email": this.email,
-                "password": this.password 
-            };
-            this.$axios.post("/auth/login/", data).then(res => {
-                this.logUserIn(res.data.token);
-                this.$router.push(this.$route.query.redirect || {name: 'Wallets'});
-            }).catch(err => {
-                this.$notify({
-                    text: 'Vyskytl se problém, zkuste to prosím později.',
-                    type: 'error'
-                });
-            })
-        }
-    },
-    components: {
-        AppButton,
-        AppInput,
-        AppLabel
+  data () {
+    return {
+      email: '',
+      password: ''
     }
+  },
+  methods: {
+    ...mapActions([
+      'logUserIn'
+    ]),
+    login () {
+      const data = {
+        'email': this.email,
+        'password': this.password
+      }
+      this.$axios.post('/auth/login/', data).then(res => {
+        this.logUserIn(res.data.token)
+        this.$router.push(this.$route.query.redirect || {name: 'Wallets'})
+      }).catch(err => {
+        this.$notify({
+          text: 'Vyskytl se problém, zkuste to prosím později.',
+          type: 'error'
+        })
+      })
+    }
+  },
+  components: {
+    AppButton,
+    AppInput,
+    AppLabel
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import "../styles/variables.styl"
@@ -68,7 +67,7 @@ export default {
     align-items: center
     width: 100%
     height: 100vh
-    
+
     & .button
         align-self: flex-end
 
@@ -83,5 +82,3 @@ export default {
         margin-bottom: 30px
 
 </style>
-
-

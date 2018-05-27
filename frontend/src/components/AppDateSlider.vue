@@ -20,48 +20,46 @@
     </section>
 </template>
 
-
 <script>
 import { mapState, mapMutations } from 'vuex'
 
 import { dateMixin } from '@/mixins'
 
 export default {
-    mixins: [dateMixin],
-    computed: {
-        ...mapState([
-            'filter'
-        ]),
-        renderMonth() {
-            return this.isMonth(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
-        },
-        renderYear() {
-            return this.isYear(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
-        }
+  mixins: [dateMixin],
+  computed: {
+    ...mapState([
+      'filter'
+    ]),
+    renderMonth () {
+      return this.isMonth(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
     },
-    methods: {
-        ...mapMutations([
-            'updateDateFrom',
-            'updateDateTo'
-        ]),
-        updateDates(dateObj) {
-            this.updateDateFrom(dateObj.dateFrom)
-            this.updateDateTo(dateObj.dateTo)
-        },
-        editDates(add) {
-            let dateObj = {}
-            let dateFrom = this.$store.state.filter.dateFrom
-            let dateTo = this.$store.state.filter.dateTo
-
-            if(add) dateObj = this.addDate(dateFrom, dateTo)
-            else dateObj = this.subtractDate(dateFrom, dateTo)
-
-            this.updateDates(dateObj)
-        }
+    renderYear () {
+      return this.isYear(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
     }
+  },
+  methods: {
+    ...mapMutations([
+      'updateDateFrom',
+      'updateDateTo'
+    ]),
+    updateDates (dateObj) {
+      this.updateDateFrom(dateObj.dateFrom)
+      this.updateDateTo(dateObj.dateTo)
+    },
+    editDates (add) {
+      let dateObj = {}
+      let dateFrom = this.$store.state.filter.dateFrom
+      let dateTo = this.$store.state.filter.dateTo
+
+      if (add) dateObj = this.addDate(dateFrom, dateTo)
+      else dateObj = this.subtractDate(dateFrom, dateTo)
+
+      this.updateDates(dateObj)
+    }
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -93,6 +91,6 @@ $border-color = #D9D9D9
     width: 2em
     display: flex
     justify-content: center
-    align-items: center    
+    align-items: center
 
 </style>

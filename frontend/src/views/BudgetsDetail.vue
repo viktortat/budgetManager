@@ -25,9 +25,8 @@
     </main>
 </template>
 
-
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex'
 
 import AppDateInput from '@/components/AppDateInput.vue'
 import AppButton from '@/components/AppButton.vue'
@@ -36,79 +35,78 @@ import AppLabel from '@/components/AppLabel.vue'
 import AppSelect from '@/components/AppSelect.vue'
 
 export default {
-    data() {
-        return {
-            budget: {
-                name: '',
-                categories: [],
-                amount: ''
-            },
-            isNew: false
-        }
-    },
-    computed: {
-        ...mapState([
-            'categories',
-            'token',
-            'wallet',
-            'budgets'
-        ])
-    },
-    methods: {
-        ...mapActions([
-            'loadData',
-            'refreshData'
-        ]),
-        createOrUpdateBudget() {
-            const data = {
-                name: this.budget.name,
-                amount: this.budget.amount,
-                categories: this.budget.categories
-            }
-            if(this.isNew) {
-                const url = '/budgets/'
-                this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                    this.resetBudget()
-                    this.refreshData()
-                })
-            } else {
-                const url = '/budgets/' + this.budget.id + '/'
-                this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                    this.refreshData()
-                })
-            }
-        },
-        resetBudget() {
-            this.budget.name = ''
-            this.budget.amount = ''
-            this.budget.categories = []
-        }
-    },
-    components: {
-        AppInput,
-        AppLabel,
-        AppSelect,
-        AppButton
-    },
-    created() {
-        this.loadData()
-        const budgetID = this.$route.params.id
-        if (!budgetID) this.isNew = true
-        else if (Number(budgetID)) {
-            const budget = this.budgets.find(x => x.id == budgetID)
-            this.budget = Object.assign({}, budget)
-        } else this.$router.push("/")
+  data () {
+    return {
+      budget: {
+        name: '',
+        categories: [],
+        amount: ''
+      },
+      isNew: false
     }
+  },
+  computed: {
+    ...mapState([
+      'categories',
+      'token',
+      'wallet',
+      'budgets'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'loadData',
+      'refreshData'
+    ]),
+    createOrUpdateBudget () {
+      const data = {
+        name: this.budget.name,
+        amount: this.budget.amount,
+        categories: this.budget.categories
+      }
+      if (this.isNew) {
+        const url = '/budgets/'
+        this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+          this.resetBudget()
+          this.refreshData()
+        })
+      } else {
+        const url = '/budgets/' + this.budget.id + '/'
+        this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+          this.refreshData()
+        })
+      }
+    },
+    resetBudget () {
+      this.budget.name = ''
+      this.budget.amount = ''
+      this.budget.categories = []
+    }
+  },
+  components: {
+    AppInput,
+    AppLabel,
+    AppSelect,
+    AppButton
+  },
+  created () {
+    this.loadData()
+    const budgetID = this.$route.params.id
+    if (!budgetID) this.isNew = true
+    else if (Number(budgetID)) {
+      const budget = this.budgets.find(x => x.id == budgetID)
+      this.budget = Object.assign({}, budget)
+    } else this.$router.push('/')
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 
 .budget-detail-wrapper
     @media screen and (min-width: 768px)
         font-size: 20px
-    
+
     display: flex
     flex-flow: column
     justify-content: center
@@ -116,14 +114,14 @@ export default {
     width: 100%
     height: 100%
     padding-top: 20px
-    
+
     & .button
         align-self: flex-end
 
 .budget-detail-form
     display: flex
     flex-flow: column
-    
+
 .budget-detail-form-item
     margin-bottom: 20px
 

@@ -11,7 +11,7 @@
     height: 45px
     width: 156px
 
-    font-family: inherit 
+    font-family: inherit
     font-size: 1em
     font-weight: 500
 
@@ -61,7 +61,7 @@
 
         background-color: $DANGER-COLOR
 
-    &.is-100 
+    &.is-100
         width: 100%
 
     &.is-square

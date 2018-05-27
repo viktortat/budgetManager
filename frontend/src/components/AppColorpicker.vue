@@ -12,55 +12,53 @@
     </div>
 </template>
 
-
 <script>
-import { baseColors } from "./AppColorpickerColors";
+import { materialcolorsdark } from './AppColorpickerColors'
 
 export default {
-    props: {
-        colors: {
-            type: Array,
-            default: () => baseColors
-        },
-        value: {
-            type: String
-        },
-        columns: {
-            type: Number,
-            default: 4
-        },
-        background: {
-            type: String
-        },
-        compact: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    colors: {
+      type: Array,
+      default: () => materialcolorsdark
     },
-    data() {
-        return {
-        visible: false,
-        pickedColor: ""
-        };
+    value: {
+      type: String
     },
-    methods: {
-        pickColor(color) {
-        this.pickedColor = color;
-        this.visible = false;
-        this.$emit("input", this.pickedColor);
-        }
+    columns: {
+      type: Number,
+      default: 4
     },
-    watch: {
-        value(newVal) {
-        this.pickedColor = newVal;
-        }
+    background: {
+      type: String
     },
-    mounted() {
-        this.pickedColor = this.value;
+    compact: {
+      type: Boolean,
+      default: false
     }
-};
+  },
+  data () {
+    return {
+      visible: false,
+      pickedColor: ''
+    }
+  },
+  methods: {
+    pickColor (color) {
+      this.pickedColor = color
+      this.visible = false
+      this.$emit('input', this.pickedColor)
+    }
+  },
+  watch: {
+    value (newVal) {
+      this.pickedColor = newVal
+    }
+  },
+  mounted () {
+    this.pickedColor = this.value
+  }
+}
 </script>
-
 
 <style lang="stylus" scoped>
 
@@ -75,7 +73,7 @@ export default {
     right: 0
     bottom: 0
 
-    background-color: rgba(0, 0, 0, 0.2) 
+    background-color: rgba(0, 0, 0, 0.2)
 
 .colorpicker-picked-color
     @media screen and (min-width: 768px)
@@ -115,28 +113,28 @@ export default {
     &.compact
         grid-gap: 0
 
-.colorpicker-popup-color    
+.colorpicker-popup-color
     @media screen and (min-width: 768px)
         cursor: pointer
 
     width: 60px
-    height: 60px 
+    height: 60px
 
     border: 1px solid lightgrey
     border-radius: 10px
 
 &.compact
     width: 25px
-    height: 25px 
+    height: 25px
 
     border: none
     border-radius: 0
 
 // transitions
-.fade-enter-active, .fade-leave-active 
+.fade-enter-active, .fade-leave-active
     transition: opacity .3s ease-in-out
 
-.fade-enter, .fade-leave-to 
+.fade-enter, .fade-leave-to
     opacity: 0
 
 </style>

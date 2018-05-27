@@ -9,8 +9,8 @@ import { plugins } from './plugins'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    plugins,
-    state,
-    mutations,
-    actions
+  plugins,
+  state,
+  mutations,
+  actions
 })

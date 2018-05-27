@@ -17,7 +17,6 @@
     </div>
 </template>
 
-
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { filterMixin, balanceMixin } from '@/mixins'
@@ -25,70 +24,69 @@ import { filterMixin, balanceMixin } from '@/mixins'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    mixins: [filterMixin, balanceMixin],
-    props: {
-        category: {
-            type: Object
-        }
-    },
-    data() {
-        return {
-            options: false
-        }
-    },
-    computed: {
-        ...mapState([
-            'token'
-        ]),
-        categoryBalance() {
-            return this.calculateBalance(this.getTransactions())
-        },
-        categoryTransactionsAmount() {
-            return this.getTransactions().length
-        }
-    },
-    methods: {
-        ...mapActions([
-            'refreshData'
-        ]),
-        ...mapMutations([
-            'updateCategory'
-        ]),
-        getTransactions() {
-            let trns = this.filterTransactionsByDate(this.$store.state.transactions)
-            return this.filterTransactionsByCategory(trns, this.category.id)
-        },
-        goToDetail(id) {
-            this.$router.push({ 'name': 'CategoriesDetail', params: {'id': id} })
-        },
-        confirmDeleting(id) {
-            const params = {
-                title: 'Smazání kategorie',
-                message: 'Tato akce nenávratně smaže kategorii a všechny její transakce. Přejete si pokračovat?', 
-                showConfirmButton: true,
-                onConfirm: () => {
-                    return this.deleteCategory(id)
-                }
-            }
-            this.$modal.show(params)
-        },
-        deleteCategory(id) {
-            const url = '/categories/' + id + '/'
-            this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.refreshData()
-            })
-        },
-        showTransactions() {
-            this.updateCategory(this.category.id)
-            this.$router.push({name: 'Transactions'})
-        }
-    },
-    components: {
-        AppButton
+  mixins: [filterMixin, balanceMixin],
+  props: {
+    category: {
+      type: Object
     }
+  },
+  data () {
+    return {
+      options: false
+    }
+  },
+  computed: {
+    ...mapState([
+      'token'
+    ]),
+    categoryBalance () {
+      return this.calculateBalance(this.getTransactions())
+    },
+    categoryTransactionsAmount () {
+      return this.getTransactions().length
+    }
+  },
+  methods: {
+    ...mapActions([
+      'refreshData'
+    ]),
+    ...mapMutations([
+      'updateCategory'
+    ]),
+    getTransactions () {
+      let trns = this.filterTransactionsByDate(this.$store.state.transactions)
+      return this.filterTransactionsByCategory(trns, this.category.id)
+    },
+    goToDetail (id) {
+      this.$router.push({ 'name': 'CategoriesDetail', params: {'id': id} })
+    },
+    confirmDeleting (id) {
+      const params = {
+        title: 'Smazání kategorie',
+        message: 'Tato akce nenávratně smaže kategorii a všechny její transakce. Přejete si pokračovat?',
+        showConfirmButton: true,
+        onConfirm: () => {
+          return this.deleteCategory(id)
+        }
+      }
+      this.$modal.show(params)
+    },
+    deleteCategory (id) {
+      const url = '/categories/' + id + '/'
+      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+        this.refreshData()
+      })
+    },
+    showTransactions () {
+      this.updateCategory(this.category.id)
+      this.$router.push({name: 'Transactions'})
+    }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -107,7 +105,7 @@ $border-color = #D9D9D9
     height: $height
     padding-left: 13px
     padding-right: 10px
-    padding-top: $padding-top-bottom 
+    padding-top: $padding-top-bottom
     padding-bottom: $padding-top-bottom
     display: flex
     justify-content: space-between
@@ -126,7 +124,7 @@ $border-color = #D9D9D9
     @media screen and (min-width: 768px)
         cursor: pointer
 
-    height: $height - $padding-top-bottom * 2 
+    height: $height - $padding-top-bottom * 2
     width: 50%
     display: flex
     flex-flow: column
@@ -160,7 +158,7 @@ $border-color = #D9D9D9
     color: #FFFFFF
     border-radius: 50%
 
-.is-positive 
+.is-positive
     color: $SUCCESS-COLOR
 
 .is-negative
