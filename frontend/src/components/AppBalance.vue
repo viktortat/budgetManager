@@ -15,39 +15,37 @@
     </section>
 </template>
 
-
 <script>
 import { filterMixin, dateMixin, balanceMixin } from '@/mixins'
 
 export default {
-    mixins: [filterMixin, dateMixin, balanceMixin],
-    data() {
-        return {
-            balanceComplete: false
-        }
-    },
-    computed: {
-        getBalance() {
-            return this.calculateBalance(this.filterTransactions(this.$store.state.transactions))
-        },
-        getChange() {
-            return this.calculateChange(this.$store.state.transactions)
-        },
-        getCompleteBalance() {
-            return this.calculateBalance(this.$store.state.transactions)
-        }
-    },
-    methods: {
-        calculateChange(transactions) {
-            const thisPeriod = this.calculateBalance(this.filterTransactions(transactions))
-            const date = this.subtractDate(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
-            const lastPeriod = this.calculateBalance(this.filterTransactions(transactions, null, date.dateFrom, date.dateTo))
-            return thisPeriod - lastPeriod
-        }
+  mixins: [filterMixin, dateMixin, balanceMixin],
+  data () {
+    return {
+      balanceComplete: false
     }
+  },
+  computed: {
+    getBalance () {
+      return this.calculateBalance(this.filterTransactions(this.$store.state.transactions))
+    },
+    getChange () {
+      return this.calculateChange(this.$store.state.transactions)
+    },
+    getCompleteBalance () {
+      return this.calculateBalance(this.$store.state.transactions)
+    }
+  },
+  methods: {
+    calculateChange (transactions) {
+      const thisPeriod = this.calculateBalance(this.filterTransactions(transactions))
+      const date = this.subtractDate(this.$store.state.filter.dateFrom, this.$store.state.filter.dateTo)
+      const lastPeriod = this.calculateBalance(this.filterTransactions(transactions, null, date.dateFrom, date.dateTo))
+      return thisPeriod - lastPeriod
+    }
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -72,7 +70,7 @@ $border-color = #D9D9D9
     flex-flow: column
     justify-content: space-between
     align-items: flex-end
-    
+
     &:first-child
         align-items: flex-start
 
@@ -80,7 +78,7 @@ $border-color = #D9D9D9
     font-size: 0.875em
     font-weight: 400
 
-.is-positive 
+.is-positive
     color: $SUCCESS-COLOR
 
 .is-negative

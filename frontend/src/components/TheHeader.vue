@@ -1,20 +1,20 @@
 <template>
     <header class="header">
-        <div 
-            class="header-burger" 
-            @click="toggleMenu()" 
+        <div
+            class="header-burger"
+            @click="toggleMenu()"
             v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) === -1">
             <icon name="bars" scale="2" />
         </div>
-        <div 
-            class="navbar-wallets-back" 
-            v-if="['WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1" 
+        <div
+            class="navbar-wallets-back"
+            v-if="['WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1"
             @click="goToWallets">
             <icon name="chevron-left" scale="2" />
         </div>
         <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
-        <app-button class="button" 
-            @click="logUserOut()" 
+        <app-button class="button"
+            @click="logUserOut()"
             v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1">
             Odhlásit se
         </app-button>
@@ -28,19 +28,19 @@ import { mapActions } from 'vuex'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    methods: {
-        ...mapActions([
-            "toggleMenu",
-            "logUserOut",
-            "toggleFilter"
-        ]),
-        goToWallets() {
-            this.$router.push({name: 'Wallets'})
-        }
-    },
-    components: {
-        AppButton
+  methods: {
+    ...mapActions([
+      'toggleMenu',
+      'logUserOut',
+      'toggleFilter'
+    ]),
+    goToWallets () {
+      this.$router.push({name: 'Wallets'})
     }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
 
@@ -77,14 +77,14 @@ export default {
     top: 0
     width: 54px
     height: 54px
-    
+
     cursor: pointer
 
 .header-burger
     @media screen and (max-width: 767px)
         display: flex
         justify-content: center
-        align-items: center 
+        align-items: center
 
     display: none
     left: 0
@@ -93,15 +93,15 @@ export default {
     right: 16px
     display: flex
     justify-content: center
-    align-items: center 
+    align-items: center
 
 .navbar-wallets-back
     left: 0
     display: flex
     justify-content: center
-    align-items: center 
+    align-items: center
 
-.header-heading 
+.header-heading
     font-size: $FONT-SIZE * 1.5
     font-weight: 400
 

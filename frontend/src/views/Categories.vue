@@ -10,7 +10,6 @@
     </main>
 </template>
 
-
 <script>
 import { mapState } from 'vuex'
 
@@ -19,31 +18,30 @@ import CategoriesCategory from '@/components/CategoriesCategory.vue'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    computed: {
-        ...mapState([
-            'categories'
-        ])
-    },
-    methods: {
-        createCategory() {
-            this.$router.push({name: 'CategoriesNew'})
-        }
-    },
-    components: {
-        CategoriesCategory,
-        AppDateSlider,
-        AppButton
+  computed: {
+    ...mapState([
+      'categories'
+    ])
+  },
+  methods: {
+    createCategory () {
+      this.$router.push({name: 'CategoriesNew'})
     }
+  },
+  components: {
+    CategoriesCategory,
+    AppDateSlider,
+    AppButton
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 
 $padding-top-bottom = 1em
 $border-color = #D9D9D9
 
-.section    
+.section
     @media screen and (min-width: 768px)
         font-size: 20px
 
@@ -68,7 +66,7 @@ $border-color = #D9D9D9
 
     border-bottom: 1px solid $border-color
 
-    &:hover 
+    &:hover
         @media screen and (min-width: 768px)
             background-color: $border-color
 

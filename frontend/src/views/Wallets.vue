@@ -9,47 +9,45 @@
     </main>
 </template>
 
-
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 import WalletsWallet from '@/components/WalletsWallet.vue'
 
 export default {
-    name: 'Wallets',
-    computed: {
-        ...mapState([
-            'wallets'
-        ])
+  name: 'Wallets',
+  computed: {
+    ...mapState([
+      'wallets'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'setWallets',
+      'setWallet'
+    ]),
+    ...mapActions([
+      'refreshData',
+      'loadWallets'
+    ]),
+    pickWallet (walletID) {
+      const wallet = this.wallets.find(x => x.id === walletID)
+      this.setWallet(wallet)
+      this.refreshData()
+      this.$router.push(this.$route.query.redirect || { name: 'Dashboard' })
     },
-    methods: {
-        ...mapMutations([
-            'setWallets',
-            'setWallet'
-        ]),
-        ...mapActions([
-            'refreshData',
-            'loadWallets'
-        ]),
-        pickWallet(walletID) {
-            const wallet = this.wallets.find(x => x.id === walletID)
-            this.setWallet(wallet)
-            this.refreshData()
-            this.$router.push(this.$route.query.redirect || { name: 'Dashboard' })
-        },
-        createWallet() {
-            this.$router.push({ name: 'WalletsNew' })
-        }
-    },
-    components: {
-        WalletsWallet
-    },
-    created() {
-        this.loadWallets(true)
+    createWallet () {
+      this.$router.push({ name: 'WalletsNew' })
     }
+  },
+  components: {
+    WalletsWallet
+  },
+  created () {
+    this.loadWallets(true)
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import "../styles/variables"
@@ -76,7 +74,7 @@ $border-color = #D9D9D9
 
     border-bottom: 1px solid $border-color
 
-    &:hover 
+    &:hover
         @media screen and (min-width: 768px)
             background-color: $border-color
 </style>

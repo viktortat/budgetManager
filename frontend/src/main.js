@@ -8,16 +8,16 @@ import '@/registerServiceWorker'
 
 // Axios
 import axios from 'axios'
-axios.defaults.baseURL = '/api/';
+axios.defaults.baseURL = '/api/'
 axios.interceptors.response.use(response => {
-        return response
-    }, 
-    error => {
-        if(error.response.status === 401) {
-            store.dispatch("logUserOut")
-        }
-        return Promise.reject(error)
-    }
+  return response
+},
+error => {
+  if (error.response.status === 401) {
+    store.dispatch('logUserOut')
+  }
+  return Promise.reject(error)
+}
 )
 Vue.prototype.$axios = axios
 
@@ -47,11 +47,9 @@ Vue.component('icon', Icon)
 
 // Modal component
 
-
-
 // Base Vue instance
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')

@@ -6,7 +6,6 @@
     </main>
 </template>
 
-
 <style lang="stylus" scoped>
 
 .settings

@@ -14,7 +14,7 @@ module.exports = {
     workboxOptions: {
       runtimeCaching: [{
         urlPattern: /api(?:$|\/)/,
-        handler: 'networkFirst',
+        handler: 'networkFirst'
       }]
     }
   }

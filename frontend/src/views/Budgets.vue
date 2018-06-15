@@ -1,7 +1,7 @@
 <template>
     <main class="section">
         <app-date-slider/>
-        <section class="budgets"> 
+        <section class="budgets">
             <div class="create-budget" @click="createBudget">
                 <p>Nový rozpočet</p>
             </div>
@@ -10,7 +10,6 @@
     </main>
 </template>
 
-
 <script>
 import { mapState } from 'vuex'
 
@@ -18,30 +17,29 @@ import BudgetsBudget from '@/components/BudgetsBudget.vue'
 import AppDateSlider from '@/components/AppDateSlider.vue'
 
 export default {
-    computed: {
-        ...mapState([
-            'budgets'
-        ]),
-    },
-    methods: {
-        createBudget() {
-            this.$router.push({name: 'BudgetsNew'})
-        }
-    },
-    components: {
-        BudgetsBudget,
-        AppDateSlider
+  computed: {
+    ...mapState([
+      'budgets'
+    ])
+  },
+  methods: {
+    createBudget () {
+      this.$router.push({name: 'BudgetsNew'})
     }
+  },
+  components: {
+    BudgetsBudget,
+    AppDateSlider
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 
 $padding-top-bottom = 1em
 $border-color = #D9D9D9
 
-.section    
+.section
     @media screen and (min-width: 768px)
         font-size: 20px
 
@@ -55,7 +53,7 @@ $border-color = #D9D9D9
 .create-budget
     @media screen and (min-width: 768px)
         cursor: pointer
-    
+
     display: flex
     align-items: center
     justify-content: center
@@ -66,7 +64,7 @@ $border-color = #D9D9D9
 
     border-bottom: 1px solid $border-color
 
-    &:hover 
+    &:hover
         @media screen and (min-width: 768px)
             background-color: $border-color
 </style>

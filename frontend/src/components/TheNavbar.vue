@@ -9,8 +9,8 @@
             <router-link :to="{name: 'Transactions'}" class="navbar-item" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
             <router-link :to="{name: 'Categories'}" class="navbar-item" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
             <router-link :to="{name: 'Budgets'}" class="navbar-item" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
-            <!-- 
-            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link> 
+            <!--
+            <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link>
             -->
         </div>
         <footer class="navbar-footer">
@@ -30,27 +30,27 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    computed: {
-        ...mapState([
-            "isMenuActive"
-        ])
+  computed: {
+    ...mapState([
+      'isMenuActive'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'logUserOut',
+      'toggleMenu'
+    ]),
+    changeWallet () {
+      this.$store.dispatch('dumpData', '')
+      this.$router.push({name: 'Wallets'})
     },
-    methods: {
-        ...mapActions([
-            "logUserOut",
-            'toggleMenu'
-        ]),
-        changeWallet() {
-            this.$store.dispatch('dumpData', '')
-            this.$router.push({name: 'Wallets'})
-        },
-        createTransaction() {
-            this.$router.push({name: 'TransactionsNew'})
-        }
-    },
-    components: {
-        AppButton
+    createTransaction () {
+      this.$router.push({name: 'TransactionsNew'})
     }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
 
@@ -89,8 +89,8 @@ $navbar-color-active = #53A6FA
 
     background-color: $navbar-color-secondary
 
-.navbar-menu 
-    background-color: $navbar-color-tertiary 
+.navbar-menu
+    background-color: $navbar-color-tertiary
 
 .navbar-item
     display: block
@@ -125,7 +125,7 @@ $navbar-color-active = #53A6FA
     &:hover
         background-color: rgba(255, 255, 255, 0.05);
 
-.navbar-button-wrapper 
+.navbar-button-wrapper
     padding-top: 30px
     padding-bottom: 30px
     display: flex
@@ -152,8 +152,8 @@ $navbar-color-active = #53A6FA
     height: 56px
     display: flex
     align-items: center
-    justify-content: center 
-    
+    justify-content: center
+
     cursor: pointer
 
     background-color: $navbar-color-secondary

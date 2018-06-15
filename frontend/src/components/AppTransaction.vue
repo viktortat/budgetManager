@@ -11,11 +11,11 @@
             <app-button class="button transaction-option" key="2" @click="goToDetail(transaction.id)"><icon name="pencil-alt" /></app-button>
             <app-button class="button transaction-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
         </div>
-        <div 
-            class="transaction-right" 
-            key="price" 
-            v-else 
-            @click="options = true" 
+        <div
+            class="transaction-right"
+            key="price"
+            v-else
+            @click="options = true"
             :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}">
             {{ transaction.amount | formatCurrency | appendMinusSign(transaction.transaction_type) }}
         </div>
@@ -28,55 +28,54 @@ import { mapState, mapActions } from 'vuex'
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    props: {
-        transaction: {
-            type: Object
-        }
-    },
-    data() {
-        return {
-            options: false,
-            checked: false
-        }
-    },
-    computed: {
-        ...mapState([
-            'categories',
-            'token'
-        ])
-    },
-    methods: {
-        ...mapActions([
-            'refreshData'
-        ]),
-        goToDetail(id) {
-            this.$router.push({ 'name': 'TransactionsDetail', params: { 'id': id } })
-        },
-        confirmDeleting(id) {
-            const params = {
-                title: 'Smazání transakce',
-                message: 'Tato akce nenávratně smaže transakci. Přejete si pokračovat?', 
-                showConfirmButton: true,
-                onConfirm: () => {
-                    return this.deleteTransaction(id)
-                }
-            }
-            this.$modal.show(params)
-        },
-        deleteTransaction(id) {
-            const index = this.$store.state.transactions.indexOf(this.transaction)
-            const url = '/transactions/' + id + '/'
-            this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.refreshData()
-            })
-        }
-    },
-    components: {
-        AppButton
+  props: {
+    transaction: {
+      type: Object
     }
+  },
+  data () {
+    return {
+      options: false,
+      checked: false
+    }
+  },
+  computed: {
+    ...mapState([
+      'categories',
+      'token'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'refreshData'
+    ]),
+    goToDetail (id) {
+      this.$router.push({ 'name': 'TransactionsDetail', params: { 'id': id } })
+    },
+    confirmDeleting (id) {
+      const params = {
+        title: 'Smazání transakce',
+        message: 'Tato akce nenávratně smaže transakci. Přejete si pokračovat?',
+        showConfirmButton: true,
+        onConfirm: () => {
+          return this.deleteTransaction(id)
+        }
+      }
+      this.$modal.show(params)
+    },
+    deleteTransaction (id) {
+      const index = this.$store.state.transactions.indexOf(this.transaction)
+      const url = '/transactions/' + id + '/'
+      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+        this.refreshData()
+      })
+    }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/variables'
@@ -95,7 +94,7 @@ $border-color = #D9D9D9
     height: $height
     padding-left: 13px
     padding-right: 10px
-    padding-top: $padding-top-bottom 
+    padding-top: $padding-top-bottom
     padding-bottom: $padding-top-bottom
     display: flex
     justify-content: space-between
@@ -111,7 +110,7 @@ $border-color = #D9D9D9
     left: 0
 
 .transaction-right, .transaction-options, .transaction-left
-    height: $height - $padding-top-bottom * 2 
+    height: $height - $padding-top-bottom * 2
     width: 50%
     display: flex
     justify-content: flex-end
@@ -149,7 +148,7 @@ $border-color = #D9D9D9
     color: #FFFFFF
     border-radius: 50%
 
-.is-positive 
+.is-positive
     color: $SUCCESS-COLOR
 
 .is-negative

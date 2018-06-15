@@ -15,63 +15,61 @@
     </div>
 </template>
 
-
 <script>
 import { mapState, mapActions } from 'vuex'
 
 import AppButton from '@/components/AppButton.vue'
 
 export default {
-    props: {
-        wallet: {
-            type: Object
-        }
-    },
-    data() {
-        return {
-            options: false
-        }
-    },
-    computed: {
-        ...mapState([
-            'token'
-        ])
-    },
-    methods: {
-        ...mapActions([
-            'refreshData',
-            'loadWallets'
-        ]),
-        pickWallet() {
-            this.$emit("pickWallet", this.wallet.id)
-        },
-        confirmDeleting() {
-            const params = {
-                title: 'Smazání peněženky',
-                message: 'Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?', 
-                showConfirmButton: true,
-                onConfirm: () => {
-                    return this.deleteWallet()
-                }
-            }
-            this.$modal.show(params)
-        },
-        deleteWallet() {
-            const url = '/wallets/' + this.wallet.id + '/'
-            this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-                this.loadWallets(true)
-            })
-        },
-        goToDetail() {
-            this.$router.push({ 'name': 'WalletsDetail', params: { 'id': this.wallet.id } })
-        }
-    },
-    components: {
-        AppButton
+  props: {
+    wallet: {
+      type: Object
     }
+  },
+  data () {
+    return {
+      options: false
+    }
+  },
+  computed: {
+    ...mapState([
+      'token'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'refreshData',
+      'loadWallets'
+    ]),
+    pickWallet () {
+      this.$emit('pickWallet', this.wallet.id)
+    },
+    confirmDeleting () {
+      const params = {
+        title: 'Smazání peněženky',
+        message: 'Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?',
+        showConfirmButton: true,
+        onConfirm: () => {
+          return this.deleteWallet()
+        }
+      }
+      this.$modal.show(params)
+    },
+    deleteWallet () {
+      const url = '/wallets/' + this.wallet.id + '/'
+      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
+        this.loadWallets(true)
+      })
+    },
+    goToDetail () {
+      this.$router.push({ 'name': 'WalletsDetail', params: { 'id': this.wallet.id } })
+    }
+  },
+  components: {
+    AppButton
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import "../styles/variables"

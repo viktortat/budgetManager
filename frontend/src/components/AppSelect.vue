@@ -6,46 +6,44 @@
     </select>
 </template>
 
-
 <script>
 export default {
-    props: {
-        value: [String, Number, Array],
-        content: [Array, Object],
-        contentKey: {
-            type: String,
-            default: 'id'
-        },
-        contentValue: {
-            type: String,
-            default: 'id'
-        },
-        contentName: {
-            type: String,
-            default: 'name'
-        },
-        empty: {
-            type: Boolean,
-            default: true
-        },
-        multiple: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    value: [String, Number, Array],
+    content: [Array, Object],
+    contentKey: {
+      type: String,
+      default: 'id'
     },
-    computed: {
-        selected: {
-            get() {
-                return this.value
-            },
-            set(value) {
-                this.$emit('input', value)
-            }
-        },
+    contentValue: {
+      type: String,
+      default: 'id'
+    },
+    contentName: {
+      type: String,
+      default: 'name'
+    },
+    empty: {
+      type: Boolean,
+      default: true
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
+  },
+  computed: {
+    selected: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        this.$emit('input', value)
+      }
+    }
+  }
 }
 </script>
-
 
 <style lang="stylus" scoped>
 @import '../styles/input.styl'
