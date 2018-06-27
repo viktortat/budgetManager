@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build_django:
     working_directory: ~/budgetManager
     docker:
       - image: circleci/python:3.6.4
@@ -19,3 +19,25 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+  build_vue:
+    working_directory: ~/budgetManager
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/budgetManager/frontend
+            npm install
+      - run:
+          name: Run build
+          command: |
+            cd ~/budgetManager/frontend
+            npm run build
+workflows:
+  version: 2
+  my_workflow: 
+    jobs:
+      - build_django
+      - build_vue
