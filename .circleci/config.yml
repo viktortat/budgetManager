@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  backend_test:
+  build:
     working_directory: ~/budgetManager/backend/
     docker:
       - image: circleci/python:3.6.4
