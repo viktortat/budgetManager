@@ -10,6 +10,8 @@ djangorestframework-jwt = "*"
 dry-rest-permissions = "*"
 coverage = "*"
 Django = "*"
+raven = "*"
+python-decouple = "*"
 
 [dev-packages]
 
