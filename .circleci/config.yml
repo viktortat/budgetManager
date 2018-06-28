@@ -16,13 +16,10 @@ jobs:
           command: |
             cd ~/budgetManager/backend
             pipenv run python manage.py test
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
   build_vue:
     working_directory: ~/budgetManager
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:8.11
     steps:
       - checkout
       - run:
@@ -35,6 +32,14 @@ jobs:
           command: |
             cd ~/budgetManager/frontend
             npm run build
+      - add_ssh_keys
+      - deploy:
+          name: Deploy to VPS
+          command: |
+            ssh-keyscan 159.89.7.48 >> ~/.ssh/known_hosts
+            cd ~/budgetManager/frontend
+            sudo apt install rsync
+            rsync -va --delete dist/ lukas@159.89.7.48:/home/lukas/test/
 workflows:
   version: 2
   my_workflow: 
