@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { materialcolorsdark } from './AppColorpickerColors'
+import { materialcolorsdark } from "./AppColorpickerColors";
 
 export default {
   props: {
@@ -36,28 +36,28 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       visible: false,
-      pickedColor: ''
-    }
+      pickedColor: ""
+    };
   },
   methods: {
-    pickColor (color) {
-      this.pickedColor = color
-      this.visible = false
-      this.$emit('input', this.pickedColor)
+    pickColor(color) {
+      this.pickedColor = color;
+      this.visible = false;
+      this.$emit("input", this.pickedColor);
     }
   },
   watch: {
-    value (newVal) {
-      this.pickedColor = newVal
+    value(newVal) {
+      this.pickedColor = newVal;
     }
   },
-  mounted () {
-    this.pickedColor = this.value
+  mounted() {
+    this.pickedColor = this.value;
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

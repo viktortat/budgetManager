@@ -20,65 +20,61 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from "vuex";
 
-import AppDateInput from '@/components/AppDateInput.vue'
-import AppButton from '@/components/AppButton.vue'
-import AppInput from '@/components/AppInput.vue'
-import AppLabel from '@/components/AppLabel.vue'
-import AppSelect from '@/components/AppSelect.vue'
-import AppColorpicker from '@/components/AppColorpicker.vue'
+import AppDateInput from "@/components/AppDateInput.vue";
+import AppButton from "@/components/AppButton.vue";
+import AppInput from "@/components/AppInput.vue";
+import AppLabel from "@/components/AppLabel.vue";
+import AppSelect from "@/components/AppSelect.vue";
+import AppColorpicker from "@/components/AppColorpicker.vue";
 
 export default {
-  data () {
+  data() {
     return {
       category: {
-        name: '',
-        color: ''
+        name: "",
+        color: ""
       },
       isNew: false
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'categories',
-      'token',
-      'wallet'
-    ])
+    ...mapState(["categories", "token", "wallet"])
   },
   methods: {
-    ...mapMutations([
-      'addCategory'
-    ]),
-    ...mapActions([
-      'loadData',
-      'refreshData'
-    ]),
-    createOrUpdateCategory () {
+    ...mapMutations(["addCategory"]),
+    ...mapActions(["loadData", "refreshData"]),
+    createOrUpdateCategory() {
       const data = {
         name: this.category.name,
         color: this.category.color,
         wallet: this.wallet.id
-      }
+      };
       if (this.isNew) {
-        const url = '/categories/'
-        this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-          this.refreshData()
-          this.resetCategory()
-        })
+        const url = "/categories/";
+        this.$axios
+          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .then(() => {
+            this.refreshData();
+            this.resetCategory();
+          });
       } else {
-        const url = '/categories/' + this.category.id + '/'
-        this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-          this.refreshData()
-          this.$router.push({name: 'Categories'})
-        }).catch(error => {
-          console.log(error.response)
-        })
+        const url = "/categories/" + this.category.id + "/";
+        this.$axios
+          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .then(() => {
+            this.refreshData();
+            this.$router.push({ name: "Categories" });
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
       }
     },
-    resetCategory () {
-      this.category.name = ''
-      this.category.color = ''
+    resetCategory() {
+      this.category.name = "";
+      this.category.color = "";
     }
   },
   components: {
@@ -89,16 +85,18 @@ export default {
     AppSelect,
     AppColorpicker
   },
-  created () {
-    this.loadData()
-    const categoryID = this.$route.params.id
-    if (!categoryID) this.isNew = true
+  created() {
+    this.loadData();
+    const categoryID = this.$route.params.id;
+    if (!categoryID) this.isNew = true;
     else if (Number(categoryID)) {
-      const category = this.$store.state.categories.find(x => x.id == categoryID)
-      this.category = Object.assign({}, category)
-    } else this.$router.push('/')
+      const category = this.$store.state.categories.find(
+        x => x.id == categoryID
+      );
+      this.category = Object.assign({}, category);
+    } else this.$router.push("/");
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

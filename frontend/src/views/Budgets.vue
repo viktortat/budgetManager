@@ -11,27 +11,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
-import BudgetsBudget from '@/components/BudgetsBudget.vue'
-import AppDateSlider from '@/components/AppDateSlider.vue'
+import BudgetsBudget from "@/components/BudgetsBudget.vue";
+import AppDateSlider from "@/components/AppDateSlider.vue";
 
 export default {
   computed: {
-    ...mapState([
-      'budgets'
-    ])
+    ...mapState(["budgets"])
   },
   methods: {
-    createBudget () {
-      this.$router.push({name: 'BudgetsNew'})
+    createBudget() {
+      this.$router.push({ name: "BudgetsNew" });
     }
   },
   components: {
     BudgetsBudget,
     AppDateSlider
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

@@ -3,16 +3,16 @@
 </template>
 
 <script>
-import Chartist from 'chartist'
-import 'chartist/dist/chartist.min.css'
+import Chartist from "chartist";
+import "chartist/dist/chartist.min.css";
 
 export default {
   props: {
     type: {
       type: String,
-      default: 'Line',
-      validator (value) {
-        return ['Pie', 'Line', 'Bar'].indexOf(value) !== -1
+      default: "Line",
+      validator(value) {
+        return ["Pie", "Line", "Bar"].indexOf(value) !== -1;
       }
     },
     data: {
@@ -29,45 +29,52 @@ export default {
       type: Array
     }
   },
-  data () {
+  data() {
     return {
       chartist: undefined
-    }
+    };
   },
   watch: {
     data: {
-      handler: 'renderChart',
+      handler: "renderChart",
       deep: true
     },
     options: {
-      handler: 'renderChart',
+      handler: "renderChart",
       deep: true
     },
     responsiveOptions: {
-      handler: 'renderChart',
+      handler: "renderChart",
       deep: true
     }
   },
   methods: {
-    renderChart () {
-      const data = this.data
-      const options = this.options ? this.options : {}
-      const responsiveOptions = this.responsiveOptions ? this.responsiveOptions : []
+    renderChart() {
+      const data = this.data;
+      const options = this.options ? this.options : {};
+      const responsiveOptions = this.responsiveOptions
+        ? this.responsiveOptions
+        : [];
 
       if (this.chartist) {
-        this.chartist.update(data, options, responsiveOptions)
+        this.chartist.update(data, options, responsiveOptions);
       } else {
-        this.chartist = new Chartist[this.type](this.$refs.chart, data, options, responsiveOptions)
+        this.chartist = new Chartist[this.type](
+          this.$refs.chart,
+          data,
+          options,
+          responsiveOptions
+        );
       }
     }
   },
-  mounted () {
-    this.renderChart()
+  mounted() {
+    this.renderChart();
   },
-  destroyed () {
+  destroyed() {
     if (this.chartist) {
-      this.chartist.detach()
+      this.chartist.detach();
     }
   }
-}
+};
 </script>

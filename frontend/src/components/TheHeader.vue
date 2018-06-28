@@ -23,25 +23,21 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   methods: {
-    ...mapActions([
-      'toggleMenu',
-      'logUserOut',
-      'toggleFilter'
-    ]),
-    goToWallets () {
-      this.$router.push({name: 'Wallets'})
+    ...mapActions(["toggleMenu", "logUserOut", "toggleFilter"]),
+    goToWallets() {
+      this.$router.push({ name: "Wallets" });
     }
   },
   components: {
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

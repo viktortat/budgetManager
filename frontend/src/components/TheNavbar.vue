@@ -25,33 +25,28 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   computed: {
-    ...mapState([
-      'isMenuActive'
-    ])
+    ...mapState(["isMenuActive"])
   },
   methods: {
-    ...mapActions([
-      'logUserOut',
-      'toggleMenu'
-    ]),
-    changeWallet () {
-      this.$store.dispatch('dumpData', '')
-      this.$router.push({name: 'Wallets'})
+    ...mapActions(["logUserOut", "toggleMenu"]),
+    changeWallet() {
+      this.$store.dispatch("dumpData", "");
+      this.$router.push({ name: "Wallets" });
     },
-    createTransaction () {
-      this.$router.push({name: 'TransactionsNew'})
+    createTransaction() {
+      this.$router.push({ name: "TransactionsNew" });
     }
   },
   components: {
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

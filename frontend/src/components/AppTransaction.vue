@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   props: {
@@ -33,48 +33,44 @@ export default {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
       options: false,
       checked: false
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'categories',
-      'token'
-    ])
+    ...mapState(["categories", "token"])
   },
   methods: {
-    ...mapActions([
-      'refreshData'
-    ]),
-    goToDetail (id) {
-      this.$router.push({ 'name': 'TransactionsDetail', params: { 'id': id } })
+    ...mapActions(["refreshData"]),
+    goToDetail(id) {
+      this.$router.push({ name: "TransactionsDetail", params: { id: id } });
     },
-    confirmDeleting (id) {
+    confirmDeleting(id) {
       const params = {
-        title: 'Smazání transakce',
-        message: 'Tato akce nenávratně smaže transakci. Přejete si pokračovat?',
+        title: "Smazání transakce",
+        message: "Tato akce nenávratně smaže transakci. Přejete si pokračovat?",
         showConfirmButton: true,
         onConfirm: () => {
-          return this.deleteTransaction(id)
+          return this.deleteTransaction(id);
         }
-      }
-      this.$modal.show(params)
+      };
+      this.$modal.show(params);
     },
-    deleteTransaction (id) {
-      const index = this.$store.state.transactions.indexOf(this.transaction)
-      const url = '/transactions/' + id + '/'
-      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-        this.refreshData()
-      })
+    deleteTransaction(id) {
+      const url = "/transactions/" + id + "/";
+      this.$axios
+        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .then(() => {
+          this.refreshData();
+        });
     }
   },
   components: {
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

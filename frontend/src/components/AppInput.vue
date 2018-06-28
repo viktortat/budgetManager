@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  props: ['value']
-}
+  props: ["value"]
+};
 </script>
 
 <style lang="stylus" scoped>

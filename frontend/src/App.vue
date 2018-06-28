@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import TheFilter from '@/components/TheFilter.vue'
-import AppModal from '@/components/AppModal.vue'
+import TheFilter from "@/components/TheFilter.vue";
+import AppModal from "@/components/AppModal.vue";
 
 export default {
   // name
@@ -36,7 +36,7 @@ export default {
     TheFilter,
     AppModal
   }
-}
+};
 </script>
 
 <style lang="stylus">

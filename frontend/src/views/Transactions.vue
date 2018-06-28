@@ -9,29 +9,31 @@
 </template>
 
 <script>
-import AppTransaction from '@/components/AppTransaction.vue'
-import AppDateSlider from '@/components/AppDateSlider.vue'
-import AppBalance from '@/components/AppBalance.vue'
+import AppTransaction from "@/components/AppTransaction.vue";
+import AppDateSlider from "@/components/AppDateSlider.vue";
+import AppBalance from "@/components/AppBalance.vue";
 
-import { filterMixin, sortMixin } from '@/mixins'
+import { filterMixin, sortMixin } from "@/mixins";
 
 export default {
   mixins: [filterMixin, sortMixin],
-  data () {
+  data() {
     return {
-      sortBy: '',
+      sortBy: "",
       descend: false
-    }
+    };
   },
   methods: {
-    processTransactions () {
-      let transactions = this.filterTransactions(this.$store.state.transactions)
-      return this.sortTransactions(transactions, this.sortBy, this.descend)
+    processTransactions() {
+      let transactions = this.filterTransactions(
+        this.$store.state.transactions
+      );
+      return this.sortTransactions(transactions, this.sortBy, this.descend);
     }
   },
   computed: {
-    transactions () {
-      return this.processTransactions()
+    transactions() {
+      return this.processTransactions();
     }
   },
   components: {
@@ -39,7 +41,7 @@ export default {
     AppDateSlider,
     AppBalance
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

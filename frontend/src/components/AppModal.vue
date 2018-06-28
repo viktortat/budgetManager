@@ -14,59 +14,65 @@
 </template>
 
 <script>
-import { Modal } from '@/plugins'
+import { Modal } from "@/plugins";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
-  data () {
+  data() {
     return {
       visible: false,
-      title: '',
-      message: '',
+      title: "",
+      message: "",
       showConfirmButton: false,
-      confirmButtonText: 'Potvrdit',
+      confirmButtonText: "Potvrdit",
       onConfirm: {}
-    }
+    };
   },
   methods: {
-    show (params) {
-      this.visible = true
+    show(params) {
+      this.visible = true;
       if (params) {
-        this.title = typeof params.title === 'string' ? params.title : ''
-        this.message = typeof params.message === 'string' ? params.message : ''
-        this.showConfirmButton = typeof params.showConfirmButton === 'boolean' ? params.showConfirmButton : false
-        this.onConfirm = typeof params.onConfirm === 'function' ? params.onConfirm : {}
-        this.confirmButtonText = typeof params.confirmButtonText === 'string' ? params.confirmButtonText : 'Potvrdit'
+        this.title = typeof params.title === "string" ? params.title : "";
+        this.message = typeof params.message === "string" ? params.message : "";
+        this.showConfirmButton =
+          typeof params.showConfirmButton === "boolean"
+            ? params.showConfirmButton
+            : false;
+        this.onConfirm =
+          typeof params.onConfirm === "function" ? params.onConfirm : {};
+        this.confirmButtonText =
+          typeof params.confirmButtonText === "string"
+            ? params.confirmButtonText
+            : "Potvrdit";
       }
     },
-    hide () {
-      this.reset()
-      this.visible = false
+    hide() {
+      this.reset();
+      this.visible = false;
     },
-    reset () {
-      this.title = ''
-      this.message = ''
-      this.showConfirmButton = false
-      this.onConfirm = {},
-      this.confirmButtonText = 'Potvrdit'
+    reset() {
+      this.title = "";
+      this.message = "";
+      this.showConfirmButton = false;
+      (this.onConfirm = {}), (this.confirmButtonText = "Potvrdit");
     },
-    confirmFunction () {
-      if (typeof this.onConfirm === 'function') {
-        this.onConfirm()
-        this.hide()
-      } else this.hide()
+    confirmFunction() {
+      if (typeof this.onConfirm === "function") {
+        this.onConfirm();
+        this.hide();
+      } else this.hide();
     }
   },
   components: {
     AppButton
   },
-  beforeMount () {
-    Modal.EventBus.$on('show', (params) => {
-      this.show(params)
-    })
+  beforeMount() {
+    Modal.EventBus.$on("show", params => {
+      this.show(params);
+    });
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

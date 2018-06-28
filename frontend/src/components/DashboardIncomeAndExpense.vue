@@ -12,21 +12,25 @@
 </template>
 
 <script>
-import { filterMixin, balanceMixin } from '@/mixins'
+import { filterMixin, balanceMixin } from "@/mixins";
 
 export default {
   mixins: [filterMixin, balanceMixin],
   computed: {
-    getExpense () {
-      const trns = this.filterTransactionsByDate(this.filterTransactionsByType(this.$store.state.transactions, 'expense'))
-      return this.calculateBalance(trns)
+    getExpense() {
+      const trns = this.filterTransactionsByDate(
+        this.filterTransactionsByType(this.$store.state.transactions, "expense")
+      );
+      return this.calculateBalance(trns);
     },
-    getIncome () {
-      const trns = this.filterTransactionsByDate(this.filterTransactionsByType(this.$store.state.transactions, 'income'))
-      return this.calculateBalance(trns)
+    getIncome() {
+      const trns = this.filterTransactionsByDate(
+        this.filterTransactionsByType(this.$store.state.transactions, "income")
+      );
+      return this.calculateBalance(trns);
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

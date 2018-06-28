@@ -11,21 +11,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
-import AppDateSlider from '@/components/AppDateSlider.vue'
-import CategoriesCategory from '@/components/CategoriesCategory.vue'
-import AppButton from '@/components/AppButton.vue'
+import AppDateSlider from "@/components/AppDateSlider.vue";
+import CategoriesCategory from "@/components/CategoriesCategory.vue";
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   computed: {
-    ...mapState([
-      'categories'
-    ])
+    ...mapState(["categories"])
   },
   methods: {
-    createCategory () {
-      this.$router.push({name: 'CategoriesNew'})
+    createCategory() {
+      this.$router.push({ name: "CategoriesNew" });
     }
   },
   components: {
@@ -33,7 +31,7 @@ export default {
     AppDateSlider,
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

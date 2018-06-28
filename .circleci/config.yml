@@ -1,28 +1,107 @@
 version: 2
 jobs:
-  build:
-    working_directory: ~/budgetManager/backend/
+  test_backend:
+    working_directory: ~/budgetManager
     docker:
       - image: circleci/python:3.6.4
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - cache-{{ checksum "Pipfile.lock" }}
-            - cache-
       - run:
           name: Install dependencies
-          command: pipenv sync --dev
-      - save_cache:
-          key: cache-{{ checksum "Pipfile.lock" }}
-          paths:
-            - ~/.local
-            - ~/.cache
+          command: |
+            cd ~/budgetManager/backend
+            pipenv install
       - run:
           name: Run unit tests
           command: |
-            pipenv shell
-            python manage.py test
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+            cd ~/budgetManager/backend
+            pipenv run python manage.py test
+  deploy_backend:
+    working_directory: ~/budgetManager
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - checkout
+      - run:
+          name: Create .env file
+          command: |
+            cd ~/budgetManager/backend
+            touch .env
+            echo "SECRET_KEY=${SECRET_KEY}" >> .env
+            echo "DEBUG=${DEBUG}" >> .env
+            echo "ALLOWED_HOSTS=${ALLOWED_HOSTS}" >> .env
+            echo "RAVEN_ENABLED=${RAVEN_ENABLED}" >> .env
+            echo "RAVEN_DNS=${RAVEN_DNS}" >> .env
+            echo "DB_ENGINE=${DB_ENGINE}" >> .env
+            echo "DB_NAME=${DB_NAME}" >> .env
+            echo "DB_USER=${DB_USER}" >> .env
+            echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+            echo "DB_HOST=${DB_HOST}" >> .env
+            echo "DB_PORT=${DB_PORT}" >> .env
+      - add_ssh_keys
+      - deploy:
+          name: Deploy to VPS
+          command: |
+            ssh-keyscan 159.89.7.48 >> ~/.ssh/known_hosts
+            cd ~/budgetManager
+            sudo apt install rsync
+            rsync -va --delete backend/ lukas@159.89.7.48:/home/lukas/budgetManager/backend
+  test_frontend:
+    working_directory: ~/budgetManager
+    docker:
+      - image: circleci/node:8.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/budgetManager/frontend
+            npm install
+      - run:
+          name: Lint
+          command: |
+            cd ~/budgetManager/frontend
+            npm run lint
+  deploy_frontend:
+    working_directory: ~/budgetManager
+    docker:
+      - image: circleci/node:8.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/budgetManager/frontend
+            npm install
+      - run:
+          name: Run build
+          command: |
+            cd ~/budgetManager/frontend
+            npm run build
+      - add_ssh_keys
+      - deploy:
+          name: Deploy to VPS
+          command: |
+            ssh-keyscan 159.89.7.48 >> ~/.ssh/known_hosts
+            cd ~/budgetManager/frontend
+            sudo apt install rsync
+            rsync -va --delete dist/ lukas@159.89.7.48:/home/lukas/budgetManager/frontend/
+workflows:
+  version: 2
+  my_workflow: 
+    jobs:
+      - test_backend
+      - test_frontend
+      - deploy_frontend:
+          requires:
+            - test_frontend
+          filters:
+            branches:
+              only: master
+      - deploy_backend:
+          requires:
+            - test_backend
+          filters:
+            branches:
+              only: master
+        
