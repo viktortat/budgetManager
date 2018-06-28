@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { filterMixin, balanceMixin } from '@/mixins'
+import { mapState, mapActions } from "vuex";
+import { filterMixin, balanceMixin } from "@/mixins";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   mixins: [filterMixin, balanceMixin],
@@ -37,57 +37,54 @@ export default {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
       options: false
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'budgets',
-      'filter',
-      'categories',
-      'transactions',
-      'token'
-    ]),
-    budgetBalance () {
-      return this.calculateExpenses(this.getTransactions())
+    ...mapState(["budgets", "filter", "categories", "transactions", "token"]),
+    budgetBalance() {
+      return this.calculateExpenses(this.getTransactions());
     },
-    budgetPercents () {
-      return this.budgetBalance / this.budget.amount
+    budgetPercents() {
+      return this.budgetBalance / this.budget.amount;
     },
-    budgetPercentsCapped () {
-      const val = this.budgetBalance / this.budget.amount
-      return val > 1 ? 1 : val
+    budgetPercentsCapped() {
+      const val = this.budgetBalance / this.budget.amount;
+      return val > 1 ? 1 : val;
     }
   },
   methods: {
-    ...mapActions([
-      'refreshData'
-    ]),
-    getTransactions () {
-      const trns = this.filterTransactionsByDate(this.$store.state.transactions)
-      let finalTrns = []
+    ...mapActions(["refreshData"]),
+    getTransactions() {
+      const trns = this.filterTransactionsByDate(
+        this.$store.state.transactions
+      );
+      let finalTrns = [];
       for (let category of this.budget.categories) {
-        finalTrns = finalTrns.concat(this.filterTransactionsByCategory(trns, category))
+        finalTrns = finalTrns.concat(
+          this.filterTransactionsByCategory(trns, category)
+        );
       }
-      return finalTrns
+      return finalTrns;
     },
-    deleteBudget (id) {
-      const index = this.$store.state.budgets.indexOf(this.budget)
-      const url = '/budgets/' + id + '/'
-      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-        this.refreshData()
-      })
+    deleteBudget(id) {
+      const url = "/budgets/" + id + "/";
+      this.$axios
+        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .then(() => {
+          this.refreshData();
+        });
     },
-    goToDetail (id) {
-      this.$router.push({ 'name': 'BudgetsDetail', params: { 'id': id } })
+    goToDetail(id) {
+      this.$router.push({ name: "BudgetsDetail", params: { id: id } });
     }
   },
   components: {
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

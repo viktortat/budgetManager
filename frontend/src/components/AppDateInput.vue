@@ -3,15 +3,15 @@
 </template>
 
 <script>
-import flatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
 
 export default {
-  props: ['value'],
+  props: ["value"],
   components: {
     flatPickr
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

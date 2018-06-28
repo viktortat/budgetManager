@@ -13,15 +13,15 @@ export default {
     content: [Array, Object],
     contentKey: {
       type: String,
-      default: 'id'
+      default: "id"
     },
     contentValue: {
       type: String,
-      default: 'id'
+      default: "id"
     },
     contentName: {
       type: String,
-      default: 'name'
+      default: "name"
     },
     empty: {
       type: Boolean,
@@ -34,15 +34,15 @@ export default {
   },
   computed: {
     selected: {
-      get () {
-        return this.value
+      get() {
+        return this.value;
       },
-      set (value) {
-        this.$emit('input', value)
+      set(value) {
+        this.$emit("input", value);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

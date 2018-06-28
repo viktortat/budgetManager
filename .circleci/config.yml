@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build_django:
+  test_backend:
     working_directory: ~/budgetManager
     docker:
       - image: circleci/python:3.6.4
@@ -16,7 +16,23 @@ jobs:
           command: |
             cd ~/budgetManager/backend
             pipenv run python manage.py test
-  build_vue:
+  test_frontend:
+    working_directory: ~/budgetManager
+    docker:
+      - image: circleci/node:8.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd ~/budgetManager/frontend
+            npm install
+      - run:
+          name: Lint
+          command: |
+            cd ~/budgetManager/frontend
+            npm run lint
+  deploy_frontend:
     working_directory: ~/budgetManager
     docker:
       - image: circleci/node:8.11
@@ -44,5 +60,12 @@ workflows:
   version: 2
   my_workflow: 
     jobs:
-      - build_django
-      - build_vue
+      - test_backend
+      - test_frontend
+      - deploy_frontend:
+          requires:
+            - test_frontend
+          filters:
+            branches:
+              only: master
+        

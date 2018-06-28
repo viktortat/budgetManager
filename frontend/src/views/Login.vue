@@ -16,37 +16,39 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 
-import AppButton from '@/components/AppButton.vue'
-import AppInput from '@/components/AppInput.vue'
-import AppLabel from '@/components/AppLabel.vue'
+import AppButton from "@/components/AppButton.vue";
+import AppInput from "@/components/AppInput.vue";
+import AppLabel from "@/components/AppLabel.vue";
 
 export default {
-  data () {
+  data() {
     return {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: ""
+    };
   },
   methods: {
-    ...mapActions([
-      'logUserIn'
-    ]),
-    login () {
+    ...mapActions(["logUserIn"]),
+    login() {
       const data = {
-        'email': this.email,
-        'password': this.password
-      }
-      this.$axios.post('/auth/login/', data).then(res => {
-        this.logUserIn(res.data.token)
-        this.$router.push(this.$route.query.redirect || {name: 'Wallets'})
-      }).catch(err => {
-        this.$notify({
-          text: 'Vyskytl se problém, zkuste to prosím později.',
-          type: 'error'
+        email: this.email,
+        password: this.password
+      };
+      this.$axios
+        .post("/auth/login/", data)
+        .then(res => {
+          this.logUserIn(res.data.token);
+          this.$router.push(this.$route.query.redirect || { name: "Wallets" });
         })
-      })
+        .catch(error => {
+          this.$notify({
+            text: "Vyskytl se problém, zkuste to prosím později.",
+            type: "error"
+          });
+          console.error(error);
+        });
     }
   },
   components: {
@@ -54,7 +56,7 @@ export default {
     AppInput,
     AppLabel
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

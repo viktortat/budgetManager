@@ -1,8 +1,8 @@
-import moment from 'moment'
+import moment from "moment";
 
 export const state = {
   user: {},
-  token: '',
+  token: "",
   wallet: null,
 
   wallets: [],
@@ -15,11 +15,15 @@ export const state = {
 
   // filter
   filter: {
-    dateFrom: moment().startOf('month').format('YYYY-MM-DD'),
-    dateTo: moment().endOf('month').format('YYYY-MM-DD'),
-    type: '',
-    category: '',
-    amountFrom: '',
-    amountTo: ''
+    dateFrom: moment()
+      .startOf("month")
+      .format("YYYY-MM-DD"),
+    dateTo: moment()
+      .endOf("month")
+      .format("YYYY-MM-DD"),
+    type: "",
+    category: "",
+    amountFrom: "",
+    amountTo: ""
   }
-}
+};

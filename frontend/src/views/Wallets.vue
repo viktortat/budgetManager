@@ -10,43 +10,35 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from "vuex";
 
-import WalletsWallet from '@/components/WalletsWallet.vue'
+import WalletsWallet from "@/components/WalletsWallet.vue";
 
 export default {
-  name: 'Wallets',
+  name: "Wallets",
   computed: {
-    ...mapState([
-      'wallets'
-    ])
+    ...mapState(["wallets"])
   },
   methods: {
-    ...mapMutations([
-      'setWallets',
-      'setWallet'
-    ]),
-    ...mapActions([
-      'refreshData',
-      'loadWallets'
-    ]),
-    pickWallet (walletID) {
-      const wallet = this.wallets.find(x => x.id === walletID)
-      this.setWallet(wallet)
-      this.refreshData()
-      this.$router.push(this.$route.query.redirect || { name: 'Dashboard' })
+    ...mapMutations(["setWallets", "setWallet"]),
+    ...mapActions(["refreshData", "loadWallets"]),
+    pickWallet(walletID) {
+      const wallet = this.wallets.find(x => x.id === walletID);
+      this.setWallet(wallet);
+      this.refreshData();
+      this.$router.push(this.$route.query.redirect || { name: "Dashboard" });
     },
-    createWallet () {
-      this.$router.push({ name: 'WalletsNew' })
+    createWallet() {
+      this.$router.push({ name: "WalletsNew" });
     }
   },
   components: {
     WalletsWallet
   },
-  created () {
-    this.loadWallets(true)
+  created() {
+    this.loadWallets(true);
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

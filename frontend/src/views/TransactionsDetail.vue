@@ -37,75 +37,71 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from "vuex";
 
-import AppDateInput from '@/components/AppDateInput.vue'
-import AppButton from '@/components/AppButton.vue'
-import AppInput from '@/components/AppInput.vue'
-import AppLabel from '@/components/AppLabel.vue'
-import AppSelect from '@/components/AppSelect.vue'
+import AppDateInput from "@/components/AppDateInput.vue";
+import AppButton from "@/components/AppButton.vue";
+import AppInput from "@/components/AppInput.vue";
+import AppLabel from "@/components/AppLabel.vue";
+import AppSelect from "@/components/AppSelect.vue";
 
 export default {
-  data () {
+  data() {
     return {
       transaction: {
-        amount: '',
-        transaction_type: 'expense',
-        notes: '',
-        date: this.$moment().format('YYYY-MM-DD'),
-        category: ''
+        amount: "",
+        transaction_type: "expense",
+        notes: "",
+        date: this.$moment().format("YYYY-MM-DD"),
+        category: ""
       },
       isNew: false
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'categories',
-      'token'
-    ])
+    ...mapState(["categories", "token"])
   },
   methods: {
-    ...mapMutations([
-      'addTransaction'
-    ]),
-    ...mapActions([
-      'loadData',
-      'refreshData'
-    ]),
-    createOrUpdateTransaction () {
+    ...mapMutations(["addTransaction"]),
+    ...mapActions(["loadData", "refreshData"]),
+    createOrUpdateTransaction() {
       const data = {
         category: this.transaction.category,
         amount: this.transaction.amount,
         transaction_type: this.transaction.transaction_type,
         notes: this.transaction.notes,
         date: this.transaction.date
-      }
+      };
       if (this.isNew) {
-        const url = '/transactions/'
-        this.$axios.post(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-          this.refreshData()
-          this.resetTransaction()
-        })
+        const url = "/transactions/";
+        this.$axios
+          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .then(() => {
+            this.refreshData();
+            this.resetTransaction();
+          });
       } else {
-        const url = '/transactions/' + this.transaction.id + '/'
-        this.$axios.patch(url, data, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-          this.refreshData()
-          this.$router.push({name: 'Transactions'})
-        })
+        const url = "/transactions/" + this.transaction.id + "/";
+        this.$axios
+          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .then(() => {
+            this.refreshData();
+            this.$router.push({ name: "Transactions" });
+          });
       }
     },
-    resetTransaction () {
-      this.transaction.amount = ''
-      this.transaction.transaction_type = 'expense'
-      this.transaction.notes = ''
-      this.transaction.date = this.$moment().format('YYYY-MM-DD')
-      this.transaction.category = ''
+    resetTransaction() {
+      this.transaction.amount = "";
+      this.transaction.transaction_type = "expense";
+      this.transaction.notes = "";
+      this.transaction.date = this.$moment().format("YYYY-MM-DD");
+      this.transaction.category = "";
     }
   },
   watch: {
-    '$route' (to, from) {
-      this.isNew = true
-      this.resetTransaction()
+    $route() {
+      this.isNew = true;
+      this.resetTransaction();
     }
   },
   components: {
@@ -115,16 +111,18 @@ export default {
     AppDateInput,
     AppSelect
   },
-  created () {
-    this.loadData()
-    const transactionID = this.$route.params.id
-    if (!transactionID) this.isNew = true
+  created() {
+    this.loadData();
+    const transactionID = this.$route.params.id;
+    if (!transactionID) this.isNew = true;
     else if (Number(transactionID)) {
-      const transaction = this.$store.state.transactions.find(x => x.id == transactionID)
-      this.transaction = Object.assign({}, transaction)
-    } else this.$router.push('/')
+      const transaction = this.$store.state.transactions.find(
+        x => x.id == transactionID
+      );
+      this.transaction = Object.assign({}, transaction);
+    } else this.$router.push("/");
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

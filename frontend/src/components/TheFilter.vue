@@ -47,98 +47,131 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from "vuex";
 
-import AppDateInput from '@/components/AppDateInput.vue'
-import AppButton from '@/components/AppButton.vue'
-import AppInput from '@/components/AppInput.vue'
-import AppLabel from '@/components/AppLabel.vue'
-import AppSelect from '@/components/AppSelect.vue'
+import AppDateInput from "@/components/AppDateInput.vue";
+import AppButton from "@/components/AppButton.vue";
+import AppInput from "@/components/AppInput.vue";
+import AppLabel from "@/components/AppLabel.vue";
+import AppSelect from "@/components/AppSelect.vue";
 
 export default {
   computed: {
-    ...mapState([
-      'isFilterActive',
-      'categories'
-    ]),
+    ...mapState(["isFilterActive", "categories"]),
     dateFrom: {
-      get () {
-        return this.$store.state.filter.dateFrom
+      get() {
+        return this.$store.state.filter.dateFrom;
       },
-      set (value) {
-        this.updateDateFrom(value)
+      set(value) {
+        this.updateDateFrom(value);
       }
     },
     dateTo: {
-      get () {
-        return this.$store.state.filter.dateTo
+      get() {
+        return this.$store.state.filter.dateTo;
       },
-      set (value) {
-        this.updateDateTo(value)
+      set(value) {
+        this.updateDateTo(value);
       }
     },
     amountFrom: {
-      get () {
-        return this.$store.state.filter.amountFrom
+      get() {
+        return this.$store.state.filter.amountFrom;
       },
-      set (value) {
-        this.updateAmountFrom(value)
+      set(value) {
+        this.updateAmountFrom(value);
       }
     },
     amountTo: {
-      get () {
-        return this.$store.state.filter.amountTo
+      get() {
+        return this.$store.state.filter.amountTo;
       },
-      set (value) {
-        this.updateAmountTo(value)
+      set(value) {
+        this.updateAmountTo(value);
       }
     },
     type: {
-      get () {
-        return this.$store.state.filter.type
+      get() {
+        return this.$store.state.filter.type;
       },
-      set (value) {
-        this.updateType(value)
+      set(value) {
+        this.updateType(value);
       }
     },
     category: {
-      get () {
-        return this.$store.state.filter.category
+      get() {
+        return this.$store.state.filter.category;
       },
-      set (value) {
-        this.updateCategory(value)
+      set(value) {
+        this.updateCategory(value);
       }
     }
   },
   methods: {
     ...mapMutations([
-      'setIsFilterActive',
-      'updateDateTo',
-      'updateDateFrom',
-      'updateType',
-      'updateCategory',
-      'updateAmountFrom',
-      'updateAmountTo',
-      'resetFilter'
+      "setIsFilterActive",
+      "updateDateTo",
+      "updateDateFrom",
+      "updateType",
+      "updateCategory",
+      "updateAmountFrom",
+      "updateAmountTo",
+      "resetFilter"
     ]),
-    setFilterDate (value) {
+    setFilterDate(value) {
       switch (value) {
-        case 'thisMonth':
-          this.updateDateFrom(this.$moment().startOf('month').format('YYYY-MM-DD'))
-          this.updateDateTo(this.$moment().endOf('month').format('YYYY-MM-DD'))
-          break
-        case 'lastMonth':
-          this.updateDateFrom(this.$moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'))
-          this.updateDateTo(this.$moment().subtract(1, 'months').endOf('month').format('YYYY-MM-DD'))
-          break
-        case 'thisYear':
-          this.updateDateFrom(this.$moment().startOf('year').format('YYYY-MM-DD'))
-          this.updateDateTo(this.$moment().endOf('year').format('YYYY-MM-DD'))
-          break
-        case 'lastYear':
-          this.updateDateFrom(this.$moment().subtract(1, 'years').startOf('year').format('YYYY-MM-DD'))
-          this.updateDateTo(this.$moment().subtract(1, 'years').endOf('year').format('YYYY-MM-DD'))
-          break
+        case "thisMonth":
+          this.updateDateFrom(
+            this.$moment()
+              .startOf("month")
+              .format("YYYY-MM-DD")
+          );
+          this.updateDateTo(
+            this.$moment()
+              .endOf("month")
+              .format("YYYY-MM-DD")
+          );
+          break;
+        case "lastMonth":
+          this.updateDateFrom(
+            this.$moment()
+              .subtract(1, "months")
+              .startOf("month")
+              .format("YYYY-MM-DD")
+          );
+          this.updateDateTo(
+            this.$moment()
+              .subtract(1, "months")
+              .endOf("month")
+              .format("YYYY-MM-DD")
+          );
+          break;
+        case "thisYear":
+          this.updateDateFrom(
+            this.$moment()
+              .startOf("year")
+              .format("YYYY-MM-DD")
+          );
+          this.updateDateTo(
+            this.$moment()
+              .endOf("year")
+              .format("YYYY-MM-DD")
+          );
+          break;
+        case "lastYear":
+          this.updateDateFrom(
+            this.$moment()
+              .subtract(1, "years")
+              .startOf("year")
+              .format("YYYY-MM-DD")
+          );
+          this.updateDateTo(
+            this.$moment()
+              .subtract(1, "years")
+              .endOf("year")
+              .format("YYYY-MM-DD")
+          );
+          break;
       }
     }
   },
@@ -149,7 +182,7 @@ export default {
     AppDateInput,
     AppSelect
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

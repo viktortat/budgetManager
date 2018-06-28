@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
-import AppButton from '@/components/AppButton.vue'
+import AppButton from "@/components/AppButton.vue";
 
 export default {
   props: {
@@ -26,49 +26,50 @@ export default {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
       options: false
-    }
+    };
   },
   computed: {
-    ...mapState([
-      'token'
-    ])
+    ...mapState(["token"])
   },
   methods: {
-    ...mapActions([
-      'refreshData',
-      'loadWallets'
-    ]),
-    pickWallet () {
-      this.$emit('pickWallet', this.wallet.id)
+    ...mapActions(["refreshData", "loadWallets"]),
+    pickWallet() {
+      this.$emit("pickWallet", this.wallet.id);
     },
-    confirmDeleting () {
+    confirmDeleting() {
       const params = {
-        title: 'Smazání peněženky',
-        message: 'Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?',
+        title: "Smazání peněženky",
+        message:
+          "Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?",
         showConfirmButton: true,
         onConfirm: () => {
-          return this.deleteWallet()
+          return this.deleteWallet();
         }
-      }
-      this.$modal.show(params)
+      };
+      this.$modal.show(params);
     },
-    deleteWallet () {
-      const url = '/wallets/' + this.wallet.id + '/'
-      this.$axios.delete(url, { headers: { Authorization: 'JWT ' + this.token }}).then(response => {
-        this.loadWallets(true)
-      })
+    deleteWallet() {
+      const url = "/wallets/" + this.wallet.id + "/";
+      this.$axios
+        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .then(() => {
+          this.loadWallets(true);
+        });
     },
-    goToDetail () {
-      this.$router.push({ 'name': 'WalletsDetail', params: { 'id': this.wallet.id } })
+    goToDetail() {
+      this.$router.push({
+        name: "WalletsDetail",
+        params: { id: this.wallet.id }
+      });
     }
   },
   components: {
     AppButton
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>
