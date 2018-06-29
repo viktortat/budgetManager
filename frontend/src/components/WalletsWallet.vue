@@ -1,39 +1,50 @@
 <template>
-    <div class="wallet">
-        <p class="wallet-heading" v-if="!options">
-            {{ wallet.name }}
-        </p>
-        <app-button class="button wallet-button" @click="pickWallet">Vybrat</app-button>
-        <div class="wallet-options" key="option" v-if="options">
-            <app-button class="button wallet-option is-danger" key="1" @click="confirmDeleting"><icon name="trash" /></app-button>
-            <app-button class="button wallet-option" key="2" @click="goToDetail"><icon name="pencil-alt" /></app-button>
-            <app-button class="button wallet-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
-        </div>
-        <div class="wallet-options-button" v-else @click="options = true">
-            <icon name="ellipsis-v" />
-        </div>
+  <div class="wallet">
+    <p
+      v-if="!options"
+      class="wallet-heading">
+      {{ wallet.name }}
+    </p>
+    <app-button
+      class="button wallet-button"
+      @click="pickWallet">Vybrat</app-button>
+    <div
+      v-if="options"
+      key="option"
+      class="wallet-options">
+      <app-button
+        key="1"
+        class="button wallet-option is-danger"
+        @click="confirmDeleting"><icon name="trash" /></app-button>
+      <app-button
+        key="2"
+        class="button wallet-option"
+        @click="goToDetail"><icon name="pencil-alt" /></app-button>
+      <app-button
+        key="3"
+        class="button wallet-option is-warning"
+        @click="options = false"><icon name="times" /></app-button>
     </div>
+    <div
+      v-else
+      class="wallet-options-button"
+      @click="options = true">
+      <icon name="ellipsis-v" />
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 import AppButton from "@/components/AppButton.vue";
 
 export default {
-  props: {
-    wallet: {
-      type: Object
-    }
-  },
+  props: { wallet: { type: Object } },
   data() {
-    return {
-      options: false
-    };
+    return { options: false };
   },
-  computed: {
-    ...mapState(["token"])
-  },
+  computed: { ...mapState(["token"]) },
   methods: {
     ...mapActions(["refreshData", "loadWallets"]),
     pickWallet() {
@@ -45,16 +56,16 @@ export default {
         message:
           "Tato akce nenávratně smaže peněženku a všechny její transakce a kategorie.<br>Přejete si pokračovat?",
         showConfirmButton: true,
-        onConfirm: () => {
-          return this.deleteWallet();
-        }
+        onConfirm: () => this.deleteWallet()
       };
+
       this.$modal.show(params);
     },
     deleteWallet() {
-      const url = "/wallets/" + this.wallet.id + "/";
+      const url = `/wallets/${this.wallet.id}/`;
+
       this.$axios
-        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .delete(url, { headers: { Authorization: `JWT ${this.token}` } })
         .then(() => {
           this.loadWallets(true);
         });
@@ -66,9 +77,7 @@ export default {
       });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 

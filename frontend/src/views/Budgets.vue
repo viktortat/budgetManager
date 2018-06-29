@@ -1,13 +1,18 @@
 <template>
-    <main class="section">
-        <app-date-slider/>
-        <section class="budgets">
-            <div class="create-budget" @click="createBudget">
-                <p>Nový rozpočet</p>
-            </div>
-            <budgets-budget v-for="budget in budgets" :budget="budget" :key="budget.id" />
-        </section>
-    </main>
+  <main class="section">
+    <app-date-slider/>
+    <section class="budgets">
+      <div
+        class="create-budget"
+        @click="createBudget">
+        <p>Nový rozpočet</p>
+      </div>
+      <budgets-budget
+        v-for="budget in budgets"
+        :budget="budget"
+        :key="budget.id" />
+    </section>
+  </main>
 </template>
 
 <script>
@@ -17,9 +22,7 @@ import BudgetsBudget from "@/components/BudgetsBudget.vue";
 import AppDateSlider from "@/components/AppDateSlider.vue";
 
 export default {
-  computed: {
-    ...mapState(["budgets"])
-  },
+  computed: { ...mapState(["budgets"]) },
   methods: {
     createBudget() {
       this.$router.push({ name: "BudgetsNew" });

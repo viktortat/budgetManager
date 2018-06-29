@@ -1,16 +1,28 @@
 <template>
-    <transition name="modal" appear>
-        <div class="modal-wrapper" v-if="visible" @click.self="hide">
-            <div class="modal-body">
-                <p class="modal-title">{{ title }}</p>
-                <p class="modal-message" v-html="message"></p>
-                <div class="modal-buttons">
-                    <app-button class="button" @click="hide">Zrušit</app-button>
-                    <app-button class="button is-danger" v-if="showConfirmButton" @click="confirmFunction">{{ confirmButtonText }}</app-button>
-                </div>
-            </div>
+  <transition
+    name="modal"
+    appear>
+    <div
+      v-if="visible"
+      class="modal-wrapper"
+      @click.self="hide">
+      <div class="modal-body">
+        <p class="modal-title">{{ title }}</p>
+        <p
+          class="modal-message"
+          v-html="message"/>
+        <div class="modal-buttons">
+          <app-button
+            class="button"
+            @click="hide">Zrušit</app-button>
+          <app-button
+            v-if="showConfirmButton"
+            class="button is-danger"
+            @click="confirmFunction">{{ confirmButtonText }}</app-button>
         </div>
-    </transition>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -19,6 +31,7 @@ import { Modal } from "@/plugins";
 import AppButton from "@/components/AppButton.vue";
 
 export default {
+  components: { AppButton },
   data() {
     return {
       visible: false,
@@ -28,6 +41,11 @@ export default {
       confirmButtonText: "Potvrdit",
       onConfirm: {}
     };
+  },
+  beforeMount() {
+    Modal.EventBus.$on("show", params => {
+      this.show(params);
+    });
   },
   methods: {
     show(params) {
@@ -61,16 +79,10 @@ export default {
       if (typeof this.onConfirm === "function") {
         this.onConfirm();
         this.hide();
-      } else this.hide();
+      } else {
+        this.hide();
+      }
     }
-  },
-  components: {
-    AppButton
-  },
-  beforeMount() {
-    Modal.EventBus.$on("show", params => {
-      this.show(params);
-    });
   }
 };
 </script>

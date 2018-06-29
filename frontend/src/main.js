@@ -10,13 +10,12 @@ import "@/registerServiceWorker";
 import axios from "axios";
 axios.defaults.baseURL = "/api/";
 axios.interceptors.response.use(
-  response => {
-    return response;
-  },
+  response => response,
   error => {
     if (error.response.status === 401) {
       store.dispatch("logUserOut");
     }
+
     return Promise.reject(error);
   }
 );
@@ -45,8 +44,6 @@ import "vue-awesome/icons/dollar-sign";
 import "vue-awesome/icons/ellipsis-v";
 import Icon from "vue-awesome/components/Icon";
 Vue.component("icon", Icon);
-
-// Modal component
 
 // Base Vue instance
 new Vue({

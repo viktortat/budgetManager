@@ -1,18 +1,18 @@
 <template>
-    <section class="balance-wrapper">
-        <div class="balance">
-            <p class="balance-heading">Příjmy</p>
-            <p :class="{'is-positive': getIncome > 0, 'is-negative': getIncome < 0}">{{ getIncome | formatNumber | formatCurrency }}</p>
-        </div>
-        <div class="balance">
-            <p class="balance-heading">Výdaje</p>
-            <p :class="{'is-positive': getExpense > 0, 'is-negative': getExpense < 0}">{{ getExpense | formatNumber | formatCurrency }}</p>
-        </div>
-    </section>
+  <section class="balance-wrapper">
+    <div class="balance">
+      <p class="balance-heading">Příjmy</p>
+      <p :class="{'is-positive': getIncome > 0, 'is-negative': getIncome < 0}">{{ getIncome | formatNumber | formatCurrency }}</p>
+    </div>
+    <div class="balance">
+      <p class="balance-heading">Výdaje</p>
+      <p :class="{'is-positive': getExpense > 0, 'is-negative': getExpense < 0}">{{ getExpense | formatNumber | formatCurrency }}</p>
+    </div>
+  </section>
 </template>
 
 <script>
-import { filterMixin, balanceMixin } from "@/mixins";
+import { balanceMixin, filterMixin } from "@/mixins";
 
 export default {
   mixins: [filterMixin, balanceMixin],
@@ -21,12 +21,14 @@ export default {
       const trns = this.filterTransactionsByDate(
         this.filterTransactionsByType(this.$store.state.transactions, "expense")
       );
+
       return this.calculateBalance(trns);
     },
     getIncome() {
       const trns = this.filterTransactionsByDate(
         this.filterTransactionsByType(this.$store.state.transactions, "income")
       );
+
       return this.calculateBalance(trns);
     }
   }

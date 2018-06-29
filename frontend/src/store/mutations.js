@@ -31,7 +31,7 @@ export const mutations = {
     state.isFilterActive = payload;
   },
 
-  // filter
+  // Filter
   updateDateFrom: (state, payload) => {
     state.filter.dateFrom = payload;
   },

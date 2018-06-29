@@ -1,29 +1,34 @@
 <template>
-    <main class="section top">
-        <section class="create-wallet" @click="createWallet">
-            <p>Nová peněženka</p>
-        </section>
-        <section class="wallets-wrapper">
-            <wallets-wallet v-for="wallet in wallets" :key="wallet.id" :wallet="wallet" @pickWallet="pickWallet" />
-        </section>
-    </main>
+  <main class="section top">
+    <section
+      class="create-wallet"
+      @click="createWallet">
+      <p>Nová peněženka</p>
+    </section>
+    <section class="wallets-wrapper">
+      <wallets-wallet
+        v-for="wallet in wallets"
+        :key="wallet.id"
+        :wallet="wallet"
+        @pickWallet="pickWallet" />
+    </section>
+  </main>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 import WalletsWallet from "@/components/WalletsWallet.vue";
 
 export default {
   name: "Wallets",
-  computed: {
-    ...mapState(["wallets"])
-  },
+  computed: { ...mapState(["wallets"]) },
   methods: {
     ...mapMutations(["setWallets", "setWallet"]),
     ...mapActions(["refreshData", "loadWallets"]),
     pickWallet(walletID) {
       const wallet = this.wallets.find(x => x.id === walletID);
+
       this.setWallet(wallet);
       this.refreshData();
       this.$router.push(this.$route.query.redirect || { name: "Dashboard" });
@@ -32,9 +37,7 @@ export default {
       this.$router.push({ name: "WalletsNew" });
     }
   },
-  components: {
-    WalletsWallet
-  },
+  components: { WalletsWallet },
   created() {
     this.loadWallets(true);
   }

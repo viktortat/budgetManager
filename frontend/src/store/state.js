@@ -13,7 +13,7 @@ export const state = {
   isMenuActive: false,
   isFilterActive: false,
 
-  // filter
+  // Filter
   filter: {
     dateFrom: moment()
       .startOf("month")

@@ -1,11 +1,14 @@
 <template>
-    <main class="section">
-        <app-date-slider />
-        <section class="transactions">
-            <app-balance></app-balance>
-            <app-transaction v-for="transaction in transactions" :key="transaction.id" :transaction=transaction></app-transaction>
-        </section>
-    </main>
+  <main class="section">
+    <app-date-slider />
+    <section class="transactions">
+      <app-balance/>
+      <app-transaction
+        v-for="transaction in transactions"
+        :key="transaction.id"
+        :transaction="transaction"/>
+    </section>
+  </main>
 </template>
 
 <script>
@@ -16,6 +19,11 @@ import AppBalance from "@/components/AppBalance.vue";
 import { filterMixin, sortMixin } from "@/mixins";
 
 export default {
+  components: {
+    AppTransaction,
+    AppDateSlider,
+    AppBalance
+  },
   mixins: [filterMixin, sortMixin],
   data() {
     return {
@@ -23,23 +31,19 @@ export default {
       descend: false
     };
   },
-  methods: {
-    processTransactions() {
-      let transactions = this.filterTransactions(
-        this.$store.state.transactions
-      );
-      return this.sortTransactions(transactions, this.sortBy, this.descend);
-    }
-  },
   computed: {
     transactions() {
       return this.processTransactions();
     }
   },
-  components: {
-    AppTransaction,
-    AppDateSlider,
-    AppBalance
+  methods: {
+    processTransactions() {
+      const transactions = this.filterTransactions(
+        this.$store.state.transactions
+      );
+
+      return this.sortTransactions(transactions, this.sortBy, this.descend);
+    }
   }
 };
 </script>

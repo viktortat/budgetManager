@@ -1,53 +1,100 @@
 <template>
-    <transition name="slide-right">
-        <section class="filter-wrapper" v-if="isFilterActive">
-            <div>
-                <app-label class="label" for="filter-date-from">Datum od</app-label>
-                <app-date-input class="input" id="filter-date-from" v-model="dateFrom"></app-date-input>
-            </div>
-            <div>
-                <app-label class="label" for="filter-date-to">Datum do</app-label>
-                <app-date-input class="input" id="filter-date-to" v-model="dateTo"></app-date-input>
-            </div>
-            <div>
-                <app-button class="button is-link divider" @click="setFilterDate('thisMonth')">současný měsíc</app-button>
-                <app-button class="button is-link" @click="setFilterDate('lastMonth')">minulý měsíc</app-button>
-            </div>
-            <div>
-                <app-button class="button is-link divider" @click="setFilterDate('thisYear')">současný rok</app-button>
-                <app-button class="button is-link" @click="setFilterDate('lastYear')">minulý rok</app-button>
-            </div>
-            <div>
-                <app-label class="label" for="filter-amount-from">Částka od</app-label>
-                <app-input class="input" id="filter-amount-from" v-model="amountFrom"></app-input>
-            </div>
-            <div>
-                <app-label class="label" for="filter-amount-to">Částka do</app-label>
-                <app-input class="input" id="filter-amount-to" v-model="amountTo"></app-input>
-            </div>
-            <div>
-                <app-label class="label" for="filter-type">Typ transakce</app-label>
-                <app-select class="input" id="filter-type" v-model="type">
-                    <option value="expense">Výdej</option>
-                    <option value="income">Příjem</option>
-                </app-select>
-            </div>
-            <div>
-                <app-label class="label" for="filter-category">Kategorie</app-label>
-                <app-select class="input" id="filter-category" v-model="category">
-                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </app-select>
-            </div>
-            <div>
-                <app-button class="button is-danger" @click="resetFilter()">Reset</app-button>
-                <app-button class="button is-success" @click="setIsFilterActive(false)">Zavřít</app-button>
-            </div>
-        </section>
-    </transition>
+  <transition name="slide-right">
+    <section
+      v-if="isFilterActive"
+      class="filter-wrapper">
+      <div>
+        <app-label
+          class="label"
+          for="filter-date-from">Datum od</app-label>
+        <app-date-input
+          id="filter-date-from"
+          v-model="dateFrom"
+          class="input"/>
+      </div>
+      <div>
+        <app-label
+          class="label"
+          for="filter-date-to">Datum do</app-label>
+        <app-date-input
+          id="filter-date-to"
+          v-model="dateTo"
+          class="input"/>
+      </div>
+      <div>
+        <app-button
+          class="button is-link divider"
+          @click="setFilterDate('thisMonth')">současný měsíc</app-button>
+        <app-button
+          class="button is-link"
+          @click="setFilterDate('lastMonth')">minulý měsíc</app-button>
+      </div>
+      <div>
+        <app-button
+          class="button is-link divider"
+          @click="setFilterDate('thisYear')">současný rok</app-button>
+        <app-button
+          class="button is-link"
+          @click="setFilterDate('lastYear')">minulý rok</app-button>
+      </div>
+      <div>
+        <app-label
+          class="label"
+          for="filter-amount-from">Částka od</app-label>
+        <app-input
+          id="filter-amount-from"
+          v-model="amountFrom"
+          class="input"/>
+      </div>
+      <div>
+        <app-label
+          class="label"
+          for="filter-amount-to">Částka do</app-label>
+        <app-input
+          id="filter-amount-to"
+          v-model="amountTo"
+          class="input"/>
+      </div>
+      <div>
+        <app-label
+          class="label"
+          for="filter-type">Typ transakce</app-label>
+        <app-select
+          id="filter-type"
+          v-model="type"
+          class="input">
+          <option value="expense">Výdej</option>
+          <option value="income">Příjem</option>
+        </app-select>
+      </div>
+      <div>
+        <app-label
+          class="label"
+          for="filter-category">Kategorie</app-label>
+        <app-select
+          id="filter-category"
+          v-model="category"
+          class="input">
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id">{{ category.name }}</option>
+        </app-select>
+      </div>
+      <div>
+        <app-button
+          class="button is-danger"
+          @click="resetFilter()">Reset</app-button>
+        <app-button
+          class="button is-success"
+          @click="setIsFilterActive(false)">Zavřít</app-button>
+      </div>
+    </section>
+  </transition>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import AppDateInput from "@/components/AppDateInput.vue";
 import AppButton from "@/components/AppButton.vue";

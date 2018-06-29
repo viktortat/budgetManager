@@ -1,25 +1,35 @@
 <template>
-    <header class="header">
-        <div
-            class="header-burger"
-            @click="toggleMenu()"
-            v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) === -1">
-            <icon name="bars" scale="2" />
-        </div>
-        <div
-            class="navbar-wallets-back"
-            v-if="['WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1"
-            @click="goToWallets">
-            <icon name="chevron-left" scale="2" />
-        </div>
-        <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
-        <app-button class="button"
-            @click="logUserOut()"
-            v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1">
-            Odhlásit se
-        </app-button>
-        <div class="header-filter" @click="toggleFilter()" v-else><icon name="filter" scale="2" /></div>
-    </header>
+  <header class="header">
+    <div
+      v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) === -1"
+      class="header-burger"
+      @click="toggleMenu()">
+      <icon
+        name="bars"
+        scale="2" />
+    </div>
+    <div
+      v-if="['WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1"
+      class="navbar-wallets-back"
+      @click="goToWallets">
+      <icon
+        name="chevron-left"
+        scale="2" />
+    </div>
+    <h1 class="header-heading">{{ this.$route.meta.name }}</h1>
+    <app-button
+      v-if="['Wallets', 'WalletsDetail', 'WalletsNew'].indexOf(this.$route.name) !== -1"
+      class="button"
+      @click="logUserOut()">
+      Odhlásit se
+    </app-button>
+    <div
+      v-else
+      class="header-filter"
+      @click="toggleFilter()"><icon
+        name="filter"
+        scale="2" /></div>
+  </header>
 </template>
 
 <script>
@@ -34,9 +44,7 @@ export default {
       this.$router.push({ name: "Wallets" });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 

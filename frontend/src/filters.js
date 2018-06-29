@@ -1,31 +1,38 @@
 import Vue from "vue";
 
-Vue.filter("formatCurrency", value => {
-  return (
-    value
+Vue.filter(
+  "formatCurrency",
+  value =>
+    `${value
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-      .replace(".", ",") + " Kč"
-  );
-});
+      .replace(".", ",")} Kč`
+);
 
 Vue.filter("shortenString", (value, lng) => {
   if (value) {
-    if (value.length > lng) return value.substring(0, lng).trim() + "...";
-    else return value;
-  } else return "--";
+    if (value.length > lng) {
+      return `${value.substring(0, lng).trim()}...`;
+    }
+
+    return value;
+  }
+
+  return "--";
 });
 
 Vue.filter("appendMinusSign", (value, type) => {
-  if (type === "expense") return "- " + value;
-  else return value;
+  if (type === "expense") {
+    return `- ${value}`;
+  }
+
+  return value;
 });
 
 Vue.filter("formatNumber", value => {
-  let num = parseFloat(value);
+  const num = parseFloat(value);
+
   return num.toFixed(2);
 });
 
-Vue.filter("formatPercents", value => {
-  return value * 100 + " %";
-});
+Vue.filter("formatPercents", value => `${value * 100} %`);

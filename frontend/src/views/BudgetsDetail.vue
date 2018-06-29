@@ -1,28 +1,51 @@
 <template>
-    <main class="section">
-        <section class="budget-detail-wrapper">
-            <div class="budget-detail-form">
-                <div class="budget-detail-form-item">
-                    <app-label class="label" for="budget-name">Jméno</app-label>
-                    <app-input v-model="budget.name" class="input" id="budget-name" type="text" />
-                </div>
-                <div class="budget-detail-form-item">
-                    <app-label class="label" for="budget-color">Velikost</app-label>
-                    <app-input v-model="budget.amount" class="input" id="budget-color" type="number" />
-                </div>
-                <div class="budget-detail-form-item">
-                    <app-label class="label" for="budget-categories">Kategorie</app-label>
-                    <app-select :multiple="true" :empty="false" v-model="budget.categories" class="input">
-                        <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>
-                    </app-select>
-                </div>
-                <app-button class="button is-success" @click="createOrUpdateBudget" >
-                    <span v-if="isNew">Přidat</span>
-                    <span v-else>Upravit</span>
-                </app-button>
-            </div>
-        </section>
-    </main>
+  <main class="section">
+    <section class="budget-detail-wrapper">
+      <div class="budget-detail-form">
+        <div class="budget-detail-form-item">
+          <app-label
+            class="label"
+            for="budget-name">Jméno</app-label>
+          <app-input
+            id="budget-name"
+            v-model="budget.name"
+            class="input"
+            type="text" />
+        </div>
+        <div class="budget-detail-form-item">
+          <app-label
+            class="label"
+            for="budget-color">Velikost</app-label>
+          <app-input
+            id="budget-color"
+            v-model="budget.amount"
+            class="input"
+            type="number" />
+        </div>
+        <div class="budget-detail-form-item">
+          <app-label
+            class="label"
+            for="budget-categories">Kategorie</app-label>
+          <app-select
+            :multiple="true"
+            :empty="false"
+            v-model="budget.categories"
+            class="input">
+            <option
+              v-for="category in categories"
+              :value="category.id"
+              :key="category.id">{{ category.name }}</option>
+          </app-select>
+        </div>
+        <app-button
+          class="button is-success"
+          @click="createOrUpdateBudget" >
+          <span v-if="isNew">Přidat</span>
+          <span v-else>Upravit</span>
+        </app-button>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script>
@@ -55,18 +78,21 @@ export default {
         amount: this.budget.amount,
         categories: this.budget.categories
       };
+
       if (this.isNew) {
         const url = "/budgets/";
+
         this.$axios
-          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .post(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.resetBudget();
             this.refreshData();
           });
       } else {
-        const url = "/budgets/" + this.budget.id + "/";
+        const url = `/budgets/${this.budget.id}/`;
+
         this.$axios
-          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .patch(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.refreshData();
           });
@@ -87,11 +113,16 @@ export default {
   created() {
     this.loadData();
     const budgetID = this.$route.params.id;
-    if (!budgetID) this.isNew = true;
-    else if (Number(budgetID)) {
+
+    if (!budgetID) {
+      this.isNew = true;
+    } else if (Number(budgetID)) {
       const budget = this.budgets.find(x => x.id == budgetID);
+
       this.budget = Object.assign({}, budget);
-    } else this.$router.push("/");
+    } else {
+      this.$router.push("/");
+    }
   }
 };
 </script>

@@ -1,13 +1,18 @@
 <template>
-    <main class="section">
-        <app-date-slider />
-        <section class="categories">
-            <div class="create-category" @click="createCategory">
-                <p>Nová kategorie</p>
-            </div>
-            <categories-category v-for="category in categories" :key="category.id" :category="category" />
-        </section>
-    </main>
+  <main class="section">
+    <app-date-slider />
+    <section class="categories">
+      <div
+        class="create-category"
+        @click="createCategory">
+        <p>Nová kategorie</p>
+      </div>
+      <categories-category
+        v-for="category in categories"
+        :key="category.id"
+        :category="category" />
+    </section>
+  </main>
 </template>
 
 <script>
@@ -18,9 +23,7 @@ import CategoriesCategory from "@/components/CategoriesCategory.vue";
 import AppButton from "@/components/AppButton.vue";
 
 export default {
-  computed: {
-    ...mapState(["categories"])
-  },
+  computed: { ...mapState(["categories"]) },
   methods: {
     createCategory() {
       this.$router.push({ name: "CategoriesNew" });

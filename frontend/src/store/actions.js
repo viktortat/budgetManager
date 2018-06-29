@@ -2,12 +2,13 @@ import router from "@/router/router";
 import axios from "axios";
 
 export const actions = {
-  // user actions
+  // User actions
   logUserIn: (context, payload) => {
     context.commit("setToken", payload);
     const url = "/auth/users/current/";
+
     axios
-      .get(url, { headers: { Authorization: "JWT " + payload } })
+      .get(url, { headers: { Authorization: `JWT ${payload}` } })
       .then(response => {
         context.commit("setUser", response.data);
       });
@@ -19,14 +20,15 @@ export const actions = {
     router.push({ name: "Login" });
   },
 
-  // data actions
+  // Data actions
   loadTransactions: (context, payload) => {
     if (payload) {
       const walletID = context.state.wallet.id;
       const token = context.state.token;
-      const url = "/transactions/" + "?wallet=" + walletID;
+      const url = `${"/transactions/" + "?wallet="}${walletID}`;
+
       axios
-        .get(url, { headers: { Authorization: "JWT " + token } })
+        .get(url, { headers: { Authorization: `JWT ${token}` } })
         .then(response => {
           context.commit("setTransactions", response.data);
         });
@@ -36,9 +38,10 @@ export const actions = {
     if (payload) {
       const walletID = context.state.wallet.id;
       const token = context.state.token;
-      const url = "/categories/" + "?wallet=" + walletID;
+      const url = `${"/categories/" + "?wallet="}${walletID}`;
+
       axios
-        .get(url, { headers: { Authorization: "JWT " + token } })
+        .get(url, { headers: { Authorization: `JWT ${token}` } })
         .then(response => {
           context.commit("setCategories", response.data);
         });
@@ -48,9 +51,10 @@ export const actions = {
     if (payload) {
       const walletID = context.state.wallet.id;
       const token = context.state.token;
-      const url = "/budgets/" + "?wallet=" + walletID;
+      const url = `${"/budgets/" + "?wallet="}${walletID}`;
+
       axios
-        .get(url, { headers: { Authorization: "JWT " + token } })
+        .get(url, { headers: { Authorization: `JWT ${token}` } })
         .then(response => {
           context.commit("setBudgets", response.data);
         });
@@ -60,8 +64,9 @@ export const actions = {
     if (payload) {
       const token = context.state.token;
       const url = "/wallets/";
+
       axios
-        .get(url, { headers: { Authorization: "JWT " + token } })
+        .get(url, { headers: { Authorization: `JWT ${token}` } })
         .then(response => {
           context.commit("setWallets", response.data);
         })
@@ -76,6 +81,7 @@ export const actions = {
       context.state.transactions.length === 0 &&
       context.state.categories.length === 0 &&
       context.state.budgets.length === 0;
+
     context.dispatch("loadTransactions", dataIsNotLoaded);
     context.dispatch("loadCategories", dataIsNotLoaded);
     context.dispatch("loadBudgets", dataIsNotLoaded);
@@ -93,15 +99,19 @@ export const actions = {
     context.commit("setBudgets", []);
   },
 
-  // menu
+  // Menu
   toggleMenu: (context, payload) => {
-    if (payload === undefined)
+    if (payload === undefined) {
       context.commit("setIsMenuActive", !context.state.isMenuActive);
-    else context.commit("setIsMenuActive", payload);
+    } else {
+      context.commit("setIsMenuActive", payload);
+    }
   },
   toggleFilter: (context, payload) => {
-    if (payload === undefined)
+    if (payload === undefined) {
       context.commit("setIsFilterActive", !context.state.isFilterActive);
-    else context.commit("setIsFilterActive", payload);
+    } else {
+      context.commit("setIsFilterActive", payload);
+    }
   }
 };

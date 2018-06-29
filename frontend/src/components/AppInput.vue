@@ -1,11 +1,11 @@
 <template>
-    <input @input="$emit('input', $event.target.value)" :value="value">
+  <input
+    :value="value"
+    @input="$emit('input', $event.target.value)">
 </template>
 
 <script>
-export default {
-  props: ["value"]
-};
+export default { props: { value: { type: String } } };
 </script>
 
 <style lang="stylus" scoped>

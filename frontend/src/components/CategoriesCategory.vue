@@ -1,39 +1,55 @@
 <template>
-    <div class="category">
-        <aside class="category-color" :style="{ backgroundColor: category.color }"></aside>
-        <div class="category-left" @click="showTransactions">
-            <p class="category-text-big">{{ category.name | shortenString(14) }}</p>
-            <p class="category-text-small">Transakcí celkem: {{ category.transactions.length }}</p>
-        </div>
-        <div class="category-options" key="option" v-if="options">
-            <app-button class="button category-option is-danger" key="1" @click="confirmDeleting(category.id)"><icon name="trash" /></app-button>
-            <app-button class="button category-option" key="2" @click="goToDetail(category.id)"><icon name="pencil-alt" /></app-button>
-            <app-button class="button category-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
-        </div>
-        <div class="category-right" key="info" v-else @click="options = true" >
-            <p class="category-text-big" :class="{'is-positive': categoryBalance > 0, 'is-negative': categoryBalance < 0}">{{ categoryBalance | formatNumber | formatCurrency }}</p>
-            <p class="category-text-small">Transakcí za období: {{ categoryTransactionsAmount }}</p>
-        </div>
+  <div class="category">
+    <aside
+      :style="{ backgroundColor: category.color }"
+      class="category-color"/>
+    <div
+      class="category-left"
+      @click="showTransactions">
+      <p class="category-text-big">{{ category.name | shortenString(14) }}</p>
+      <p class="category-text-small">Transakcí celkem: {{ category.transactions.length }}</p>
     </div>
+    <div
+      v-if="options"
+      key="option"
+      class="category-options">
+      <app-button
+        key="1"
+        class="button category-option is-danger"
+        @click="confirmDeleting(category.id)"><icon name="trash" /></app-button>
+      <app-button
+        key="2"
+        class="button category-option"
+        @click="goToDetail(category.id)"><icon name="pencil-alt" /></app-button>
+      <app-button
+        key="3"
+        class="button category-option is-warning"
+        @click="options = false"><icon name="times" /></app-button>
+    </div>
+    <div
+      v-else
+      key="info"
+      class="category-right"
+      @click="options = true" >
+      <p
+        :class="{'is-positive': categoryBalance > 0, 'is-negative': categoryBalance < 0}"
+        class="category-text-big">{{ categoryBalance | formatNumber | formatCurrency }}</p>
+      <p class="category-text-small">Transakcí za období: {{ categoryTransactionsAmount }}</p>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-import { filterMixin, balanceMixin } from "@/mixins";
+import { mapActions, mapMutations, mapState } from "vuex";
+import { balanceMixin, filterMixin } from "@/mixins";
 
 import AppButton from "@/components/AppButton.vue";
 
 export default {
   mixins: [filterMixin, balanceMixin],
-  props: {
-    category: {
-      type: Object
-    }
-  },
+  props: { category: { type: Object } },
   data() {
-    return {
-      options: false
-    };
+    return { options: false };
   },
   computed: {
     ...mapState(["token"]),
@@ -48,11 +64,17 @@ export default {
     ...mapActions(["refreshData"]),
     ...mapMutations(["updateCategory"]),
     getTransactions() {
-      let trns = this.filterTransactionsByDate(this.$store.state.transactions);
+      const trns = this.filterTransactionsByDate(
+        this.$store.state.transactions
+      );
+
       return this.filterTransactionsByCategory(trns, this.category.id);
     },
     goToDetail(id) {
-      this.$router.push({ name: "CategoriesDetail", params: { id: id } });
+      this.$router.push({
+        name: "CategoriesDetail",
+        params: { id }
+      });
     },
     confirmDeleting(id) {
       const params = {
@@ -60,16 +82,16 @@ export default {
         message:
           "Tato akce nenávratně smaže kategorii a všechny její transakce. Přejete si pokračovat?",
         showConfirmButton: true,
-        onConfirm: () => {
-          return this.deleteCategory(id);
-        }
+        onConfirm: () => this.deleteCategory(id)
       };
+
       this.$modal.show(params);
     },
     deleteCategory(id) {
-      const url = "/categories/" + id + "/";
+      const url = `/categories/${id}/`;
+
       this.$axios
-        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .delete(url, { headers: { Authorization: `JWT ${this.token}` } })
         .then(() => {
           this.refreshData();
         });
@@ -79,9 +101,7 @@ export default {
       this.$router.push({ name: "Transactions" });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 

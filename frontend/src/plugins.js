@@ -3,7 +3,7 @@ import Notifications from "vue-notification";
 
 Vue.use(Notifications);
 
-// my custom Modal plugin
+// My custom Modal plugin
 import AppModal from "@/components/AppModal.vue";
 
 export const Modal = {

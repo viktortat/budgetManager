@@ -1,29 +1,33 @@
 <template>
-    <section class="balance-wrapper">
-        <div class="balance" @click="balanceComplete = !balanceComplete" v-if="balanceComplete">
-            <p class="balance-heading">Součet celkem</p>
-            <p :class="{'is-positive': getCompleteBalance > 0, 'is-negative': getCompleteBalance < 0}">{{ getCompleteBalance | formatNumber | formatCurrency }}</p>
-        </div>
-        <div class="balance" @click="balanceComplete = !balanceComplete" v-else>
-            <p class="balance-heading">Součet za období</p>
-            <p :class="{'is-positive': getBalance > 0, 'is-negative': getBalance < 0}">{{ getBalance | formatNumber | formatCurrency }}</p>
-        </div>
-        <div class="balance">
-            <p class="balance-heading">Změna</p>
-            <p :class="{'is-positive': getChange > 0, 'is-negative': getChange < 0}">{{ getChange | formatNumber | formatCurrency }}</p>
-        </div>
-    </section>
+  <section class="balance-wrapper">
+    <div
+      v-if="balanceComplete"
+      class="balance"
+      @click="balanceComplete = !balanceComplete">
+      <p class="balance-heading">Součet celkem</p>
+      <p :class="{'is-positive': getCompleteBalance > 0, 'is-negative': getCompleteBalance < 0}">{{ getCompleteBalance | formatNumber | formatCurrency }}</p>
+    </div>
+    <div
+      v-else
+      class="balance"
+      @click="balanceComplete = !balanceComplete">
+      <p class="balance-heading">Součet za období</p>
+      <p :class="{'is-positive': getBalance > 0, 'is-negative': getBalance < 0}">{{ getBalance | formatNumber | formatCurrency }}</p>
+    </div>
+    <div class="balance">
+      <p class="balance-heading">Změna</p>
+      <p :class="{'is-positive': getChange > 0, 'is-negative': getChange < 0}">{{ getChange | formatNumber | formatCurrency }}</p>
+    </div>
+  </section>
 </template>
 
 <script>
-import { filterMixin, dateMixin, balanceMixin } from "@/mixins";
+import { balanceMixin, dateMixin, filterMixin } from "@/mixins";
 
 export default {
   mixins: [filterMixin, dateMixin, balanceMixin],
   data() {
-    return {
-      balanceComplete: false
-    };
+    return { balanceComplete: false };
   },
   computed: {
     getBalance() {
@@ -50,6 +54,7 @@ export default {
       const lastPeriod = this.calculateBalance(
         this.filterTransactions(transactions, null, date.dateFrom, date.dateTo)
       );
+
       return thisPeriod - lastPeriod;
     }
   }

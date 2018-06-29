@@ -1,26 +1,38 @@
 <template>
-    <main class="section">
-        <section class="category-detail-wrapper">
-            <div class="category-detail-form">
-                <div class="category-detail-form-item">
-                    <app-label class="label" for="category-name">Jméno</app-label>
-                    <app-input v-model="category.name" class="input" id="category-name" type="text" />
-                </div>
-                <div class="category-detail-form-item">
-                    <app-label class="label" for="category-color">Barva</app-label>
-                    <app-colorpicker v-model="category.color" id="category-color"></app-colorpicker>
-                </div>
-                <app-button class="button is-success" @click="createOrUpdateCategory" >
-                    <span v-if="isNew">Přidat</span>
-                    <span v-else>Upravit</span>
-                </app-button>
-            </div>
-        </section>
-    </main>
+  <main class="section">
+    <section class="category-detail-wrapper">
+      <div class="category-detail-form">
+        <div class="category-detail-form-item">
+          <app-label
+            class="label"
+            for="category-name">Jméno</app-label>
+          <app-input
+            id="category-name"
+            v-model="category.name"
+            class="input"
+            type="text" />
+        </div>
+        <div class="category-detail-form-item">
+          <app-label
+            class="label"
+            for="category-color">Barva</app-label>
+          <app-colorpicker
+            id="category-color"
+            v-model="category.color"/>
+        </div>
+        <app-button
+          class="button is-success"
+          @click="createOrUpdateCategory" >
+          <span v-if="isNew">Přidat</span>
+          <span v-else>Upravit</span>
+        </app-button>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 import AppDateInput from "@/components/AppDateInput.vue";
 import AppButton from "@/components/AppButton.vue";
@@ -51,18 +63,21 @@ export default {
         color: this.category.color,
         wallet: this.wallet.id
       };
+
       if (this.isNew) {
         const url = "/categories/";
+
         this.$axios
-          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .post(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.refreshData();
             this.resetCategory();
           });
       } else {
-        const url = "/categories/" + this.category.id + "/";
+        const url = `/categories/${this.category.id}/`;
+
         this.$axios
-          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .patch(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.refreshData();
             this.$router.push({ name: "Categories" });
@@ -88,13 +103,18 @@ export default {
   created() {
     this.loadData();
     const categoryID = this.$route.params.id;
-    if (!categoryID) this.isNew = true;
-    else if (Number(categoryID)) {
+
+    if (!categoryID) {
+      this.isNew = true;
+    } else if (Number(categoryID)) {
       const category = this.$store.state.categories.find(
         x => x.id == categoryID
       );
+
       this.category = Object.assign({}, category);
-    } else this.$router.push("/");
+    } else {
+      this.$router.push("/");
+    }
   }
 };
 </script>

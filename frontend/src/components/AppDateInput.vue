@@ -1,5 +1,8 @@
 <template>
-    <flat-pickr @input="$emit('input', $event)" :value="value" class="input"></flat-pickr>
+  <flat-pickr
+    :value="value"
+    class="input"
+    @input="$emit('input', $event)"/>
 </template>
 
 <script>
@@ -7,10 +10,8 @@ import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
-  props: ["value"],
-  components: {
-    flatPickr
-  }
+  components: { flatPickr },
+  props: { value: { type: String } }
 };
 </script>
 

@@ -30,14 +30,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Přehled"
-      },
+      meta: { name: "Přehled" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -51,14 +55,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Transakce"
-      },
+      meta: { name: "Transakce" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -72,14 +80,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Transakce"
-      },
+      meta: { name: "Transakce" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -93,14 +105,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Transakce"
-      },
+      meta: { name: "Transakce" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -114,14 +130,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Kategorie"
-      },
+      meta: { name: "Kategorie" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -135,14 +155,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Kategorie"
-      },
+      meta: { name: "Kategorie" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -156,14 +180,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Kategorie"
-      },
+      meta: { name: "Kategorie" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -177,14 +205,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Rozpočty"
-      },
+      meta: { name: "Rozpočty" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -198,14 +230,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Rozpočty"
-      },
+      meta: { name: "Rozpočty" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -219,14 +255,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Rozpočty"
-      },
+      meta: { name: "Rozpočty" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -240,14 +280,18 @@ const router = new Router({
         header: Header,
         navbar: Navbar
       },
-      meta: {
-        name: "Nastavení"
-      },
+      meta: { name: "Nastavení" },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else if (store.state.wallet == null) {
-          next({ name: "Wallets", query: { redirect: to.fullPath } });
+          next({
+            name: "Wallets",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -262,7 +306,10 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -277,7 +324,10 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }
@@ -292,7 +342,10 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         if (!store.state.token) {
-          next({ name: "Login", query: { redirect: to.fullPath } });
+          next({
+            name: "Login",
+            query: { redirect: to.fullPath }
+          });
         } else {
           next();
         }

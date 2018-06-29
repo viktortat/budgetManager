@@ -1,27 +1,31 @@
 <template>
-    <section class="transactions-date-wrapper">
-        <div class="transactions-date-arrow" @click="editDates(false)">
-            <icon name="chevron-left" />
-        </div>
-        <div>
-            <span v-if="renderMonth">
-                {{ this.$moment(filter.dateFrom).format('MMMM') }}
-            </span>
-            <span v-else-if="renderYear">
-                {{ this.$moment(filter.dateFrom).format('YYYY') }}
-            </span>
-            <span v-else>
-                {{ this.$moment(filter.dateFrom).format('DD.MM.YYYY') }} - {{ this.$moment(filter.dateTo).format('DD.MM.YYYY') }}
-            </span>
-        </div>
-        <div class="transactions-date-arrow" @click="editDates(true)">
-            <icon name="chevron-right" />
-        </div>
-    </section>
+  <section class="transactions-date-wrapper">
+    <div
+      class="transactions-date-arrow"
+      @click="editDates(false)">
+      <icon name="chevron-left" />
+    </div>
+    <div>
+      <span v-if="renderMonth">
+        {{ this.$moment(filter.dateFrom).format('MMMM') }}
+      </span>
+      <span v-else-if="renderYear">
+        {{ this.$moment(filter.dateFrom).format('YYYY') }}
+      </span>
+      <span v-else>
+        {{ this.$moment(filter.dateFrom).format('DD.MM.YYYY') }} - {{ this.$moment(filter.dateTo).format('DD.MM.YYYY') }}
+      </span>
+    </div>
+    <div
+      class="transactions-date-arrow"
+      @click="editDates(true)">
+      <icon name="chevron-right" />
+    </div>
+  </section>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import { dateMixin } from "@/mixins";
 
@@ -50,11 +54,14 @@ export default {
     },
     editDates(add) {
       let dateObj = {};
-      let dateFrom = this.$store.state.filter.dateFrom;
-      let dateTo = this.$store.state.filter.dateTo;
+      const dateFrom = this.$store.state.filter.dateFrom;
+      const dateTo = this.$store.state.filter.dateTo;
 
-      if (add) dateObj = this.addDate(dateFrom, dateTo);
-      else dateObj = this.subtractDate(dateFrom, dateTo);
+      if (add) {
+        dateObj = this.addDate(dateFrom, dateTo);
+      } else {
+        dateObj = this.subtractDate(dateFrom, dateTo);
+      }
 
       this.updateDates(dateObj);
     }

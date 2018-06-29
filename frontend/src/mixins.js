@@ -4,15 +4,19 @@ export const filterMixin = {
       let trns = transactions.slice();
       const filter = this.$store.state.filter;
 
-      if (filter.amountFrom)
+      if (filter.amountFrom) {
         trns = trns.filter(
           trn => Number(trn.amount) >= Number(filter.amountFrom)
         );
-      if (filter.amountTo)
+      }
+      if (filter.amountTo) {
         trns = trns.filter(
           trn => Number(trn.amount) <= Number(filter.amountTo)
         );
-      if (filter.author) trns = trns.filter(trn => trn.user === filter.author);
+      }
+      if (filter.author) {
+        trns = trns.filter(trn => trn.user === filter.author);
+      }
 
       trns = this.filterTransactionsByDate(trns, dateFrom, dateTo);
       trns = this.filterTransactionsByType(trns, filter.type);
@@ -31,15 +35,18 @@ export const filterMixin = {
         trns = trns.filter(trn => trn.date >= filter.dateFrom);
         trns = trns.filter(trn => trn.date <= filter.dateTo);
       }
+
       return trns;
     },
     filterTransactionsByCategory(transactions, categoryID) {
       let trns = transactions.slice();
       const filter = this.$store.state.filter;
 
-      if (categoryID) trns = trns.filter(trn => trn.category == categoryID);
-      else if (filter.category)
+      if (categoryID) {
+        trns = trns.filter(trn => trn.category == categoryID);
+      } else if (filter.category) {
         trns = trns.filter(trn => trn.category == filter.category);
+      }
 
       return trns;
     },
@@ -47,9 +54,11 @@ export const filterMixin = {
       let trns = transactions.slice();
       const filter = this.$store.state.filter;
 
-      if (type) trns = trns.filter(trn => trn.transaction_type === type);
-      else if (filter.type)
+      if (type) {
+        trns = trns.filter(trn => trn.transaction_type === type);
+      } else if (filter.type) {
         trns = trns.filter(trn => trn.transaction_type === filter.type);
+      }
 
       return trns;
     }
@@ -60,11 +69,14 @@ export const sortMixin = {
   methods: {
     sortTransactions(transactions, key, descend) {
       let trns = transactions.slice();
+
       switch (key) {
         case "Date":
-          if (descend)
+          if (descend) {
             trns = trns.sort((a, b) => new Date(b.date) - new Date(a.date));
-          else trns = trns.sort((a, b) => new Date(a.date) - new Date(b.date));
+          } else {
+            trns = trns.sort((a, b) => new Date(a.date) - new Date(b.date));
+          }
           break;
         case "Amount":
           if (descend) {
@@ -73,6 +85,7 @@ export const sortMixin = {
                 a.transaction_type === "expense" ? a.amount * -1 : a.amount;
               const amountB =
                 b.transaction_type === "expense" ? b.amount * -1 : b.amount;
+
               return amountB - amountA;
             });
           } else {
@@ -81,11 +94,13 @@ export const sortMixin = {
                 a.transaction_type === "expense" ? a.amount * -1 : a.amount;
               const amountB =
                 b.transaction_type === "expense" ? b.amount * -1 : b.amount;
+
               return amountA - amountB;
             });
           }
           break;
       }
+
       return trns;
     }
   }
@@ -116,7 +131,10 @@ export const dateMixin = {
         let difference = this.$moment
           .duration(this.$moment(dateTo).diff(this.$moment(dateFrom)))
           .asDays();
-        if (difference === 0) difference = 1;
+
+        if (difference === 0) {
+          difference = 1;
+        }
         dateTo = this.$moment(dateTo)
           .subtract(difference, "days")
           .format("YYYY-MM-DD");
@@ -125,7 +143,10 @@ export const dateMixin = {
           .format("YYYY-MM-DD");
       }
 
-      return { dateFrom: dateFrom, dateTo: dateTo };
+      return {
+        dateFrom,
+        dateTo
+      };
     },
     addDate(dateFrom, dateTo) {
       if (this.isMonth(dateFrom, dateTo)) {
@@ -150,7 +171,10 @@ export const dateMixin = {
         let difference = this.$moment
           .duration(this.$moment(dateTo).diff(this.$moment(dateFrom)))
           .asDays();
-        if (difference === 0) difference = 1;
+
+        if (difference === 0) {
+          difference = 1;
+        }
         dateTo = this.$moment(dateTo)
           .add(difference, "days")
           .format("YYYY-MM-DD");
@@ -159,7 +183,10 @@ export const dateMixin = {
           .format("YYYY-MM-DD");
       }
 
-      return { dateFrom: dateFrom, dateTo: dateTo };
+      return {
+        dateFrom,
+        dateTo
+      };
     },
     isMonth(dateFrom, dateTo) {
       const startOfPeriod = this.$moment(dateFrom)
@@ -203,20 +230,29 @@ export const dateMixin = {
 export const balanceMixin = {
   methods: {
     calculateBalance(transactions) {
-      let trns = transactions.slice();
+      const trns = transactions.slice();
       let balance = 0;
-      for (let trn of trns) {
-        if (trn.transaction_type === "expense") balance -= Number(trn.amount);
-        else balance += Number(trn.amount);
+
+      for (const trn of trns) {
+        if (trn.transaction_type === "expense") {
+          balance -= Number(trn.amount);
+        } else {
+          balance += Number(trn.amount);
+        }
       }
+
       return balance;
     },
     calculateExpenses(transactions) {
-      let trns = transactions.slice();
+      const trns = transactions.slice();
       let balance = 0;
-      for (let trn of trns) {
-        if (trn.transaction_type === "expense") balance += Number(trn.amount);
+
+      for (const trn of trns) {
+        if (trn.transaction_type === "expense") {
+          balance += Number(trn.amount);
+        }
       }
+
       return balance;
     }
   }

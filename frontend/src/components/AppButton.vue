@@ -1,7 +1,7 @@
 <template>
-    <button @click="$emit('click')">
-        <slot>button</slot>
-    </button>
+  <button @click="$emit('click')">
+    <slot>button</slot>
+  </button>
 </template>
 
 <style lang="stylus" scoped>

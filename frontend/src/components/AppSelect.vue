@@ -1,9 +1,16 @@
 <template>
-    <select v-model="selected" :multiple="multiple">
-        <option v-if="empty" value=""></option>
-        <slot></slot>
-        <option v-for="item in content" :key="item[contentKey]" :value="item[contentValue]">{{ item[contentName] }}</option>
-    </select>
+  <select
+    v-model="selected"
+    :multiple="multiple">
+    <option
+      v-if="empty"
+      value=""/>
+    <slot/>
+    <option
+      v-for="item in content"
+      :key="item[contentKey]"
+      :value="item[contentValue]">{{ item[contentName] }}</option>
+  </select>
 </template>
 
 <script>

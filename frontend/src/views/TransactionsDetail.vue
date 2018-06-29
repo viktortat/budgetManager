@@ -1,43 +1,76 @@
 <template>
-    <main class="section">
-        <section class="transaction-detail-wrapper">
-            <div class="transaction-detail-form">
-                <div class="transcation-detail-form-item">
-                    <app-label class="label" for="transaction-amount">Částka</app-label>
-                    <app-input v-model="transaction.amount" class="input" id="transaction-amount" type="number" />
-                </div>
-                <div class="transcation-detail-form-item">
-                    <app-label class="label" for="transaction-category">Kategorie</app-label>
-                    <app-select class="input" v-model="transaction.category" id="transaction-category" :empty="false">
-                        <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name | shortenString(20) }}</option>
-                    </app-select>
-                </div>
-                <div class="transcation-detail-form-item">
-                    <app-label class="label" for="transaction-date">Datum</app-label>
-                    <app-date-input id="transaction-date" class="input" v-model="transaction.date"></app-date-input>
-                </div>
-                <div class="transcation-detail-form-item">
-                    <app-label class="label" for="transaction-notes">Poznámka</app-label>
-                    <app-input v-model="transaction.notes" class="input" id="transaction-notes" />
-                </div>
-                <div class="transcation-detail-form-item">
-                    <app-label class="label" for="transaction-type">Typ transakce</app-label>
-                    <app-select class="input" v-model="transaction.transaction_type" id="transaction-type" :empty="false">
-                        <option value="expense">Výdej</option>
-                        <option value="income">Příjem</option>
-                    </app-select>
-                </div>
-                <app-button class="button is-success" @click="createOrUpdateTransaction" >
-                    <span v-if="isNew">Přidat</span>
-                    <span v-else>Upravit</span>
-                </app-button>
-            </div>
-        </section>
-    </main>
+  <main class="section">
+    <section class="transaction-detail-wrapper">
+      <div class="transaction-detail-form">
+        <div class="transcation-detail-form-item">
+          <app-label
+            class="label"
+            for="transaction-amount">Částka</app-label>
+          <app-input
+            id="transaction-amount"
+            v-model="transaction.amount"
+            class="input"
+            type="number" />
+        </div>
+        <div class="transcation-detail-form-item">
+          <app-label
+            class="label"
+            for="transaction-category">Kategorie</app-label>
+          <app-select
+            id="transaction-category"
+            v-model="transaction.category"
+            :empty="false"
+            class="input">
+            <option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id">{{ category.name | shortenString(20) }}</option>
+          </app-select>
+        </div>
+        <div class="transcation-detail-form-item">
+          <app-label
+            class="label"
+            for="transaction-date">Datum</app-label>
+          <app-date-input
+            id="transaction-date"
+            v-model="transaction.date"
+            class="input"/>
+        </div>
+        <div class="transcation-detail-form-item">
+          <app-label
+            class="label"
+            for="transaction-notes">Poznámka</app-label>
+          <app-input
+            id="transaction-notes"
+            v-model="transaction.notes"
+            class="input" />
+        </div>
+        <div class="transcation-detail-form-item">
+          <app-label
+            class="label"
+            for="transaction-type">Typ transakce</app-label>
+          <app-select
+            id="transaction-type"
+            v-model="transaction.transaction_type"
+            :empty="false"
+            class="input">
+            <option value="expense">Výdej</option>
+            <option value="income">Příjem</option>
+          </app-select>
+        </div>
+        <app-button
+          class="button is-success"
+          @click="createOrUpdateTransaction" >
+          <span v-if="isNew">Přidat</span>
+          <span v-else>Upravit</span>
+        </app-button>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 import AppDateInput from "@/components/AppDateInput.vue";
 import AppButton from "@/components/AppButton.vue";
@@ -72,18 +105,21 @@ export default {
         notes: this.transaction.notes,
         date: this.transaction.date
       };
+
       if (this.isNew) {
         const url = "/transactions/";
+
         this.$axios
-          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .post(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.refreshData();
             this.resetTransaction();
           });
       } else {
-        const url = "/transactions/" + this.transaction.id + "/";
+        const url = `/transactions/${this.transaction.id}/`;
+
         this.$axios
-          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .patch(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.refreshData();
             this.$router.push({ name: "Transactions" });
@@ -114,13 +150,18 @@ export default {
   created() {
     this.loadData();
     const transactionID = this.$route.params.id;
-    if (!transactionID) this.isNew = true;
-    else if (Number(transactionID)) {
+
+    if (!transactionID) {
+      this.isNew = true;
+    } else if (Number(transactionID)) {
       const transaction = this.$store.state.transactions.find(
         x => x.id == transactionID
       );
+
       this.transaction = Object.assign({}, transaction);
-    } else this.$router.push("/");
+    } else {
+      this.$router.push("/");
+    }
   }
 };
 </script>

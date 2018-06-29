@@ -1,18 +1,34 @@
 <template>
-    <main class="login">
-        <h1 class="login-heading">Přihlásit se</h1>
-        <div class="login-form">
-            <p>
-                <app-label for="username-login" class="label">Email</app-label>
-                <app-input type="text" id="username-login" class="input" v-model="email" placeholder="Email"></app-input>
-            </p>
-            <p>
-                <app-label for="password-login" class="label">Heslo</app-label>
-                <app-input type="password" id="password-login" class="input" v-model="password" placeholder="Heslo"></app-input>
-            </p>
-            <app-button class="button" @click="login()">Přihlásit se</app-button>
-        </div>
-    </main>
+  <main class="login">
+    <h1 class="login-heading">Přihlásit se</h1>
+    <div class="login-form">
+      <p>
+        <app-label
+          for="username-login"
+          class="label">Email</app-label>
+        <app-input
+          id="username-login"
+          v-model="email"
+          type="text"
+          class="input"
+          placeholder="Email"/>
+      </p>
+      <p>
+        <app-label
+          for="password-login"
+          class="label">Heslo</app-label>
+        <app-input
+          id="password-login"
+          v-model="password"
+          type="password"
+          class="input"
+          placeholder="Heslo"/>
+      </p>
+      <app-button
+        class="button"
+        @click="login()">Přihlásit se</app-button>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -36,6 +52,7 @@ export default {
         email: this.email,
         password: this.password
       };
+
       this.$axios
         .post("/auth/login/", data)
         .then(res => {

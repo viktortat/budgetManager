@@ -1,19 +1,25 @@
 <template>
-    <div id="app" class="app">
-        <router-view name="header" />
+  <div
+    id="app"
+    class="app">
+    <router-view name="header" />
 
-        <transition name="slide-left" mode="out-in">
-            <router-view name="navbar" />
-        </transition>
+    <transition
+      name="slide-left"
+      mode="out-in">
+      <router-view name="navbar" />
+    </transition>
 
-        <transition name="fade" mode="out-in">
-            <router-view />
-        </transition>
+    <transition
+      name="fade"
+      mode="out-in">
+      <router-view />
+    </transition>
 
-        <notifications />
-        <the-filter />
-        <app-modal />
-    </div>
+    <notifications />
+    <the-filter />
+    <app-modal />
+  </div>
 </template>
 
 <script>
@@ -21,16 +27,18 @@ import TheFilter from "@/components/TheFilter.vue";
 import AppModal from "@/components/AppModal.vue";
 
 export default {
-  // name
-  // mixins
-  // extending of other components
-  // props
-  // data
-  // computed
-  // methods
-  // watch
-  // components
-  // lifecycle hooks
+  /*
+     * Name
+     * mixins
+     * extending of other components
+     * props
+     * data
+     * computed
+     * methods
+     * watch
+     * components
+     * lifecycle hooks
+     */
 
   components: {
     TheFilter,

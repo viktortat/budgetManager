@@ -1,5 +1,8 @@
 <template>
-    <div ref="chart" class="ct-chart" :class="[ratio]"></div>
+  <div
+    ref="chart"
+    :class="[ratio]"
+    class="ct-chart"/>
 </template>
 
 <script>
@@ -19,20 +22,12 @@ export default {
       type: Object,
       required: true
     },
-    options: {
-      type: Object
-    },
-    ratio: {
-      type: String
-    },
-    responsiveOptions: {
-      type: Array
-    }
+    options: { type: Object },
+    ratio: { type: String },
+    responsiveOptions: { type: Array }
   },
   data() {
-    return {
-      chartist: undefined
-    };
+    return { chartist: undefined };
   },
   watch: {
     data: {
@@ -46,6 +41,14 @@ export default {
     responsiveOptions: {
       handler: "renderChart",
       deep: true
+    }
+  },
+  mounted() {
+    this.renderChart();
+  },
+  destroyed() {
+    if (this.chartist) {
+      this.chartist.detach();
     }
   },
   methods: {
@@ -66,14 +69,6 @@ export default {
           responsiveOptions
         );
       }
-    }
-  },
-  mounted() {
-    this.renderChart();
-  },
-  destroyed() {
-    if (this.chartist) {
-      this.chartist.detach();
     }
   }
 };

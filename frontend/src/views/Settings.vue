@@ -1,9 +1,7 @@
 <template>
-    <main class="section">
-        <section class="settings">
-
-        </section>
-    </main>
+  <main class="section">
+    <section class="settings"/>
+  </main>
 </template>
 
 <style lang="stylus" scoped>

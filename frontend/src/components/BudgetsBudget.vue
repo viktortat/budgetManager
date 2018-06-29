@@ -1,46 +1,58 @@
 <template>
-    <div class="budget">
-        <p class="budget-name budget-text-big">{{ budget.name }}</p>
-        <p class="budget-amount">
-            <span class="budget-text-big">{{ budgetBalance | formatNumber | formatCurrency }}</span><span class="budget-text-small"> z {{ budget.amount | formatNumber | formatCurrency }}</span>
-        </p>
-        <div class="budget-bar">
-            <div class="budget-bar-progress" :style="{ transform: 'scaleX(' + budgetPercentsCapped + ')' }" :class="{'is-full': budgetPercents > 1}"></div>
-            <div class="budget-bar-percents budget-text-small">{{ budgetPercents | formatNumber | formatPercents }}</div>
-        </div>
-        <div class="budget-bar-info budget-text-small">
-            <p>{{ $moment(filter.dateFrom).startOf('month').format('DD.MM.YYYY') }}</p>
-            <p>{{ $moment(filter.dateFrom).endOf('month').format('DD.MM.YYYY') }}</p>
-        </div>
-
-        <div class="budget-options" key="option" v-if="options">
-            <app-button class="button budget-option is-danger" key="1" @click="deleteBudget(budget.id)"><icon name="trash" /></app-button>
-            <app-button class="button budget-option" key="2" @click="goToDetail(budget.id)"><icon name="pencil-alt" /></app-button>
-            <app-button class="button budget-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
-        </div>
-        <div class="budget-options-button" v-else @click="options = true">
-            <icon name="ellipsis-v" />
-        </div>
+  <div class="budget">
+    <p class="budget-name budget-text-big">{{ budget.name }}</p>
+    <p class="budget-amount">
+      <span class="budget-text-big">{{ budgetBalance | formatNumber | formatCurrency }}</span><span class="budget-text-small"> z {{ budget.amount | formatNumber | formatCurrency }}</span>
+    </p>
+    <div class="budget-bar">
+      <div
+        :style="{ transform: 'scaleX(' + budgetPercentsCapped + ')' }"
+        :class="{'is-full': budgetPercents > 1}"
+        class="budget-bar-progress"/>
+      <div class="budget-bar-percents budget-text-small">{{ budgetPercents | formatNumber | formatPercents }}</div>
     </div>
+    <div class="budget-bar-info budget-text-small">
+      <p>{{ $moment(filter.dateFrom).startOf('month').format('DD.MM.YYYY') }}</p>
+      <p>{{ $moment(filter.dateFrom).endOf('month').format('DD.MM.YYYY') }}</p>
+    </div>
+
+    <div
+      v-if="options"
+      key="option"
+      class="budget-options">
+      <app-button
+        key="1"
+        class="button budget-option is-danger"
+        @click="deleteBudget(budget.id)"><icon name="trash" /></app-button>
+      <app-button
+        key="2"
+        class="button budget-option"
+        @click="goToDetail(budget.id)"><icon name="pencil-alt" /></app-button>
+      <app-button
+        key="3"
+        class="button budget-option is-warning"
+        @click="options = false"><icon name="times" /></app-button>
+    </div>
+    <div
+      v-else
+      class="budget-options-button"
+      @click="options = true">
+      <icon name="ellipsis-v" />
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { filterMixin, balanceMixin } from "@/mixins";
+import { mapActions, mapState } from "vuex";
+import { balanceMixin, filterMixin } from "@/mixins";
 
 import AppButton from "@/components/AppButton.vue";
 
 export default {
   mixins: [filterMixin, balanceMixin],
-  props: {
-    budget: {
-      type: Object
-    }
-  },
+  props: { budget: { type: Object } },
   data() {
-    return {
-      options: false
-    };
+    return { options: false };
   },
   computed: {
     ...mapState(["budgets", "filter", "categories", "transactions", "token"]),
@@ -52,6 +64,7 @@ export default {
     },
     budgetPercentsCapped() {
       const val = this.budgetBalance / this.budget.amount;
+
       return val > 1 ? 1 : val;
     }
   },
@@ -62,28 +75,32 @@ export default {
         this.$store.state.transactions
       );
       let finalTrns = [];
-      for (let category of this.budget.categories) {
+
+      for (const category of this.budget.categories) {
         finalTrns = finalTrns.concat(
           this.filterTransactionsByCategory(trns, category)
         );
       }
+
       return finalTrns;
     },
     deleteBudget(id) {
-      const url = "/budgets/" + id + "/";
+      const url = `/budgets/${id}/`;
+
       this.$axios
-        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .delete(url, { headers: { Authorization: `JWT ${this.token}` } })
         .then(() => {
           this.refreshData();
         });
     },
     goToDetail(id) {
-      this.$router.push({ name: "BudgetsDetail", params: { id: id } });
+      this.$router.push({
+        name: "BudgetsDetail",
+        params: { id }
+      });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 

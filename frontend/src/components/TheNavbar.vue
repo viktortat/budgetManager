@@ -1,38 +1,59 @@
 <template>
-    <nav class="navbar" :class="{'is-active': isMenuActive}">
-        <header class="navbar-header"></header>
-        <div class="navbar-menu">
-            <div class="navbar-button-wrapper">
-                <app-button class="button is-success" @click="createTransaction()">Nová transakce</app-button>
-            </div>
-            <router-link :to="{name: 'Dashboard'}" class="navbar-item" active-class="is-active"><div><icon name='chart-area'/></div>Přehled</router-link>
-            <router-link :to="{name: 'Transactions'}" class="navbar-item" active-class="is-active"><div><icon name='credit-card'/></div>Transakce</router-link>
-            <router-link :to="{name: 'Categories'}" class="navbar-item" active-class="is-active"><div><icon name='list'/></div>Kategorie</router-link>
-            <router-link :to="{name: 'Budgets'}" class="navbar-item" active-class="is-active"><div><icon name='dollar-sign'/></div>Rozpočty</router-link>
-            <!--
+  <nav
+    :class="{'is-active': isMenuActive}"
+    class="navbar">
+    <header class="navbar-header"/>
+    <div class="navbar-menu">
+      <div class="navbar-button-wrapper">
+        <app-button
+          class="button is-success"
+          @click="createTransaction()">Nová transakce</app-button>
+      </div>
+      <router-link
+        :to="{name: 'Dashboard'}"
+        class="navbar-item"
+        active-class="is-active"><div><icon name="chart-area"/></div>Přehled</router-link>
+      <router-link
+        :to="{name: 'Transactions'}"
+        class="navbar-item"
+        active-class="is-active"><div><icon name="credit-card"/></div>Transakce</router-link>
+      <router-link
+        :to="{name: 'Categories'}"
+        class="navbar-item"
+        active-class="is-active"><div><icon name="list"/></div>Kategorie</router-link>
+      <router-link
+        :to="{name: 'Budgets'}"
+        class="navbar-item"
+        active-class="is-active"><div><icon name="dollar-sign"/></div>Rozpočty</router-link>
+        <!--
             <router-link :to="{name: 'Settings'}" class="navbar-item" active-class="is-active"><div><icon name='cogs'/></div>Nastavení</router-link>
             -->
-        </div>
-        <footer class="navbar-footer">
-            <div class="navbar-account" @click="changeWallet()">
-                <icon name='archive'/>
-            </div>
-            <div></div>
-            <div class="navbar-logout" @click="logUserOut()"><icon name='sign-out-alt'/></div>
-        </footer>
-        <div class="navbar-negative-space" :class="{'is-active': isMenuActive}" @click="toggleMenu(false)"></div>
-    </nav>
+    </div>
+    <footer class="navbar-footer">
+      <div
+        class="navbar-account"
+        @click="changeWallet()">
+        <icon name="archive"/>
+      </div>
+      <div/>
+      <div
+        class="navbar-logout"
+        @click="logUserOut()"><icon name="sign-out-alt"/></div>
+    </footer>
+    <div
+      :class="{'is-active': isMenuActive}"
+      class="navbar-negative-space"
+      @click="toggleMenu(false)"/>
+  </nav>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 import AppButton from "@/components/AppButton.vue";
 
 export default {
-  computed: {
-    ...mapState(["isMenuActive"])
-  },
+  computed: { ...mapState(["isMenuActive"]) },
   methods: {
     ...mapActions(["logUserOut", "toggleMenu"]),
     changeWallet() {
@@ -43,9 +64,7 @@ export default {
       this.$router.push({ name: "TransactionsNew" });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 

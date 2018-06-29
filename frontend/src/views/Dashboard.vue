@@ -1,18 +1,29 @@
 <template>
-    <main class="section">
-        <app-date-slider />
-        <section class="dashboard">
-            <app-balance />
-            <div class="graph">
-                <vue-chartist :data="balanceDataset" :options="{fullWidth: true, chartPadding: 20}" type='Line' :ratio="'ct-golden-section'" />
-            </div>
-            <dashboard-income-and-expense />
-            <div class="graph">
-                <vue-chartist :data="categoriesDataset" :options="{fullWidth: true, chartPadding: 20}" type='Pie' :ratio="'ct-perfect-fifth'" />
-            </div>
-            <categories-category v-for="category in biggestCategories" :key="category.id" :category="category" />
-        </section>
-    </main>
+  <main class="section">
+    <app-date-slider />
+    <section class="dashboard">
+      <app-balance />
+      <div class="graph">
+        <vue-chartist
+          :data="balanceDataset"
+          :options="{fullWidth: true, chartPadding: 20}"
+          :ratio="'ct-golden-section'"
+          type="Line" />
+      </div>
+      <dashboard-income-and-expense />
+      <div class="graph">
+        <vue-chartist
+          :data="categoriesDataset"
+          :options="{fullWidth: true, chartPadding: 20}"
+          :ratio="'ct-perfect-fifth'"
+          type="Pie" />
+      </div>
+      <categories-category
+        v-for="category in biggestCategories"
+        :key="category.id"
+        :category="category" />
+    </section>
+  </main>
 </template>
 
 <script>
@@ -24,14 +35,14 @@ import DashboardIncomeAndExpense from "@/components/DashboardIncomeAndExpense.vu
 import VueChartist from "@/components/VueChartist.vue";
 import CategoriesCategory from "@/components/CategoriesCategory.vue";
 
-import { filterMixin, dateMixin, balanceMixin } from "@/mixins";
+import { balanceMixin, dateMixin, filterMixin } from "@/mixins";
 
 export default {
   mixins: [filterMixin, dateMixin, balanceMixin],
   computed: {
     ...mapState(["transactions", "categories", "budgets", "filter"]),
     balanceDataset() {
-      let data = {
+      const data = {
         series: [[]],
         labels: []
       };
@@ -39,35 +50,40 @@ export default {
       let dateFrom = this.filter.dateFrom;
       let dateTo = this.filter.dateTo;
 
-      for (var i = 0; i < 6; i++) {
-        let transactions = this.filterTransactionsByDate(
+      for (let i = 0; i < 6; i++) {
+        const transactions = this.filterTransactionsByDate(
           this.transactions,
           dateFrom,
           dateTo
         );
+
         data.series[0].unshift(this.calculateBalance(transactions));
 
-        if (this.isMonth(dateFrom, dateTo))
+        if (this.isMonth(dateFrom, dateTo)) {
           data.labels.unshift(this.$moment(dateFrom).format("MMMM"));
-        else if (this.isYear(dateFrom, dateTo))
+        } else if (this.isYear(dateFrom, dateTo)) {
           data.labels.unshift(this.$moment(dateFrom).format("YYYY"));
+        }
 
-        let dateObj = this.subtractDate(dateFrom, dateTo);
+        const dateObj = this.subtractDate(dateFrom, dateTo);
+
         dateFrom = dateObj.dateFrom;
         dateTo = dateObj.dateTo;
       }
+
       return data;
     },
     categoriesDataset() {
-      let data = {
+      const data = {
         series: [],
         labels: []
       };
 
-      let categories = this.sortedCategories();
+      const categories = this.sortedCategories();
       let iterations = 0;
       let balance = 0;
-      for (let cat of categories) {
+
+      for (const cat of categories) {
         if (iterations < 5) {
           cat.dateExpenses === 0
             ? data.labels.push("")
@@ -95,11 +111,14 @@ export default {
         this.filter.dateFrom,
         this.filter.dateTo
       );
-      let categories = this.categories.slice();
-      for (let cat of categories) {
+      const categories = this.categories.slice();
+
+      for (const cat of categories) {
         let expenses = 0;
+
         for (let i = 0; i < cat.transactions.length; i++) {
-          let trn = transactions.find(x => x.id === cat.transactions[i]);
+          const trn = transactions.find(x => x.id === cat.transactions[i]);
+
           if (trn) {
             if (trn.transaction_type === "expense") {
               expenses += Number(trn.amount);
@@ -108,6 +127,7 @@ export default {
         }
         cat.dateExpenses = expenses;
       }
+
       return categories.sort((a, b) => b.dateExpenses - a.dateExpenses);
     }
   },

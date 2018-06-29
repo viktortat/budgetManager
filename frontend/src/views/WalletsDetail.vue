@@ -1,18 +1,26 @@
 <template>
-    <main class="section top">
-        <section class="wallet-detail-wrapper">
-            <div class="wallet-detail-form">
-                <div class="wallet-detail-form-item">
-                    <app-label class="label" for="wallet-name">Jméno</app-label>
-                    <app-input v-model="wallet.name" class="input" id="wallet-name" type="text" />
-                </div>
-                <app-button class="button is-success" @click="createOrUpdateWallet" >
-                    <span v-if="isNew">Přidat</span>
-                    <span v-else>Upravit</span>
-                </app-button>
-            </div>
-        </section>
-    </main>
+  <main class="section top">
+    <section class="wallet-detail-wrapper">
+      <div class="wallet-detail-form">
+        <div class="wallet-detail-form-item">
+          <app-label
+            class="label"
+            for="wallet-name">Jméno</app-label>
+          <app-input
+            id="wallet-name"
+            v-model="wallet.name"
+            class="input"
+            type="text" />
+        </div>
+        <app-button
+          class="button is-success"
+          @click="createOrUpdateWallet" >
+          <span v-if="isNew">Přidat</span>
+          <span v-else>Upravit</span>
+        </app-button>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script>
@@ -26,9 +34,7 @@ import AppSelect from "@/components/AppSelect.vue";
 export default {
   data() {
     return {
-      wallet: {
-        name: ""
-      },
+      wallet: { name: "" },
       isNew: false
     };
   },
@@ -38,21 +44,22 @@ export default {
   methods: {
     ...mapActions(["loadData", "refreshData"]),
     createOrUpdateWallet() {
-      const data = {
-        name: this.wallet.name
-      };
+      const data = { name: this.wallet.name };
+
       if (this.isNew) {
         const url = "/wallets/";
+
         this.$axios
-          .post(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .post(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.getWallets();
             this.$router.push({ name: "Wallets" });
           });
       } else {
-        const url = "/wallets/" + this.wallet.id + "/";
+        const url = `/wallets/${this.wallet.id}/`;
+
         this.$axios
-          .patch(url, data, { headers: { Authorization: "JWT " + this.token } })
+          .patch(url, data, { headers: { Authorization: `JWT ${this.token}` } })
           .then(() => {
             this.getWallets();
             this.$router.push({ name: "Wallets" });
@@ -61,8 +68,9 @@ export default {
     },
     getWallets() {
       const url = "/wallets/";
+
       this.$axios
-        .get(url, { headers: { Authorization: "JWT " + this.token } })
+        .get(url, { headers: { Authorization: `JWT ${this.token}` } })
         .then(response => {
           this.setWallets(response.data);
         })
@@ -79,11 +87,16 @@ export default {
   },
   created() {
     const walletID = this.$route.params.id;
-    if (!walletID) this.isNew = true;
-    else if (Number(walletID)) {
+
+    if (!walletID) {
+      this.isNew = true;
+    } else if (Number(walletID)) {
       const wallet = this.wallets.find(x => x.id == walletID);
+
       this.wallet = Object.assign({}, wallet);
-    } else this.$router.push("/");
+    } else {
+      this.$router.push("/");
+    }
   }
 };
 </script>

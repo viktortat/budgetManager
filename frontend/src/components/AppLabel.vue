@@ -1,9 +1,9 @@
 <template>
-    <label>
-        <p>
-            <slot></slot>
-        </p>
-    </label>
+  <label>
+    <p>
+      <slot/>
+    </p>
+  </label>
 </template>
 
 <script>

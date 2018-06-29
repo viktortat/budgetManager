@@ -1,38 +1,48 @@
 <template>
-    <div class="transaction">
-        <aside class="transaction-category-bar" :style="{ backgroundColor: this.categories.find(x => x.id === transaction.category).color }"></aside>
-        <div class="transaction-left">
-            <div class="transaction-small-text">{{ this.$moment(transaction.date).format('DD.MM.YYYY') }}</div>
-            <div class="transaction-big-text">{{ this.categories.find(x => x.id === transaction.category).name | shortenString(12) }}</div>
-            <div class="transaction-small-text">{{ transaction.notes | shortenString(12) }}</div>
-        </div>
-        <div class="transaction-options" key="option" v-if="options">
-            <app-button class="button transaction-option is-danger" key="1" @click="confirmDeleting(transaction.id)"><icon name="trash" /></app-button>
-            <app-button class="button transaction-option" key="2" @click="goToDetail(transaction.id)"><icon name="pencil-alt" /></app-button>
-            <app-button class="button transaction-option is-warning" key="3"  @click="options = false"><icon name="times" /></app-button>
-        </div>
-        <div
-            class="transaction-right"
-            key="price"
-            v-else
-            @click="options = true"
-            :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}">
-            {{ transaction.amount | formatCurrency | appendMinusSign(transaction.transaction_type) }}
-        </div>
+  <div class="transaction">
+    <aside
+      :style="{ backgroundColor: this.categories.find(x => x.id === transaction.category).color }"
+      class="transaction-category-bar"/>
+    <div class="transaction-left">
+      <div class="transaction-small-text">{{ this.$moment(transaction.date).format('DD.MM.YYYY') }}</div>
+      <div class="transaction-big-text">{{ this.categories.find(x => x.id === transaction.category).name | shortenString(12) }}</div>
+      <div class="transaction-small-text">{{ transaction.notes | shortenString(12) }}</div>
     </div>
+    <div
+      v-if="options"
+      key="option"
+      class="transaction-options">
+      <app-button
+        key="1"
+        class="button transaction-option is-danger"
+        @click="confirmDeleting(transaction.id)"><icon name="trash" /></app-button>
+      <app-button
+        key="2"
+        class="button transaction-option"
+        @click="goToDetail(transaction.id)"><icon name="pencil-alt" /></app-button>
+      <app-button
+        key="3"
+        class="button transaction-option is-warning"
+        @click="options = false"><icon name="times" /></app-button>
+    </div>
+    <div
+      v-else
+      key="price"
+      :class="{'is-positive': transaction.transaction_type === 'income', 'is-negative': transaction.transaction_type === 'expense'}"
+      class="transaction-right"
+      @click="options = true">
+      {{ transaction.amount | formatCurrency | appendMinusSign(transaction.transaction_type) }}
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 import AppButton from "@/components/AppButton.vue";
 
 export default {
-  props: {
-    transaction: {
-      type: Object
-    }
-  },
+  props: { transaction: { type: Object } },
   data() {
     return {
       options: false,
@@ -45,31 +55,32 @@ export default {
   methods: {
     ...mapActions(["refreshData"]),
     goToDetail(id) {
-      this.$router.push({ name: "TransactionsDetail", params: { id: id } });
+      this.$router.push({
+        name: "TransactionsDetail",
+        params: { id }
+      });
     },
     confirmDeleting(id) {
       const params = {
         title: "Smazání transakce",
         message: "Tato akce nenávratně smaže transakci. Přejete si pokračovat?",
         showConfirmButton: true,
-        onConfirm: () => {
-          return this.deleteTransaction(id);
-        }
+        onConfirm: () => this.deleteTransaction(id)
       };
+
       this.$modal.show(params);
     },
     deleteTransaction(id) {
-      const url = "/transactions/" + id + "/";
+      const url = `/transactions/${id}/`;
+
       this.$axios
-        .delete(url, { headers: { Authorization: "JWT " + this.token } })
+        .delete(url, { headers: { Authorization: `JWT ${this.token}` } })
         .then(() => {
           this.refreshData();
         });
     }
   },
-  components: {
-    AppButton
-  }
+  components: { AppButton }
 };
 </script>
 
